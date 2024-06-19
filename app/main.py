@@ -7,6 +7,8 @@ from datetime import datetime
 from sqlalchemy import func
 from decimal import Decimal
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from babel.dates import format_date, format_datetime, format_time
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -91,9 +93,9 @@ def data_agora():
     return agora
 
 def mes_atual():
-    mes = datetime.now().date()
-    mes = mes.strftime('%B')
-    return mes
+    mes = datetime.now()
+    formatted_date = format_datetime(mes, format='MMMM', locale='pt_BR')
+    return formatted_date
 
 def primeiro_dia_mes():
     primeiro_dia_mes = data_agora().replace(day=1)
