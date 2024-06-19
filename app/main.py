@@ -16,7 +16,6 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 class Produto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     codigo_do_produto = db.Column(db.Integer, nullable=False)
