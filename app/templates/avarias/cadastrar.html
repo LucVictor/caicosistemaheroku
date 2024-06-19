@@ -1,0 +1,36 @@
+{% extends "../template.html" %}
+{% block content %}
+    <h2>Formulário de Avaria</h2>
+    <form action="/avarias/cadastro" method="post">
+        <label for="codigo_produto">Código do Produto:</label><br>
+        <input type="number" id="codigo_produto" name="codigo_produto" value="{{ produto.codigo_do_produto }}" readonly required><br><br>
+
+        <label for="nome_produto">Nome do Produto:</label><br>
+        <input type="text" id="nome_produto" name="nome_produto" minlength="600" value="{{ produto.nome_do_produto }}" readonly required ><br><br>
+
+        <label for="preco_produto">Preço de custo (R$): </label><br>
+        <input type="text" id="preco_produto" name="preco_produto" value="{{produto.preco_do_produto}}" required readonly><br><br>
+
+        <label for="quantidade">Quantidade: </label><br>
+        <input type="number" id="quantidade" name="quantidade" step="0.1" value="0" required><br><br>
+
+        <label for="data_vencimento">Data de Vencimento:</label><br>
+        <input type="date" id="data_vencimento" name="data_vencimento"><br><br>
+
+        <label>Tipo de Avaria: </label>
+            <select name="tipodeavaria" id="tipodeavaria">
+            <option>Embalagem</option>
+                <option>Estragado</option>
+            <option>Vencido</option>
+            </select><br><br>
+
+        <label>Enviado à cozinha?: </label>
+            <select name="cozinha" id="cozinha">
+            <option>Não</option>
+                <option>Sim</option>
+            </select><br><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+{% endblock %}

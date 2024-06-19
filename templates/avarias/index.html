@@ -1,0 +1,36 @@
+{% extends "../template.html" %}
+{% block content %}
+
+    <h2>Listagem de Avarias</h2>
+    <h3>Referente ao mês de {{ mes }}</h3>
+    <h4>Total R${{ total_soma_avarias }}</h4>
+
+    <table>
+  <tr>
+      <th>Vencimento</th>
+    <th>Código</th>
+    <th>Produto</th>
+    <th>Quantidade</th>
+    <th>Custo</th>
+      <th>Tipo de Avaria</th>
+      <th>Cozinha?</th>
+            <th>Usuário</th>
+      <th>Ação</th>
+  </tr>
+   {% for avaria in avarias %}
+  <tr>
+      <td>{{ avaria.data_de_vencimento.strftime('%d/%m/%Y') }}</td>
+    <td>{{ avaria.codigo_do_produto }}</td>
+    <td>{{ avaria.nome_do_produto }}</td>
+    <td>{{ avaria.quantidade }}</td>
+    <td>R$ {{ avaria.preco_total }}</td>
+      <td>{{ avaria.tipodeavaria }}</td>
+      <td>{{ avaria.cozinha }}</td>
+    <td>{{ avaria.criador }}</td>
+      <td><form action="/avarias/deletar/{{ avaria.id }}" method="post">
+    <input type="submit" value="Apagar"></form>
+    </td>
+  </tr>
+        {% endfor %}
+</table>
+{% endblock %}

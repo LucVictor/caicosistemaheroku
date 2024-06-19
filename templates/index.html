@@ -1,0 +1,32 @@
+{% extends "template.html" %}
+{% block content %}
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ dates | tojson }},
+      datasets: [{
+        label: 'R$',
+        data: {{ total_values | tojson }},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+</script>
+{% endblock %}
