@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
 
 class Produto(db.Model):
