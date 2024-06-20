@@ -1,7 +1,16 @@
 {% extends "./template.html" %}
 {% block content %}
-    <h2>Relatorio de Avarias</h2>
-    <h4>Total R${{ total_soma_avarias }}</h4>
+
+    <h2>Listagem de Avarias</h2>
+    <h3>Referente ao mês de {{ mes }}</h3>
+    <div><h4>Total de avarias R${{ total_soma_avarias }} </h4>
+    <h4>Total de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h4>
+    <h4>Total de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h4>
+    <h4>Total de avarias por estragrado: R${{ total_soma_avarias_estragado }} </h4>
+    <h4>Total enviados a cozinha: R${{ total_soma_avarias_cozinha }} </h4>
+    </div>
+
+
     <table>
   <tr>
     <th>Código</th>

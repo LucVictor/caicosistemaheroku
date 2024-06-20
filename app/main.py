@@ -139,7 +139,23 @@ def index_avarias():
         Produto_Avaria.data_de_insercao.desc()).all()
 
     total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).scalar()
-    return render_template('avarias/index.html', avarias=avarias, mes=mes_atual(), total_soma_avarias=total_soma_avarias)
+    total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.cozinha == "Sim").scalar()
+    total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Embalagem").scalar()
+    total_soma_avarias_vencimento = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Vencido").scalar()
+    total_soma_avarias_estragado = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Estragado").scalar()
+
+    if not total_soma_avarias:
+        total_soma_avarias = ""
+    if not total_soma_avarias_cozinha:
+        total_soma_avarias_cozinha = ""
+    if not total_soma_avarias_embalagem:
+        total_soma_avarias_embalagem = ""
+    if not total_soma_avarias_vencimento:
+        total_soma_avarias_vencimento = ""
+    if not total_soma_avarias_estragado:
+        total_soma_avarias_estragado = ""
+
+    return render_template('avarias/index.html', avarias=avarias, mes=mes_atual(), total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
 
 
 @app.route('/avarias/procurar')
@@ -186,7 +202,7 @@ def avarias_cadastro():
     db.session.add(cadastrar_avaria)
     db.session.commit()
     db.session.close()
-    return url_for("avarias_cadastrar")
+    return redirect("/avarias/")
 
 @app.route('/avarias/relatorio', methods=['GET', 'POST'])
 @login_required
@@ -199,19 +215,67 @@ def avarias_relatorio():
             resultado = Produto_Avaria.query.filter(Produto_Avaria.codigo_do_produto == codigo,
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
                                                     Produto_Avaria.data_de_insercao <= data_final).order_by(Produto_Avaria.data_de_insercao.desc()).all()
-            total_soma_avarias = db.session.query(func.sum(resultado.preco_total)).filter(Produto_Avaria.codigo_do_produto == codigo,
+
+            total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.codigo_do_produto == codigo,
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
                                                     Produto_Avaria.data_de_insercao <= data_final).scalar()
-            total_soma_avarias = total_soma_avarias if total_soma_avarias is not None else 0
-            return render_template('avarias/emitir_relatorio.html', resultado=resultado, total_soma_avarias= total_soma_avarias)
+            total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+                Produto_Avaria.codigo_do_produto == codigo, Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+                Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.cozinha == "Sim").scalar()
+            total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+                Produto_Avaria.codigo_do_produto == codigo, Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+                Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Emalagem").scalar()
+            total_soma_avarias_vencimento = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+                Produto_Avaria.codigo_do_produto == codigo, Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+                Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Vencido").scalar()
+            total_soma_avarias_estragado = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+                Produto_Avaria.codigo_do_produto == codigo, Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+                Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+                Produto_Avaria.tipodeavaria == "Estragado").scalar()
+
+            if not total_soma_avarias:
+                total_soma_avarias = ""
+            if not total_soma_avarias_cozinha:
+                total_soma_avarias_cozinha = ""
+            if not total_soma_avarias_embalagem:
+                total_soma_avarias_embalagem = ""
+            if not total_soma_avarias_vencimento:
+                total_soma_avarias_vencimento = ""
+            if not total_soma_avarias_estragado:
+                total_soma_avarias_estragado = ""
+
+            return render_template('avarias/emitir_relatorio.html', resultado=resultado, total_soma_avarias= total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
 
         resultado = Produto_Avaria.query.filter(Produto_Avaria.data_de_insercao >= data_inicial,
                                                 Produto_Avaria.data_de_insercao <= data_final).order_by(Produto_Avaria.data_de_insercao.desc()).all()
         total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= data_inicial,
                                                 Produto_Avaria.data_de_insercao <= data_final).scalar()
         total_soma_avarias = total_soma_avarias if total_soma_avarias is not None else 0
+        total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+            Produto_Avaria.cozinha == "Sim").scalar()
+        total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+            Produto_Avaria.tipodeavaria == "Embalagem").scalar()
+        total_soma_avarias_vencimento = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+            Produto_Avaria.tipodeavaria == "Vencido").scalar()
+        total_soma_avarias_estragado = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+            Produto_Avaria.tipodeavaria == "Estragado").scalar()
+
+        if not total_soma_avarias:
+            total_soma_avarias = ""
+        if not total_soma_avarias_cozinha:
+            total_soma_avarias_cozinha = ""
+        if not total_soma_avarias_embalagem:
+            total_soma_avarias_embalagem = ""
+        if not total_soma_avarias_vencimento:
+            total_soma_avarias_vencimento = ""
+        if not total_soma_avarias_estragado:
+            total_soma_avarias_estragado = ""
         return render_template('avarias/emitir_relatorio.html', resultado=resultado,
-                               total_soma_avarias=total_soma_avarias)
+                               total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
     return render_template('avarias/relatorio.html')
 
 

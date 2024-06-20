@@ -1,6 +1,7 @@
 {% extends "./template.html" %}
 {% block content %}
-    <h2>Procurar Produto</h2>
+    <div class="procurarproduto">
+    <h2>Procurar produto</h2>
     <form action="/vencimentos/cadastrar" method="post">
         <label for="codigo">Código:</label><br>
         <input type="text" id="codigo" name="codigo"><br><br>
@@ -10,4 +11,5 @@
 
         <input type="submit" value="Buscar">
     </form>
+    </div>
 {% endblock %}

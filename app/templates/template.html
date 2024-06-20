@@ -30,10 +30,9 @@
         </div>
     </div>
         {% if current_user.is_authenticated %}
-        <div class="botaoavarias">Usuário
+        <div class="botaoavarias">{{current_user.username}}
         <div class="botaoavariasconteudo">
-            <a href="/cadastrar/" class="linkbotoes">Logar</a>
-            <a href="/cadastrar" class="linkbotoes">Cadastrar</a>
+            <a href="/sair" class="linkbotoes">Sair</a>
         </div>
     </div>
         {% endif %}

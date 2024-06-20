@@ -161,3 +161,10 @@ a{
     align-items: center;
     text-align: center;
 }
+
+.procurarproduto{
+    border: solid #ffcc77 3px;
+    border-radius: 5px;
+    padding: 10px 10px 10px 10px;
+    background-color: #ffcc77;
+}
