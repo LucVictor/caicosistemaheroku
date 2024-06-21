@@ -1,0 +1,32 @@
+{% extends "./template.html" %}
+{% block content %}
+
+    <table>
+  <tr>
+      <th>Data da entrega</th>
+    <th>Motorista</th>
+    <th>Ajudante</th>
+    <th>Rota</th>
+    <th>Q. de Entrega</th>
+    <th>Tempo total</th>
+    <th>T. médio total</th>
+      <th>Tempo de entregas</th>
+      <th>T. médio entregas</th>
+      <th>Tempo</th>
+  </tr>
+   {% for entrega in entregas %}
+  <tr>
+      <td>{{ entrega.data_da_entrega.strftime('%d/%m/%Y') }}</td>
+    <td>{{ entrega.motorista }}</td>
+    <td>{{ entrega.ajudante }}</td>
+    <td>{{ entrega.rota }}</td>
+    <td>{{ entrega.quantidade_de_entregas }}</td>
+      <td>{{ entrega.tempo_total }}</td>
+      <td>{{ entrega.tempo_medio_total }}</td>
+    <td>{{ entrega.tempo_total_entrega }}</td>
+   <td>{{ entrega.tempo_medio_entrega }}</td>
+  <td>{{ entrega.resultado_tempo }}</td>
+  </tr>
+        {% endfor %}
+</table>
+{% endblock %}

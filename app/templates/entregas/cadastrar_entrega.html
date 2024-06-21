@@ -1,0 +1,34 @@
+{% extends "./template.html" %}
+{% block content %}
+      <form method="POST" action="/entregas/cadastrar">
+        <div class="form-group">
+          <label for="data_da_entrega">Data da Entrega</label>
+          <input type="date" class="form-control" id="data_da_entrega" name="data_da_entrega" required>
+        </div>
+        <div class="form-group">
+          <label for="motorista">Motorista</label>
+          <input type="text" class="form-control" id="motorista" name="motorista" required>
+        </div>
+        <div class="form-group">
+          <label for="ajudante">Ajudante</label>
+          <input type="text" class="form-control" id="ajudante" name="ajudante" required>
+        </div>
+        <div class="form-group">
+          <label for="rota">Rota</label>
+          <input type="text" class="form-control" id="rota" name="rota" required>
+        </div>
+        <div class="form-group">
+          <label for="quantidade_de_entregas">Quantidade de Entregas</label>
+          <input type="number" class="form-control" id="quantidade_de_entregas" name="quantidade_de_entregas" required>
+        </div>
+        <div class="form-group">
+          <label for="tempo_total">Tempo Total</label>
+          <input type="time" class="form-control" id="tempo_total" name="tempo_total" required>
+        </div>
+        <div class="form-group">
+          <label for="tempo_total_entrega">Tempo Total de Entrega</label>
+          <input type="time" class="form-control" id="tempo_total_entrega" name="tempo_total_entrega" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+      </form>
+{% endblock %}

@@ -1,22 +1,26 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import locale
+from werkzeug.utils import secure_filename
 import calendar
 from datetime import datetime
 from sqlalchemy import func
 from decimal import Decimal
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from babel.dates import format_date, format_datetime, format_time
-from datetime import datetime
+from datetime import datetime, timedelta, date, time
 
+UPLOAD_FOLDER = "app/static/uploads"
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bancodedados.db"
 app.config["SECRET_KEY"] = "secretkey"
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 class Produto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,11 +56,13 @@ class Produto_Avaria(db.Model):
     tipodeavaria = db.Column(db.String(300), nullable=True)
     cozinha = db.Column(db.String(300), nullable=True)
 
+
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
     filial = db.Column(db.String(250), nullable=True)
+
 
 class Volume_de_Vendas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,25 +70,65 @@ class Volume_de_Vendas(db.Model):
     mediames = db.Column(db.DECIMAL, nullable=False)
 
 
+class Entrega(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data_da_entrega = db.Column(db.Date, nullable=False)
+    motorista = db.Column(db.String(250), nullable=False)
+    ajudante = db.Column(db.String(250), nullable=False)
+    rota = db.Column(db.String(250), nullable=False)
+    quantidade_de_entregas = db.Column(db.Integer, nullable=False)
+    tempo_total = db.Column(db.Time, nullable=False)
+    tempo_total_entrega = db.Column(db.Time, nullable=False)
+    tempo_medio_total = db.Column(db.Time, nullable=False)
+    tempo_medio_entrega = db.Column(db.Time, nullable=False)
+    resultado_tempo = db.Column(db.String(250), nullable=False)
+
+
+class Rotas(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rota = db.Column(db.String(250), nullable=False)
+    tempo_medio_rota = db.Column(db.Time, nullable=False)
+
+
 @login_manager.user_loader
 def loader_user(user_id):
     return Users.query.get(user_id)
+
 
 @app.template_filter('round_quantity')
 def round_quantity_filter(value):
     a = round(value)
     return int(a)
 
+
 criador = current_user
+
 
 @app.template_filter('format_quantidade')
 def format_quantidade(value):
     if isinstance(value, Decimal) and value == value.to_integral_value():
         return int(value)
     return value
+
+
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     return redirect('/logar')
+
+
+def hora_para_segundo(t):
+    return t.hour * 3600 + t.minute * 60 + t.second
+
+
+def segundos_para_hora(seconds):
+    return (datetime.min + timedelta(seconds=seconds)).time()
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def formatar_data(x):
     x = datetime.strptime(x, '%Y-%m-%d').date()
     return x
@@ -92,42 +138,45 @@ def data_agora():
     agora = datetime.now().date()
     return agora
 
+
 def mes_atual():
     mes = datetime.now()
     formatted_date = format_datetime(mes, format='MMMM', locale='pt_BR')
     return formatted_date
 
+
 def primeiro_dia_mes():
     primeiro_dia_mes = data_agora().replace(day=1)
     return primeiro_dia_mes
+
+
 def ultimo_dia_mes():
     ultimo_dia_mes = data_agora().replace(day=calendar.monthrange(data_agora().year, data_agora().month)[1])
     return ultimo_dia_mes
 
+
 @app.route('/')
 def index():
-        db.create_all()
-        start_date = primeiro_dia_mes()
-        end_date = ultimo_dia_mes()
+    db.create_all()
+    start_date = primeiro_dia_mes()
+    end_date = ultimo_dia_mes()
 
-        query = db.session.query(
-            Produto_Avaria.data_de_insercao,
-            func.sum(Produto_Avaria.preco_total).label('total_value')
-        )
+    query = db.session.query(
+        Produto_Avaria.data_de_insercao,
+        func.sum(Produto_Avaria.preco_total).label('total_value')
+    )
 
-        if start_date:
-            query = query.filter(Produto_Avaria.data_de_insercao >= start_date)
+    if start_date:
+        query = query.filter(Produto_Avaria.data_de_insercao >= start_date)
 
-        if end_date:
-            query = query.filter(Produto_Avaria.data_de_insercao <= end_date)
+    if end_date:
+        query = query.filter(Produto_Avaria.data_de_insercao <= end_date)
 
-        results = query.group_by(Produto_Avaria.data_de_insercao).all()
+    results = query.group_by(Produto_Avaria.data_de_insercao).all()
 
-        dates = [result.data_de_insercao.strftime('%d-%m') for result in results]
-        total_values = [result.total_value for result in results]
-        print(dates)
-        print(total_values)
-        return render_template('index.html', dates=dates, total_values=total_values)
+    dates = [result.data_de_insercao.strftime('%d-%m') for result in results]
+    total_values = [result.total_value for result in results]
+    return render_template('index.html', dates=dates, total_values=total_values)
 
 
 #AVARIAS
@@ -135,14 +184,25 @@ def index():
 
 @app.route('/avarias/', methods=['GET'])
 def index_avarias():
-    avarias = Produto_Avaria.query.filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).order_by(
+    avarias = Produto_Avaria.query.filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+                                          Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).order_by(
         Produto_Avaria.data_de_insercao.desc()).all()
 
-    total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).scalar()
-    total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.cozinha == "Sim").scalar()
-    total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Embalagem").scalar()
-    total_soma_avarias_vencimento = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Vencido").scalar()
-    total_soma_avarias_estragado = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.tipodeavaria == "Estragado").scalar()
+    total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
+        Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).scalar()
+    total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+        Produto_Avaria.cozinha == "Sim").scalar()
+    total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+        Produto_Avaria.tipodeavaria == "Embalagem").scalar()
+    total_soma_avarias_vencimento = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+        Produto_Avaria.tipodeavaria == "Vencido").scalar()
+    total_soma_avarias_estragado = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
+        Produto_Avaria.tipodeavaria == "Estragado").scalar()
 
     if not total_soma_avarias:
         total_soma_avarias = ""
@@ -155,7 +215,11 @@ def index_avarias():
     if not total_soma_avarias_estragado:
         total_soma_avarias_estragado = ""
 
-    return render_template('avarias/index.html', avarias=avarias, mes=mes_atual(), total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
+    return render_template('avarias/index.html', avarias=avarias, mes=mes_atual(),
+                           total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                           total_soma_avarias_embalagem=total_soma_avarias_embalagem,
+                           total_soma_avarias_vencimento=total_soma_avarias_vencimento,
+                           total_soma_avarias_estragado=total_soma_avarias_estragado)
 
 
 @app.route('/avarias/procurar')
@@ -204,6 +268,7 @@ def avarias_cadastro():
     db.session.close()
     return redirect("/avarias/")
 
+
 @app.route('/avarias/relatorio', methods=['GET', 'POST'])
 @login_required
 def avarias_relatorio():
@@ -214,11 +279,13 @@ def avarias_relatorio():
         if codigo:
             resultado = Produto_Avaria.query.filter(Produto_Avaria.codigo_do_produto == codigo,
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
-                                                    Produto_Avaria.data_de_insercao <= data_final).order_by(Produto_Avaria.data_de_insercao.desc()).all()
+                                                    Produto_Avaria.data_de_insercao <= data_final).order_by(
+                Produto_Avaria.data_de_insercao.desc()).all()
 
-            total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.codigo_do_produto == codigo,
-                                                    Produto_Avaria.data_de_insercao >= data_inicial,
-                                                    Produto_Avaria.data_de_insercao <= data_final).scalar()
+            total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+                Produto_Avaria.codigo_do_produto == codigo,
+                Produto_Avaria.data_de_insercao >= data_inicial,
+                Produto_Avaria.data_de_insercao <= data_final).scalar()
             total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
                 Produto_Avaria.codigo_do_produto == codigo, Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
                 Produto_Avaria.data_de_insercao <= ultimo_dia_mes(), Produto_Avaria.cozinha == "Sim").scalar()
@@ -244,12 +311,19 @@ def avarias_relatorio():
             if not total_soma_avarias_estragado:
                 total_soma_avarias_estragado = ""
 
-            return render_template('avarias/emitir_relatorio.html', resultado=resultado, total_soma_avarias= total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
+            return render_template('avarias/emitir_relatorio.html', resultado=resultado,
+                                   total_soma_avarias=total_soma_avarias,
+                                   total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                                   total_soma_avarias_embalagem=total_soma_avarias_embalagem,
+                                   total_soma_avarias_vencimento=total_soma_avarias_vencimento,
+                                   total_soma_avarias_estragado=total_soma_avarias_estragado)
 
         resultado = Produto_Avaria.query.filter(Produto_Avaria.data_de_insercao >= data_inicial,
-                                                Produto_Avaria.data_de_insercao <= data_final).order_by(Produto_Avaria.data_de_insercao.desc()).all()
-        total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(Produto_Avaria.data_de_insercao >= data_inicial,
-                                                Produto_Avaria.data_de_insercao <= data_final).scalar()
+                                                Produto_Avaria.data_de_insercao <= data_final).order_by(
+            Produto_Avaria.data_de_insercao.desc()).all()
+        total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            Produto_Avaria.data_de_insercao >= data_inicial,
+            Produto_Avaria.data_de_insercao <= data_final).scalar()
         total_soma_avarias = total_soma_avarias if total_soma_avarias is not None else 0
         total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
@@ -275,7 +349,11 @@ def avarias_relatorio():
         if not total_soma_avarias_estragado:
             total_soma_avarias_estragado = ""
         return render_template('avarias/emitir_relatorio.html', resultado=resultado,
-                               total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha, total_soma_avarias_embalagem=total_soma_avarias_embalagem, total_soma_avarias_vencimento=total_soma_avarias_vencimento, total_soma_avarias_estragado=total_soma_avarias_estragado)
+                               total_soma_avarias=total_soma_avarias,
+                               total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                               total_soma_avarias_embalagem=total_soma_avarias_embalagem,
+                               total_soma_avarias_vencimento=total_soma_avarias_vencimento,
+                               total_soma_avarias_estragado=total_soma_avarias_estragado)
     return render_template('avarias/relatorio.html')
 
 
@@ -287,9 +365,8 @@ def avarias_deletar(avaria_id):
     db.session.commit()
     return redirect(url_for('index_avarias'))
 
+
 #FIM AVARIAS
-
-
 
 
 @app.route('/vencimentos/', methods=['GET'])
@@ -335,13 +412,11 @@ def vencimentos_cadastro():
         quantidade=quantidade,
         data_de_vencimento=formatar_data(data_de_vencimento),
         data_de_insercao=data_agora(),
-        criador = current_user.username)
+        criador=current_user.username)
     db.session.add(cadastrar_vencimentos)
     db.session.commit()
     db.session.close()
     return url_for("index_vencimentos")
-
-
 
 
 @app.route('/vencimentos/editar/<int:vencimento_id>', methods=('GET', 'POST'))
@@ -390,10 +465,12 @@ def logar():
             return redirect(url_for("index"))
     return render_template("logar.html")
 
+
 @app.route("/sair")
 def sair():
     logout_user()
     return redirect(url_for("logar"))
+
 
 @app.route("/vencimentos/analisarvolume", methods=["GET"])
 def anlisarvolume():
@@ -405,7 +482,7 @@ def anlisarvolume():
         Produto_Vencimento.data_de_vencimento,
         Volume_de_Vendas.mediames
     ).join(Volume_de_Vendas, Produto_Vencimento.codigo_do_produto == Volume_de_Vendas.codigo_do_produto).all()
-    dados=[]
+    dados = []
     for resultado in resultados:
         diferenca = resultado.data_de_vencimento - datetime.now().date()
         dias_restantes = diferenca.days
@@ -425,3 +502,104 @@ def anlisarvolume():
         })
 
     return render_template("/vencimentos/analisarvolume.html", dados=dados)
+
+
+@app.route('/entregas/', methods=['GET'])
+def entregas_index():
+    entregas = Entrega.query.filter(Entrega.data_da_entrega >= primeiro_dia_mes(),
+                                    Entrega.data_da_entrega <= ultimo_dia_mes()).order_by(
+        Entrega.data_da_entrega.desc()).all()
+    return render_template('entregas/index.html', entregas=entregas, data_agora=data_agora())
+
+
+@app.route('/entregas/cadastrar', methods=['GET', 'POST'])
+def entregao_cadastrar():
+    if request.method == 'POST':
+        data_da_entrega = datetime.strptime(request.form['data_da_entrega'], '%Y-%m-%d').date()
+        motorista = request.form['motorista']
+        ajudante = request.form['ajudante']
+        rota = request.form['rota']
+        quantidade_de_entregas = int(request.form['quantidade_de_entregas'])
+        tempo_total = datetime.strptime(request.form['tempo_total'], '%H:%M').time()
+
+        tempo_medio_total = hora_para_segundo(tempo_total) / quantidade_de_entregas
+        tempo_medio_total = segundos_para_hora(tempo_medio_total)
+
+        tempo_total_entrega = datetime.strptime(request.form['tempo_total_entrega'], '%H:%M').time()
+        tempo_medio_entrega = hora_para_segundo(tempo_total_entrega) / quantidade_de_entregas
+        tempo_medio_entrega = segundos_para_hora(tempo_medio_entrega)
+
+        rota_media = Rotas.query.filter_by(rota=rota).first()
+        if hora_para_segundo(rota_media.tempo_medio_rota) <= hora_para_segundo(tempo_medio_entrega):
+            resultado_tempo = "Negativo"
+        else:
+            resultado_tempo = "Positivo"
+
+        entrega = Entrega(
+            data_da_entrega=data_da_entrega,
+            motorista=motorista,
+            ajudante=ajudante,
+            rota=rota,
+            quantidade_de_entregas=quantidade_de_entregas,
+            tempo_total=tempo_total,
+            tempo_total_entrega=tempo_total_entrega,
+            tempo_medio_total=tempo_medio_total,
+            tempo_medio_entrega=tempo_medio_entrega,
+            resultado_tempo=resultado_tempo
+        )
+        db.session.add(entrega)
+        db.session.commit()
+        return redirect("/")
+    return render_template("/entregas/cadastrar_entrega.html")
+
+
+@app.route('/entregas/calcular', methods=['GET', 'POST'])
+def calcular_medias_rotas():
+    entregas = Entrega.query.all()
+
+    # Agrupar entregas por rota e calcular o tempo médio por entrega para cada rota
+    tempos_por_rota = {}
+    contagem_por_rota = {}
+
+    for entrega in entregas:
+        if entrega.rota not in tempos_por_rota:
+            tempos_por_rota[entrega.rota] = 0
+            contagem_por_rota[entrega.rota] = 0
+        tempos_por_rota[entrega.rota] += hora_para_segundo(entrega.tempo_medio_entrega)
+        contagem_por_rota[entrega.rota] += entrega.quantidade_de_entregas
+
+    # Calcular o tempo médio por entrega para cada rota
+    tempo_medio_por_entrega_por_rota = {}
+    for rota in tempos_por_rota:
+        tempo_total_segundos = tempos_por_rota[rota]
+        numero_entregas = contagem_por_rota[rota]
+        tempo_medio_segundos = tempo_total_segundos // numero_entregas
+        tempo_medio_por_entrega_por_rota[rota] = segundos_para_hora(tempo_medio_segundos)
+
+        # Atualizar a tabela de Rotas
+        rota_obj = Rotas.query.filter_by(rota=rota).first()
+        if rota_obj:
+            rota_obj.tempo_medio_rota = segundos_para_hora(tempo_medio_segundos)
+        else:
+            nova_rota = Rotas(rota=rota, tempo_medio_rota=segundos_para_hora(tempo_medio_segundos))
+            db.session.add(nova_rota)
+        db.session.commit()
+    return render_template('/entregas/calcular_medias_rotas.html')
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('download_file', name=filename))
+    return render_template("upload.html")
