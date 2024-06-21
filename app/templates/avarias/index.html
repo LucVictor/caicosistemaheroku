@@ -5,13 +5,13 @@
     <div><h4>Total de avarias R${{ total_soma_avarias }} </h4>
     <h4>Total de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h4>
     <h4>Total de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h4>
-    <h4>Total de avarias por estragrado: R${{ total_soma_avarias_estragado }} </h4>
+    <h4>Total de avarias estragadas: R${{ total_soma_avarias_estragado }} </h4>
     <h4>Total enviados a cozinha: R${{ total_soma_avarias_cozinha }} </h4>
     </div>
 
     <table>
   <tr>
-      <th>Vencimento</th>
+      <th>Data</th>
     <th>Código</th>
     <th>Produto</th>
     <th>Quantidade</th>
@@ -23,7 +23,7 @@
   </tr>
    {% for avaria in avarias %}
   <tr>
-      <td>{{ avaria.data_de_vencimento.strftime('%d/%m/%Y') }}</td>
+      <td>{{ avaria.data_de_insercao.strftime('%d/%m/%Y') }}</td>
     <td>{{ avaria.codigo_do_produto }}</td>
     <td>{{ avaria.nome_do_produto }}</td>
     <td>{{ avaria.quantidade }}</td>

@@ -416,7 +416,7 @@ def vencimentos_cadastro():
     db.session.add(cadastrar_vencimentos)
     db.session.commit()
     db.session.close()
-    return url_for("index_vencimentos")
+    return redirect("/vencimentos/")
 
 
 @app.route('/vencimentos/editar/<int:vencimento_id>', methods=('GET', 'POST'))
@@ -555,36 +555,58 @@ def entregao_cadastrar():
 
 @app.route('/entregas/calcular', methods=['GET', 'POST'])
 def calcular_medias_rotas():
-    entregas = Entrega.query.all()
+    rotas_tempo = Rotas.query.all()
+    if request.method == 'POST':
+        entregas = Entrega.query.all()
 
-    # Agrupar entregas por rota e calcular o tempo médio por entrega para cada rota
-    tempos_por_rota = {}
-    contagem_por_rota = {}
+        # Agrupar entregas por rota e calcular o tempo médio por entrega para cada rota
+        tempos_por_rota = {}
+        contagem_por_rota = {}
 
-    for entrega in entregas:
-        if entrega.rota not in tempos_por_rota:
-            tempos_por_rota[entrega.rota] = 0
-            contagem_por_rota[entrega.rota] = 0
-        tempos_por_rota[entrega.rota] += hora_para_segundo(entrega.tempo_medio_entrega)
-        contagem_por_rota[entrega.rota] += entrega.quantidade_de_entregas
+        for entrega in entregas:
+            if entrega.rota not in tempos_por_rota:
+                tempos_por_rota[entrega.rota] = 0
+                contagem_por_rota[entrega.rota] = 0
+            tempos_por_rota[entrega.rota] += hora_para_segundo(entrega.tempo_medio_entrega)
+            contagem_por_rota[entrega.rota] += entrega.quantidade_de_entregas
 
-    # Calcular o tempo médio por entrega para cada rota
-    tempo_medio_por_entrega_por_rota = {}
-    for rota in tempos_por_rota:
-        tempo_total_segundos = tempos_por_rota[rota]
-        numero_entregas = contagem_por_rota[rota]
-        tempo_medio_segundos = tempo_total_segundos // numero_entregas
-        tempo_medio_por_entrega_por_rota[rota] = segundos_para_hora(tempo_medio_segundos)
+        # Calcular o tempo médio por entrega para cada rota
+        tempo_medio_por_entrega_por_rota = {}
+        for rota in tempos_por_rota:
+            tempo_total_segundos = tempos_por_rota[rota]
+            numero_entregas = contagem_por_rota[rota]
+            tempo_medio_segundos = tempo_total_segundos // numero_entregas
+            tempo_medio_por_entrega_por_rota[rota] = segundos_para_hora(tempo_medio_segundos)
 
-        # Atualizar a tabela de Rotas
-        rota_obj = Rotas.query.filter_by(rota=rota).first()
-        if rota_obj:
-            rota_obj.tempo_medio_rota = segundos_para_hora(tempo_medio_segundos)
-        else:
-            nova_rota = Rotas(rota=rota, tempo_medio_rota=segundos_para_hora(tempo_medio_segundos))
-            db.session.add(nova_rota)
+            # Atualizar a tabela de Rotas
+            rota_obj = Rotas.query.filter_by(rota=rota).first()
+            if rota_obj:
+                rota_obj.tempo_medio_rota = segundos_para_hora(tempo_medio_segundos)
+            else:
+                nova_rota = Rotas(rota=rota, tempo_medio_rota=segundos_para_hora(tempo_medio_segundos))
+                db.session.add(nova_rota)
+            db.session.commit()
+            return redirect("calcular_medias_rotas")
+    return render_template('/entregas/calcular_medias_rotas.html', rotas_tempo=rotas_tempo)
+
+@app.route('/entregas/rotas', methods=['GET', 'POST'])
+def rotas_listagem():
+    rotas_lista = Rotas.query.all()
+    return render_template("/entregas/rotas.html", rotas_lista=rotas_lista)
+
+@app.route('/entregas/rotas_cadastrar', methods=['GET', 'POST'])
+def rotas_cadastrar():
+    if request.method == 'POST':
+        rota = request.form['rota']
+        tempo_medio = request.form['tempo_medio']
+        nova_rota = Rotas(rota=rota, tempo_medio_rota=tempo_medio)
+        db.session.add(nova_rota)
         db.session.commit()
-    return render_template('/entregas/calcular_medias_rotas.html')
+        return redirect("/entregas/rotas_listagem")
+    rotas_lista = Rotas.query.all()
+    return render_template("/entregas/rotas.html", rotas_lista=rotas_lista)
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -603,3 +625,4 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('download_file', name=filename))
     return render_template("upload.html")
+
