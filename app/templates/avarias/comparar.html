@@ -87,15 +87,15 @@
         <h3>Custos:</h3>
         {% if total_soma_avarias1>0 and total_soma_avarias2 >0 %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de avarias: {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int }}%</h4>
+                <h4 class="vermelhocusto">Custos de avarias: + {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de avarias: {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int }}%</h4>
+                <h4 class="verdecusto">Custos de avarias: - {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int - 100 }}%</h4>
             {% endif %}
         {% else %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de avarias: {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="vermelhocusto">Custos de avarias: + {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de avarias: {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="verdecusto">Custos de avarias: - {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% endif %}
         {% endif %}
 
