@@ -1,5 +1,6 @@
 {% extends "./template.html" %}
 {% block content %}
+    <div class="cadastrar_produto">
     <h2>Formulário de Avaria</h2>
     <form action="/avarias/cadastro" method="post">
         <label for="codigo_produto">Código do Produto:</label><br>
@@ -13,9 +14,6 @@
 
         <label for="quantidade">Quantidade: </label><br>
         <input type="number" id="quantidade" name="quantidade" step="0.1" value="0" required><br><br>
-
-        <label for="data_vencimento">Data de Vencimento:</label><br>
-        <input type="date" id="data_vencimento" name="data_vencimento"><br><br>
 
         <label>Tipo de Avaria: </label>
             <select name="tipodeavaria" id="tipodeavaria">
@@ -32,5 +30,5 @@
 
         <input type="submit" value="Enviar">
     </form>
-</body>
+</div>
 {% endblock %}

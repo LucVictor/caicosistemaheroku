@@ -1,14 +1,48 @@
 {% extends "./template.html" %}
 {% block content %}
-    <div><h2>Listagem de Avarias</h2>
-    <h3>Referente ao mês de {{ mes }}</h3>
-    <div><h4>Total de avarias R${{ total_soma_avarias }} </h4>
-    <h4>Total de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h4>
-    <h4>Total de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h4>
-    <h4>Total de avarias estragadas: R${{ total_soma_avarias_estragado }} </h4>
-    <h4>Total enviados a cozinha: R${{ total_soma_avarias_cozinha }} </h4>
+    <style>
+    h3{
+        text-align: center  ;
+    }
+    </style>
+    <h2>Listagem de Avarias</h2>
+        <h3>Referente ao mês de {{ mes }}</h3>
+    <div class="resumo">
+    <div class="resumoavarias">
+    <h3>Custos:</h3>
+    <h4>Custos de avarias: R${{ total_soma_avarias }} </h4>
+    <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h4>
+    </div><br>
+    <div class="resumoavarias">
+            <h3>Descrição de custos:</h3>
+    <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h5>
+    <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h5>
+    <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado }} </h5>
+    <h5>Custos enviados a cozinha: R${{ total_soma_avarias_cozinha }} </h5>
+    </div><br>
+    <div class="resumoavarias">
+     <h3>Descrição de itens:</h3>
+    <h5>Quantidade de embalagem: {{ avarias_embalagem_quantidade }}</h5>
+    <h5>Quantidade de vencidos: {{ avarias_vencidos_quantidade }}</h5>
+    <h5>Quantidade de entregados: {{ avarias_estragados_quantidade }}</h5>
     </div>
-
+    <div class="resumoavarias">
+        <h3>10 maiores custos</h3>
+    <table class="dez_itens">
+        <tr>
+            <th>Código</th>
+            <th>Custo</th>
+        </tr>
+        {% for i in dez_itens %}
+        <tr>
+            <td>{{ i.codigo_do_produto }}</td>
+                <td>R${{  i.preco_total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+    </div>
+    <div class="tabelaavarias">
     <table>
   <tr>
       <th>Data</th>
@@ -18,8 +52,8 @@
     <th>Custo</th>
     <th>Tipo de Avaria</th>
     <th>Cozinha?</th>
-      <th>Usuário</th>
-      <th>Ação</th>
+    <th>Usuário</th>
+    <th>Ação</th>
   </tr>
    {% for avaria in avarias %}
   <tr>
@@ -37,4 +71,5 @@
   </tr>
         {% endfor %}
 </table>
+    </div>
 {% endblock %}

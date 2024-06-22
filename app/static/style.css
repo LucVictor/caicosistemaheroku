@@ -168,3 +168,34 @@ a{
     padding: 10px 10px 10px 10px;
     background-color: #ffcc77;
 }
+.cadastrar_produto{
+    border: solid #ffcc77 3px;
+    border-radius: 5px;
+    padding: 10px 10px 10px 10px;
+    background-color: #ffcc77;
+}
+
+.resumoavarias{
+        border: solid 1px;
+        width: fit-content;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    margin: auto;
+    text-align: justify;
+        margin-top: 0;
+
+}
+.tabelaavarias{
+    padding: 10px;
+}
+.resumo{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+.dez_itens{
+    border: 0px #ffcc77 solid;
+    text-align: center;
+    margin: auto;
+}
