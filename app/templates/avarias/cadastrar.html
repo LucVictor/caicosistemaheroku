@@ -2,6 +2,7 @@
 {% block content %}
     <div class="cadastrar_produto">
     <h2>Formulário de Avaria</h2>
+    <img class="procurarimg" src="../static/imagens/cadastrar.png" width="80" alt=""><br>
     <form action="/avarias/cadastro" method="post">
         <label for="codigo_produto">Código do Produto:</label><br>
         <input type="number" id="codigo_produto" name="codigo_produto" value="{{ produto.codigo_do_produto }}" readonly required><br><br>

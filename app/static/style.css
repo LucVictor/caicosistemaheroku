@@ -16,6 +16,9 @@ html{
     padding-top: 4px;
      mix-blend-mode: multiply;
 }
+.procurarimg{
+     mix-blend-mode: multiply;
+}
 .botoesmenu{
     display: inline-flex;
 

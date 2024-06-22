@@ -1,0 +1,161 @@
+{% extends "./template.html" %}
+{% block content %}
+<style>
+.resumo{
+    font-size: medium;
+}
+    h3,h2{
+        text-align: center  ;
+    }
+    .resumoavarias{
+        margin-left: 30px;
+    }
+    .vermelhocusto{
+        width: fit-content;
+        margin-top: 2px;
+        padding: 2px;
+        background-color: rgb(251, 73, 73);
+        margin: auto;
+    }
+    .verdecusto{
+        width: fit-content;
+        background: green;
+        margin-top: 2px;
+        margin: auto;
+        padding: 2px;
+    }
+    .vermelho, .verde{
+        width: fit-content;
+        margin-top: 2px;
+        padding: 2px;
+    }
+
+    </style>
+        {% if not total_soma_avarias1 %}
+        <div class="cadastrar_produto">
+    <h2>Comparar Relatórios</h2>
+    <form action="/avarias/comparar" method="post">
+        <h4>Primeiro relatório</h4>
+        <label for="data_inicial1">Data inicial:</label><br>
+        <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
+
+        <label for="data_final1">Data final</label><br>
+        <input type="date" id="data_final1" name="data_final1" required><br><br>
+
+         <h4>Segundo relatório</h4>
+        <label for="data_inicial2">Data inicial:</label><br>
+        <input type="date" id="data_inicial2" name="data_inicial2" required><br><br>
+
+        <label for="data_final2">Data final</label><br>
+        <input type="date" id="data_final2" name="data_final2" required><br><br>
+        <input type="submit" value="Emitir">
+    </form>
+        </div>
+    {% endif %}
+    {% if total_soma_avarias1 %}
+
+        <div class="resumo">
+
+        <div class="resumoavarias">
+        <h2>Relatório 1</h2>
+        <h2>Relatório de {{ data_inicial1.strftime('%d/%m/%Y') }} á {{ data_final1.strftime('%d/%m/%Y') }}</h2>
+        <h3>Custos:</h3>
+        <h4>Custos de avarias: R${{ total_soma_avarias1 }} </h4>
+        <h4>Custos médio por avaria: R${{ total_soma_avarias1 }} </h4>
+            <h3>Descrição de custos:</h3>
+        <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem1 }} </h5>
+        <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento1 }} </h5>
+        <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado1 }} </h5>
+        <h5>Custos enviados a cozinha: R${{ total_soma_avarias_cozinha1 }} </h5>
+
+        </div>
+        <div class="resumoavarias">
+        <h2>Relatório 2</h2>
+        <h2>Relatório de {{ data_inicial2.strftime('%d/%m/%Y') }} á {{ data_final2.strftime('%d/%m/%Y') }}</h2>
+        <h3>Custos:</h3>
+        <h4>Custos de avarias: R${{ total_soma_avarias2 }} </h4>
+        <h4>Custos médio por avaria: R${{ total_soma_avarias2 }} </h4>
+        <h3>Descrição de custos:</h3>
+        <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem2 }} </h5>
+        <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento2 }} </h5>
+        <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado2 }} </h5>
+        <h5>Custos enviados a cozinha: R${{ total_soma_avarias_cozinha2 }} </h5>
+        </div>
+        <div class="resumoavarias">
+        <h2>Comparação</h2>
+
+        <h3>Custos:</h3>
+        {% if total_soma_avarias1>0 and total_soma_avarias2 >0 %}
+            {% if total_soma_avarias1 < total_soma_avarias2 %}
+                <h4 class="vermelhocusto">Custos de avarias: {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int }}%</h4>
+            {% else %}
+                <h4 class="verdecusto">Custos de avarias: {{ ((total_soma_avarias2*100)/total_soma_avarias1) | int }}%</h4>
+            {% endif %}
+        {% else %}
+            {% if total_soma_avarias1 < total_soma_avarias2 %}
+                <h4 class="vermelhocusto">Custos de avarias: {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+            {% else %}
+                <h4 class="verdecusto">Custos de avarias: {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+            {% endif %}
+        {% endif %}
+
+        <h3>Descrição de custos:</h3>
+        {% if total_soma_avarias_embalagem1 > 0 and total_soma_avarias_embalagem2 >0 %}
+            {% if total_soma_avarias_embalagem1 < total_soma_avarias_embalagem2 %}
+                <h5 class="vermelho">Custos avarias por embalagem: {{ ((total_soma_avarias_embalagem2*100)/total_soma_avarias_embalagem1) | int }}%</h5>
+            {% else %}
+                <h5 class="verde">Custos avarias por embalagem: {{ ((total_soma_avarias_embalagem2*100)/total_soma_avarias_embalagem1) | int }}%</h5>
+            {% endif %}
+        {% else %}
+            {% if total_soma_avarias_embalagem1 < total_soma_avarias_embalagem2 %}
+                <h5 class="vermelho">Custos avarias por embalagem: {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
+            {% else %}
+                <h5 class="verde">Custos avarias por embalagem: {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
+            {% endif %}
+        {% endif %}
+
+        {% if total_soma_avarias_vencimento1 > 0 and total_soma_avarias_vencimento2 >0 %}
+            {% if total_soma_avarias_vencimento1 < total_soma_avarias_vencimento2 %}
+                <h5 class="vermelho">Custos de avarias por vencimento: {{ ((total_soma_avarias_vencimento2*100)/total_soma_avarias_vencimento1) | int}}%</h5>
+            {% else %}
+                 <h5 class="verde">Custos de avarias por vencimento: {{ ((total_soma_avarias_vencimento2*100)/total_soma_avarias_vencimento1) | int}}%</h5>
+            {% endif %}
+        {% else %}
+            {% if total_soma_avarias_vencimento1 < total_soma_avarias_vencimento2 %}
+                <h5 class="vermelho">CCustos de avarias por vencimento: {{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
+            {% else %}
+                <h5 class="verde">Custos de avarias por vencimento: {{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
+            {% endif %}
+        {% endif %}
+
+        {% if total_soma_avarias_estragado1 > 0 and total_soma_avarias_estragado2 > 0 %}
+            {% if total_soma_avarias_estragado1 < total_soma_avarias_estragado2 %}
+                <h5 class="vermelho">Custos de avarias estragadas: R${{ ((total_soma_avarias_estragado2*100)/total_soma_avarias_estragado1) | int}} </h5>
+            {% else %}
+                <h5 class="verde">Custos de avarias estragadas: R${{ ((total_soma_avarias_estragado2*100)/total_soma_avarias_estragado1) | int}} </h5>
+            {% endif %}
+        {% else %}
+            {% if total_soma_avarias_estragado1 < total_soma_avarias_estragado2 %}
+                <h5 class="vermelho">Custos de avarias estragadas: R${{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
+            {% else %}
+                <h5 class="verde">Custos de avarias estragadas: R${{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
+            {% endif %}
+        {% endif %}
+
+        {% if total_soma_avarias_cozinha1>0 and total_soma_avarias_cozinha2 >0 %}
+            {% if total_soma_avarias_cozinha1 < total_soma_avarias_cozinha2 >0 %}
+                <h5 class="vermelho">Custos enviados a cozinha: R${{ ((total_soma_avarias_cozinha2*100)/total_soma_avarias_cozinha1)| int }} </h5>
+            {% else %}
+                <h5 class="verde">Custos enviados a cozinha: R${{ ((total_soma_avarias_cozinha2*100)/total_soma_avarias_cozinha1)| int }} </h5>
+            {% endif %}
+        {% else %}
+            {% if total_soma_avarias_cozinha1 < total_soma_avarias_cozinha2 >0 %}
+                <h5 class="vermelho">Custos enviados a cozinha: R${{ (total_soma_avarias_cozinha2 - total_soma_avarias_cozinha1) | int }} </h5>
+            {% else %}
+                <h5 class="verde">Custos enviados a cozinha: R${{ (total_soma_avarias_cozinha2 - total_soma_avarias_cozinha1) | int }} </h5>
+            {% endif %}
+        {% endif %}
+        </div>
+        </div>
+    {% endif %}
+{% endblock %}

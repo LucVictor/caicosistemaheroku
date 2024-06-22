@@ -1,0 +1,15 @@
+{% extends "./template.html" %}
+{% block content %}
+    <div class="cadastrar_rota">
+    <h2>Cadastrar rota</h2>
+    <form action="/entregas/rotas_cadastrar" method="post">
+        <label for="rota">Nome da rota</label><br>
+        <input type="text" id="rota" name="rota" required><br><br>
+
+        <label for="tempo_medio">Tempo médio de entrega</label><br>
+        <input type="time" id="tempo_medio" name="tempo_medio" required ><br><br>
+
+        <input type="submit" value="Cadastrar">
+    </form>
+    <div>
+{% endblock %}
