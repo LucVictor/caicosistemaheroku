@@ -93,9 +93,9 @@
             {% endif %}
         {% else %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de avarias: + {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="vermelhocusto">Custos de avarias: +{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de avarias: - {{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="verdecusto">Custos de avarias: -{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% endif %}
         {% endif %}
 
