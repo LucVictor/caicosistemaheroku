@@ -11,7 +11,12 @@
     <div class="resumoavarias">
     <h3>Custos:</h3>
     <h4>Custos de avarias: R${{ total_soma_avarias }} </h4>
-    <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h4>
+        {% if total_soma_avarias and total_soma_avarias  %}
+            <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h4>
+        {% else %}
+                    <h4>Custos médio por avaria: R$0</h4>
+        {% endif %}
+
     </div><br>
     <div class="resumoavarias">
             <h3>Descrição de custos:</h3>
