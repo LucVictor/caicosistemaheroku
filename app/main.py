@@ -772,8 +772,6 @@ def calcular_medias_rotas():
     rotas_tempo = Rotas.query.all()
     if request.method == 'POST':
         entregas = Entrega.query.all()
-
-        # Agrupar entregas por rota e calcular o tempo médio por entrega para cada rota
         tempos_por_rota = {}
         contagem_por_rota = {}
 
@@ -783,8 +781,6 @@ def calcular_medias_rotas():
                 contagem_por_rota[entrega.rota] = 0
             tempos_por_rota[entrega.rota] += hora_para_segundo(entrega.tempo_medio_entrega)
             contagem_por_rota[entrega.rota] += entrega.quantidade_de_entregas
-
-        # Calcular o tempo médio por entrega para cada rota
         tempo_medio_por_entrega_por_rota = {}
         for rota in tempos_por_rota:
             tempo_total_segundos = tempos_por_rota[rota]

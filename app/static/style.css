@@ -32,6 +32,7 @@ html{
     background-color: orange;
     text-align: center;
     margin-left: 8px;
+        margin-right: 5px;
 }
 
 .botaovecimentos{
@@ -202,3 +203,25 @@ a{
     text-align: center;
     margin: auto;
 }
+@media print {
+  /* All your print styles go here */
+  .botaovecimentos,
+  .botaoavarias,
+  .logo,
+  .menu,
+  .botoesmenu,
+  footer,
+  header,
+  title,
+  menu,
+  .tabelaavarias{
+    display: none;
+  }
+.conteudo{
+    top:0;
+    padding: 0;
+}
+.resumoavarias{
+    margin-left: 5px;
+}
+  }
