@@ -262,7 +262,7 @@ def index():
     dez_itens = Produto_Avaria.query.order_by(
         Produto_Avaria.data_de_insercao.desc()).limit(5).all()
     dez_vencimentos = Produto_Vencimento.query.order_by(
-        Produto_Vencimento.data_de_insercao.desc()).limit(5).all()
+        Produto_Vencimento.data_de_vencimento.desc()).limit(5).all()
     return render_template('index.html', dates=dates, total_values=total_values, dez_itens=dez_itens,
                            dez_vencimentos=dez_vencimentos)
 
