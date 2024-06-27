@@ -18,7 +18,7 @@
         .form-group{
             padding: 10px;
         }
-        #quantidade_de_entregas{
+        #quantidade_de_entregas, #reentregas{
             width: 50px;
         }
         .caminhao{
@@ -27,6 +27,8 @@
     </style>
     <div class="cadastro_rota">
       <form method="POST" action="/entregas/cadastrar">
+        <div>    <h2 class="vermelho">{{ erro }}</h2>
+    <h2 class="verde">{{ sucesso }}</h2></div>
         <div><h3>Cadastro de entrega</h3></div>
         <div><img class="caminhao" src="../static/imagens/caminhao.png" width="150" alt=""></div>
         <div class="form-group">
@@ -35,15 +37,27 @@
         </div>
         <div class="form-group">
           <label for="motorista">Motorista</label><br>
-          <input type="text" class="form-control" id="motorista" name="motorista" required>
+            <select name="motorista" id="motorista">
+                {% for i in funcionarios %}
+                    {% if i.funcao == 'Motorista' %}
+                    <option class="lista">{{ i.nome }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group">
           <label for="ajudante">Ajudante</label><br>
-          <input type="text" class="form-control" id="ajudante" name="ajudante" required>
+            <select name="ajudante" id="ajudante">
+                {% for i in funcionarios %}
+                    {% if i.funcao == 'Ajudante' %}
+                    <option class="lista">{{ i.nome }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group">
           <label for="rota">Rota:</label>
-            <select id="rota">
+            <select name="rota" id="rota">
                 {% for i in rotas_lista %}
                 <option class="lista">{{ i.rota }}</option>
                 {% endfor %}
@@ -52,6 +66,10 @@
         <div class="form-group">
           <label for="quantidade_de_entregas">Quantidade de Entregas:</label>
           <input type="number" class="form-control" id="quantidade_de_entregas" value="0" name="quantidade_de_entregas" required>
+        </div>
+              <div class="form-group">
+          <label for="reentregas">Quantidade de Reentregas:</label>
+          <input type="number" class="form-control" id="reentregas" value="0" name="reentregas" required>
         </div>
         <div class="form-group">
           <label for="tempo_total">Tempo Total:</label>

@@ -58,7 +58,7 @@
     <th>Tipo de Avaria</th>
     <th>Cozinha?</th>
     <th>Usuário</th>
-    <th>Ação</th>
+    <th class="botoesacao">Ação</th>
   </tr>
    {% for avaria in avarias %}
   <tr>
@@ -70,7 +70,7 @@
       <td>{{ avaria.tipodeavaria }}</td>
       <td>{{ avaria.cozinha }}</td>
     <td>{{ avaria.criador }}</td>
-      <td><form action="/avarias/deletar/{{ avaria.id }}" method="post">
+      <td class="botoesacao"><form action="/avarias/deletar/{{ avaria.id }}" method="post">
     <input type="submit" value="Apagar"></form>
     </td>
   </tr>

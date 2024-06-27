@@ -26,20 +26,34 @@
             {% if current_user.is_authenticated %}
             <a  href="/vencimentos/procurar" class="linkbotoes">Cadastrar</a>
             <a  href="/vencimentos/analisarvolume" class="linkbotoes">Analisar</a>
+            <a  href="/vencimentos/cadastrar_volume" class="linkbotoes">C. Volume</a>
             {% endif %}
 
         </div>
     </div>
+            {% if current_user.is_authenticated and current_user.acesso > 1%}
           <div class="botaovecimentos">Logística
         <div class="botaovecimentosconteudo">
             <a  href="/entregas/" class="linkbotoes">Entregas</a>
-            {% if current_user.is_authenticated %}
-            <a  href="/entregas/cadastrar" class="linkbotoes">Cadastrar</a>
-            <a  href="/vencimentos/relatorio" class="linkbotoes">Relatório</a>
-            {% endif %}
+            <a  href="/entregas/cadastrar" class="linkbotoes">Cadastrar E.</a>
+            <a  href="/entregas/cadastrar_funcionario" class="linkbotoes">Cadastrar F.</a>
+            <a  href="/entregas/relatorio" class="linkbotoes">Relatório</a>
+        </div>
+
+          </div>{% endif %}
+                    {% if current_user.is_authenticated and current_user.acesso > 1%}
+          <div class="botaovecimentos">ADM
+        <div class="botaovecimentosconteudo">
+            <a  href="/adm/funcionarios" class="linkbotoes">Funcionários</a>
+            <a  href="/adm/cadastrar_funcionario" class="linkbotoes">C. Funcionário</a>
+            <a  href="/adm/usuarios" class="linkbotoes">Usuários</a>
+            <a  href="/adm/cadastrar_usuario" class="linkbotoes">C. Usuário</a>
+
+
 
         </div>
-          </div>
+
+          </div>                {% endif %}
         {% if current_user.is_authenticated %}
         <div class="botaoavarias">{{current_user.username}}
         <div class="botaoavariasconteudo">

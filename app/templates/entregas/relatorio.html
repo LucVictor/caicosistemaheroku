@@ -1,10 +1,8 @@
 {% extends "./template.html" %}
 {% block content %}
     <div class="cadastrar_produto">
-    <h2>Emitir Relatório</h2>
-    <form action="/avarias/relatorio" method="post">
-        <label for="codigo_produto">Código do Produto</label><br>
-        <input type="text" id="codigo_produto" name="codigo_produto"><br><br>
+    <h2>Emitir relatório de entregas</h2>
+    <form action="/entregas/emitir_relatorio" method="post">
 
         <label for="data_inicial">Data inicial:</label><br>
         <input type="date" id="data_inicial" name="data_inicial" required><br><br>

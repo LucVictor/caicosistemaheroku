@@ -1,19 +1,18 @@
 {% extends "./template.html" %}
 {% block content %}
 <style>
-
 .resumo{
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     display: flex;
 }
 </style>
         <h2>Listagem de entregas</h2>
-        <h3>Referente ao mês de {{ mes }}</h3>
+        <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " á " + data_final.strftime('%d/%m/%Y') }}</h3>
 
     <div class="resumo">
     <div class="resumoentregas">
-    <h3>Rank de motoristas</h3>
+    <h2>Rank de motoristas</h2>
    <table class="listagemtabela">
     <tr>
         <th>Nome:</th>
@@ -35,7 +34,7 @@
 </div>
 
        <div class="resumoentregas">
-       <h3>Entregas por rota</h3>
+       <h2>Entregas por rota</h2>
    <table class="listagemtabela">
     <tr>
         <th>Rota:</th>
@@ -53,24 +52,9 @@
 
     </table><br>
 </div>
-    <div class="resumoentregas">
-    <h3>Média tempo de Entrega</h3>
-   <table class="listagemtabela">
-    <tr>
-        <th>Rota:</th>
-        <th>Média de Entrega</th>
-    </tr>
-        {% for i in rotas %}
-    <tr>
-        <td>{{ i.rota }}</td>
-        <td>{{ i.tempo_medio_rota }}</td>
 
-    </tr>
-        {% endfor %}
 
-    </table><br>
-</div>
-              <div class="resumoentregas">
+           <div class="resumoentregas">
        <h3>Total de Entregas: {{ total_de_entregas }}</h3>
        <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
 

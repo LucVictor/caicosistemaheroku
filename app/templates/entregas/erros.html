@@ -1,0 +1,36 @@
+{% extends "./template.html" %}
+{% block content %}
+    <h2>Listagem de erros</h2>
+    <table>
+  <tr>
+      <th>Data</th>
+      <th>Funcionário</th>
+      <th>Cliente</th>
+      <th>Erros</th>
+      <th>Motorista</th>
+      <th>Produto</th>
+      <th>Descrição do erro</th>
+      <th>Ação</th>
+
+  </tr>
+   {% for erro in erros %}
+  <tr>
+    <td>{{ erro.data_do_erro.strftime('%d/%m/%Y') }}</td>
+    <td>{{ erro.erro_funcionario }}</td>
+    <td>{{ erro.erro_cliente}}</td>
+    <td>{{ erro.quantidade_de_erros}}</td>
+    <td>{{ erro.motorista_da_entrega }}</td>
+    <td>{{ erro.produto_erro }}</td>
+    <td>{{ erro.descricao_do_erro }}</td>
+    <td class="botoesacao">
+        <form action="/entregas/editar_erro/{{ erro.id }}" method="post">
+        <input type="submit" value="Editar">
+    </form></td>
+      <td class="botoesacao">
+        <form action="/entregas/apagar_erro/{{ erro.id }}" method="post">
+        <input type="submit" value="Apagar">
+    </form></td>
+  </tr>
+        {% endfor %}
+</table>
+{% endblock %}

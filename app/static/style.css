@@ -214,9 +214,12 @@ a{
   header,
   title,
   menu,
-  .tabelaavarias{
+  .botoesacao{
     display: none;
   }
+    .resumoentregas{
+    font-size: 15px;
+}
 .conteudo{
     top:0;
     padding: 0;
@@ -227,4 +230,17 @@ a{
   }
 .resumoavarias{
     margin-left: 5px;
+}
+select{
+    text-align: center;
+}
+.resumoentregas{
+    text-align: center;
+    margin: 0 0 auto;
+    font-size: 15px;
+    border: solid 1px;
+    width: fit-content;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    text-align: center;
 }
