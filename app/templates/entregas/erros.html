@@ -8,8 +8,9 @@
       <th>Cliente</th>
       <th>Erros</th>
       <th>Motorista</th>
-      <th>Produto</th>
+      <th>Produtos</th>
       <th>Descrição do erro</th>
+      <th>Criador</th>
       <th>Ação</th>
 
   </tr>
@@ -21,12 +22,12 @@
     <td>{{ erro.quantidade_de_erros}}</td>
     <td>{{ erro.motorista_da_entrega }}</td>
     <td>{{ erro.produto_erro }}</td>
-    <td>{{ erro.descricao_do_erro }}</td>
+    <td>{{ erro.descricao_do_erro }}
+    <td>{{ erro.criador }}</td>
     <td class="botoesacao">
         <form action="/entregas/editar_erro/{{ erro.id }}" method="post">
         <input type="submit" value="Editar">
-    </form></td>
-      <td class="botoesacao">
+    </form>
         <form action="/entregas/apagar_erro/{{ erro.id }}" method="post">
         <input type="submit" value="Apagar">
     </form></td>

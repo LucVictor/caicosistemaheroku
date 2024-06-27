@@ -112,6 +112,8 @@ class Erros(db.Model):
     motorista_da_entrega = db.Column(db.String(250), nullable=False)
     produto_erro = db.Column(db.String(250), nullable=False)
     descricao_do_erro = db.Column(db.String(1000), nullable=True)
+    criador = db.Column(db.String(250), nullable=True)
+
 
     @classmethod
     def motorista(cls, nome):
@@ -262,7 +264,7 @@ def index():
     dez_itens = Produto_Avaria.query.order_by(
         Produto_Avaria.data_de_insercao.desc()).limit(5).all()
     dez_vencimentos = Produto_Vencimento.query.order_by(
-        Produto_Vencimento.data_de_vencimento.desc()).limit(5).all()
+        Produto_Vencimento.data_de_vencimento).limit(5).all()
     return render_template('index.html', dates=dates, total_values=total_values, dez_itens=dez_itens,
                            dez_vencimentos=dez_vencimentos)
 
@@ -1137,9 +1139,10 @@ def cadastrar_erro():
         motorista_da_entrega = request.form['motorista_da_entrega']
         produto_erro = request.form['produto_erro']
         descricao_do_erro = request.form['descricao_do_erro']
+        criador = current_user
         erro = Erros(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
                      quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente, produto_erro=produto_erro,
-                     motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro)
+                     motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro, criador=criador)
         db.session.add(erro)
         db.session.commit()
         return redirect(url_for("cadastrar_erro"))
