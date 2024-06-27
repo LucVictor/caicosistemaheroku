@@ -22,7 +22,7 @@
         {% for i in funcionarios %}
     <tr>
         <td>{{ i.nome }}</td>
-        <td>{{ i.total_positivo }}</td>
+        <td>{{ i.funcao }}</td>
         <td class="botoesacao"><form action="/adm/deletar_funcionario/{{ i.id }}" method="post">
     <input type="submit" value="Apagar"></form></td>
 
