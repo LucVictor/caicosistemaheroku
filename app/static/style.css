@@ -244,3 +244,17 @@ select{
     border-radius: 5px;
     text-align: center;
 }
+.resumoerros{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0 0 auto 15px;
+    padding: 15px 15px 15px 15px;
+    font-size: 15px;
+    border: solid 1px;
+    width: fit-content;
+    border-radius: 5px;
+}
+.tabelaerros{
+    margin: auto;
+}

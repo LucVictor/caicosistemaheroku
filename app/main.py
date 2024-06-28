@@ -101,20 +101,6 @@ class Funcionarios(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(250), unique=True, nullable=False)
     funcao = db.Column(db.String(250), nullable=False)
-
-
-class Erros(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data_do_erro = db.Column(db.Date, nullable=False)
-    erro_funcionario = db.Column(db.String(250), nullable=False)
-    erro_cliente = db.Column(db.String(250), nullable=False)
-    quantidade_de_erros = db.Column(db.Integer, nullable=False)
-    motorista_da_entrega = db.Column(db.String(250), nullable=False)
-    produto_erro = db.Column(db.String(250), nullable=False)
-    descricao_do_erro = db.Column(db.String(1000), nullable=True)
-    criador = db.Column(db.String(250), nullable=True)
-
-
     @classmethod
     def motorista(cls, nome):
         return cls(nome=nome, funcao='Motorista')
@@ -135,6 +121,31 @@ class Erros(db.Model):
     def faturista(cls, nome):
         return cls(nome=nome, funcao='Faturista')
 
+
+
+
+class Erros_Vendas(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data_do_erro = db.Column(db.Date, nullable=False)
+    erro_funcionario = db.Column(db.String(250), nullable=False)
+    erro_cliente = db.Column(db.String(250), nullable=False)
+    quantidade_de_erros = db.Column(db.Integer, nullable=False)
+    motorista_da_entrega = db.Column(db.String(250), nullable=False)
+    produto_erro = db.Column(db.String(250), nullable=False)
+    descricao_do_erro = db.Column(db.String(1000), nullable=True)
+    criador = db.Column(db.String(250), nullable=True)
+
+class Erros_Logistica(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data_do_erro = db.Column(db.Date, nullable=False)
+    erro_funcionario = db.Column(db.String(250), nullable=False)
+    erro_cliente = db.Column(db.String(250), nullable=False)
+    quantidade_de_erros = db.Column(db.Integer, nullable=False)
+    motorista_da_entrega = db.Column(db.String(250), nullable=False)
+    rota_da_entrega = db.Column(db.String(250), nullable=False)
+    produto_erro = db.Column(db.String(250), nullable=False)
+    descricao_do_erro = db.Column(db.String(1000), nullable=True)
+    criador = db.Column(db.String(250), nullable=True)
 
 @login_manager.user_loader
 def loader_user(user_id):
@@ -1118,18 +1129,89 @@ def logar():
     return render_template("logar.html")
 
 
+
 @app.route('/entregas/erros', methods=["GET", "POST"])
 @access_level_required(1)
 @login_required
-def erros_de_entrega():
-    erros = Erros.query.all()
-    return render_template("/entregas/erros.html", erros=erros)
+def entregas_erros():
+    erros = Erros_Logistica.query.filter(
+        Erros_Logistica.data_do_erro >= primeiro_dia_mes(),
+        Erros_Logistica.data_do_erro <= ultimo_dia_mes()
+    ).all()
+    erros_por_funcionario = db.session.query(
+        Erros_Logistica.erro_funcionario,
+        func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),
+
+    ).filter(
+        Erros_Logistica.data_do_erro >= primeiro_dia_mes(),
+        Erros_Logistica.data_do_erro <= ultimo_dia_mes()
+    ).group_by(
+        Erros_Logistica.erro_funcionario
+    ).all()
+
+    total_erros = 0
+    for i in erros_por_funcionario:
+        total_erros += i.total_erros
+
+    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros, erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
 
 
 @app.route('/entregas/cadastrar_erro', methods=["GET", "POST"])
 @access_level_required(1)
 @login_required
-def cadastrar_erro():
+def cadastrar_entregas_erro():
+    funcionarios = Funcionarios.query.all()
+    rotas = Rotas.query.all()
+    if request.method == "POST":
+        data_do_erro = request.form["data_do_erro"]
+        erro_funcionario = request.form['erro_funcionario']
+        erro_cliente = request.form['erro_cliente']
+        quantidade_de_erros = request.form['quantidade_de_erros']
+        motorista_da_entrega = request.form['motorista_da_entrega']
+        produto_erro = request.form['produto_erro']
+        rota_da_entrega = request.form['rota_da_entrega']
+        descricao_do_erro = request.form['descricao_do_erro']
+        criador = current_user.username
+        erro = Erros_Logistica(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
+                     quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente, produto_erro=produto_erro,
+                     motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro,
+                               rota_da_entrega=rota_da_entrega, criador=criador)
+        db.session.add(erro)
+        db.session.commit()
+        return redirect(url_for("cadastrar_entregas_erro"))
+    return render_template("/entregas/cadastrar_erro.html", funcionarios=funcionarios, rotas=rotas)
+
+
+
+
+
+@app.route('/vendas/erros', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def vendas_erros():
+    erros = Erros_Vendas.query.filter()
+    erros_por_funcionario = db.session.query(
+        Erros_Vendas.erro_funcionario,
+        func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
+
+    ).filter(
+        Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
+        Erros_Vendas.data_do_erro <= ultimo_dia_mes()
+    ).group_by(
+        Erros_Vendas.erro_funcionario
+    ).all()
+
+    total_erros = 0
+    for i in erros_por_funcionario:
+        total_erros += i.total_erros
+
+    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros, erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+
+
+@app.route('/vendas/cadastrar_erro', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def cadastrar_vendas_erro():
     funcionarios = Funcionarios.query.all()
     if request.method == "POST":
         data_do_erro = request.form["data_do_erro"]
@@ -1139,14 +1221,14 @@ def cadastrar_erro():
         motorista_da_entrega = request.form['motorista_da_entrega']
         produto_erro = request.form['produto_erro']
         descricao_do_erro = request.form['descricao_do_erro']
-        criador = current_user
-        erro = Erros(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
+        criador = current_user.username
+        erro = Erros_Vendas(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
                      quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente, produto_erro=produto_erro,
                      motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro, criador=criador)
         db.session.add(erro)
         db.session.commit()
         return redirect(url_for("cadastrar_erro"))
-    return render_template("/entregas/cadastrar_erro.html", funcionarios=funcionarios)
+    return render_template("/vendas/cadastrar_erro.html", funcionarios=funcionarios)
 
 
 @app.route("/sair")
