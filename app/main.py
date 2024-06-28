@@ -843,7 +843,7 @@ def entregas_index():
 
     total_positivo = func.count(case((subquery.c.resultado_tempo == 'Positivo', 1)))
     total_negativo = func.count(case((subquery.c.resultado_tempo == 'Negativo', 1)))
-    total_sum = total_positivo + total_negativo
+    total_sum = total_positivo - total_negativo
     total_entregas = func.sum(subquery.c.quantidade_de_entregas)
     total_reentregas = func.sum(subquery.c.reentregas)
 
@@ -873,6 +873,7 @@ def entregas_index():
     ).order_by(
         Entrega.data_da_entrega.desc()
     ).all()
+
     mes = mes_atual()
     rotas = Rotas.query.all()
     total_de_entregas = 0
@@ -881,10 +882,12 @@ def entregas_index():
     total_de_reentregas = 0
     for i in resultados_entregas:
         total_de_reentregas += i.total_reentregas
+
     return render_template('entregas/index.html', total_de_reentregas=total_de_reentregas,
                            total_de_entregas=total_de_entregas, mes=mes, rotas=rotas, entregas=entregas,
                            data_agora=data_agora(),
-                           resultados=resultados, resultados_entregas=resultados_entregas)
+                           resultados=resultados
+                           , resultados_entregas=resultados_entregas)
 
 
 @app.route('/entregas/relatorio', methods=['get'])
@@ -913,7 +916,7 @@ def entregas_emitir_relatorio():
 
     total_positivo = func.count(case((subquery.c.resultado_tempo == 'Positivo', 1)))
     total_negativo = func.count(case((subquery.c.resultado_tempo == 'Negativo', 1)))
-    total_sum = total_positivo + total_negativo
+    total_sum = total_positivo - total_negativo
     total_entregas = func.sum(subquery.c.quantidade_de_entregas)
     total_reentregas = func.sum(subquery.c.reentregas)
 
