@@ -50,7 +50,7 @@
             <a  href="/vendas/cadastrar_erro" class="linkbotoes">C. Erro</a>
             <a  href="/vendas/relatorio" class="linkbotoes">Relatório</a>
         </div>{% endif %}
-                 <div class="botaovecimentos">{{current_user.username}}
+                 <div class="botaovecimentos">{{(current_user.username).upper()}}
         <div class="botaovecimentosconteudo">
             {% if current_user.is_authenticated and current_user.acesso > 1%}
             <a  href="/adm/funcionarios" class="linkbotoes">Funcionários</a>
