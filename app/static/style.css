@@ -236,13 +236,12 @@ select{
 }
 .resumoentregas{
     text-align: center;
-    margin: 0 0 auto;
+    margin: 0 0 auto 15px;
     font-size: 15px;
     border: solid 1px;
     width: fit-content;
     padding: 5px 5px 5px 5px;
     border-radius: 5px;
-    text-align: center;
 }
 .resumoerros{
     align-items: center;

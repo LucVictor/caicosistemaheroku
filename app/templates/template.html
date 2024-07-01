@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="menu">
-    <div class="logo"><img src="../static/imagens/logo.png" width="40"></div>
+    <div class="logo"><img src="{{ url_for('static', filename='imagens/logo.png') }}" width="40"></div>
     <div class="botoesmenu">
     <div class="botaoavarias">Avarias
         <div class="botaoavariasconteudo">
@@ -36,9 +36,9 @@
         <div class="botaovecimentosconteudo">
             <a  href="/entregas/" class="linkbotoes">Entregas</a>
             <a  href="/entregas/cadastrar" class="linkbotoes">C. Entrega</a>
+            <a  href="/entregas/relatorio" class="linkbotoes">E. Relatório</a>
             <a  href="/entregas/erros" class="linkbotoes">Erros</a>
-            <a  href="/entregas/cadastrar_erro" class="linkbotoes">C. Erro</a>
-            <a  href="/entregas/relatorio" class="linkbotoes">Relatório</a>
+            <a  href="/entregas/erros_relatorio" class="linkbotoes">R. Erros</a>
         </div>
 
           </div>{% endif %}

@@ -1,0 +1,54 @@
+{% extends "./template.html" %}
+{% block content %}
+<style>
+.resumo{
+    font-size: medium;
+}
+    h3,h2{
+        text-align: center  ;
+    }
+    .resumoavarias{
+        margin-left: 30px;
+    }
+    .vermelhocusto{
+        width: fit-content;
+        margin-top: 2px;
+        padding: 2px;
+        background-color: rgb(251, 73, 73);
+        margin: auto;
+    }
+    .verdecusto{
+        width: fit-content;
+        background: green;
+        margin-top: 2px;
+        margin: auto;
+        padding: 2px;
+    }
+    .vermelho, .verde{
+        width: fit-content;
+        margin-top: 2px;
+        padding: 2px;
+    }
+
+    </style>
+        {% if not total_entregas %}
+        <div class="cadastrar_produto">
+    <h2>Comparar Relatórios</h2>
+    <form action="/avarias/comparar" method="post">
+        <h4>Primeiro relatório</h4>
+        <label for="data_inicial1">Data inicial:</label><br>
+        <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
+
+        <label for="data_final1">Data final</label><br>
+        <input type="date" id="data_final1" name="data_final1" required><br><br>
+
+         <h4>Segundo relatório</h4>
+        <label for="data_inicial2">Data inicial:</label><br>
+        <input type="date" id="data_inicial2" name="data_inicial2" required><br><br>
+
+        <label for="data_final2">Data final</label><br>
+        <input type="date" id="data_final2" name="data_final2" required><br><br>
+        <input type="submit" value="Emitir">
+    </form>
+        </div>
+    {% endif %}

@@ -59,7 +59,7 @@ class Produto_Avaria(db.Model):
     data_de_insercao = db.Column(db.Date)
     criador = db.Column(db.String(300), nullable=True)
     tipodeavaria = db.Column(db.String(300), nullable=True)
-    cozinha = db.Column(db.String(300), nullable=True)
+    usoeconsumo = db.Column(db.String(300), nullable=True)
 
 
 class Users(UserMixin, db.Model):
@@ -101,6 +101,7 @@ class Funcionarios(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(250), unique=True, nullable=False)
     funcao = db.Column(db.String(250), nullable=False)
+
     @classmethod
     def motorista(cls, nome):
         return cls(nome=nome, funcao='Motorista')
@@ -122,8 +123,6 @@ class Funcionarios(db.Model):
         return cls(nome=nome, funcao='Faturista')
 
 
-
-
 class Erros_Vendas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data_do_erro = db.Column(db.Date, nullable=False)
@@ -134,6 +133,7 @@ class Erros_Vendas(db.Model):
     produto_erro = db.Column(db.String(250), nullable=False)
     descricao_do_erro = db.Column(db.String(1000), nullable=True)
     criador = db.Column(db.String(250), nullable=True)
+
 
 class Erros_Logistica(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -146,6 +146,7 @@ class Erros_Logistica(db.Model):
     produto_erro = db.Column(db.String(250), nullable=False)
     descricao_do_erro = db.Column(db.String(1000), nullable=True)
     criador = db.Column(db.String(250), nullable=True)
+
 
 @login_manager.user_loader
 def loader_user(user_id):
@@ -293,9 +294,9 @@ def index_avarias():
     total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
         Produto_Avaria.data_de_insercao >= primeiro_dia_mes(),
         Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).scalar()
-    total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+    total_soma_avarias_usoeconsumo = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
         Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
-        Produto_Avaria.cozinha == "Sim").scalar()
+        Produto_Avaria.usoeconsumo == "Sim").scalar()
     total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
         Produto_Avaria.data_de_insercao >= primeiro_dia_mes(), Produto_Avaria.data_de_insercao <= ultimo_dia_mes(),
         Produto_Avaria.tipodeavaria == "Embalagem").scalar()
@@ -308,8 +309,8 @@ def index_avarias():
 
     if not total_soma_avarias:
         total_soma_avarias = 0
-    if not total_soma_avarias_cozinha:
-        total_soma_avarias_cozinha = 0
+    if not total_soma_avarias_usoeconsumo:
+        total_soma_avarias_usoeconsumo = 0
     if not total_soma_avarias_embalagem:
         total_soma_avarias_embalagem = 0
     if not total_soma_avarias_vencimento:
@@ -339,7 +340,8 @@ def index_avarias():
                                             Produto_Avaria.data_de_insercao <= ultimo_dia_mes()).order_by(
         Produto_Avaria.preco_total.desc()).limit(10).all()
     return render_template('avarias/index.html', avarias=avarias, mes=mes_atual(),
-                           total_soma_avarias=total_soma_avarias, total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                           total_soma_avarias=total_soma_avarias,
+                           total_soma_avarias_usoeconsumo=total_soma_avarias_usoeconsumo,
                            total_soma_avarias_embalagem=total_soma_avarias_embalagem,
                            total_soma_avarias_vencimento=total_soma_avarias_vencimento,
                            total_soma_avarias_estragado=total_soma_avarias_estragado,
@@ -362,12 +364,18 @@ def avarias_cadastrar():
     codigo_de_barras = request.form['codigo_barras']
     if codigo:
         produto = Produto.query.filter(Produto.codigo_do_produto == codigo).first()
-        return render_template('avarias/cadastrar.html', produto=produto)
+        if produto:
+            return render_template('avarias/cadastrar.html', produto=produto)
+        else:
+            return redirect(url_for('avarias_procurar'))
     if codigo_de_barras:
         produto = Produto.query.filter(Produto.codigo_de_barras == codigo_de_barras).first()
-        return render_template('avarias/cadastrar.html', produto=produto)
+        if produto:
+            return render_template('avarias/cadastrar.html', produto=produto)
+        else:
+            return redirect(url_for('avarias_procurar'))
 
-    return render_template('avarias/cadastrar.html')
+    return render_template('avarias/cadastrar.html', data_agora=data_agora())
 
 
 @app.route('/avarias/cadastro', methods=['POST'])
@@ -376,7 +384,8 @@ def avarias_cadastro():
     codigo = request.form['codigo_produto']
     quantidade = int(request.form['quantidade'])
     tipodeavaria = request.form['tipodeavaria']
-    cozinha = request.form['cozinha']
+    usoeconsumo = request.form['usoeconsumo']
+    data_de_insercao = request.form['data_de_insercao']
     produto = Produto.query.filter(Produto.codigo_do_produto == codigo).first()
     cadastrar_avaria = Produto_Avaria(
         codigo_do_produto=produto.codigo_do_produto,
@@ -384,10 +393,10 @@ def avarias_cadastro():
         preco_do_produto=produto.preco_do_produto,
         quantidade=quantidade,
         preco_total=quantidade * produto.preco_do_produto,
-        data_de_insercao=data_agora(),
+        data_de_insercao=data_de_insercao,
         criador=current_user.username,
         tipodeavaria=tipodeavaria,
-        cozinha=cozinha)
+        usoeconsumo=usoeconsumo)
     db.session.add(cadastrar_avaria)
     db.session.commit()
     db.session.close()
@@ -411,10 +420,10 @@ def avarias_relatorio():
                 Produto_Avaria.codigo_do_produto == codigo,
                 Produto_Avaria.data_de_insercao >= data_inicial,
                 Produto_Avaria.data_de_insercao <= data_final).scalar()
-            total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+            total_soma_avarias_usoeconsumo = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
                 Produto_Avaria.codigo_do_produto == codigo,
                 Produto_Avaria.data_de_insercao >= data_inicial,
-                Produto_Avaria.data_de_insercao <= data_final, Produto_Avaria.cozinha == "Sim").scalar()
+                Produto_Avaria.data_de_insercao <= data_final, Produto_Avaria.usoeconsumo == "Sim").scalar()
             total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
                 Produto_Avaria.codigo_do_produto == codigo,
                 Produto_Avaria.data_de_insercao >= data_inicial,
@@ -431,8 +440,8 @@ def avarias_relatorio():
 
             if not total_soma_avarias:
                 total_soma_avarias = "0"
-            if not total_soma_avarias_cozinha:
-                total_soma_avarias_cozinha = "0"
+            if not total_soma_avarias_usoeconsumo:
+                total_soma_avarias_usoeconsumo = "0"
             if not total_soma_avarias_embalagem:
                 total_soma_avarias_embalagem = "0"
             if not total_soma_avarias_vencimento:
@@ -470,7 +479,7 @@ def avarias_relatorio():
 
             return render_template('avarias/emitir_relatorio.html', resultado=resultado,
                                    total_soma_avarias=total_soma_avarias,
-                                   total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                                   total_soma_avarias_usoeconsumo=total_soma_avarias_usoeconsumo,
                                    total_soma_avarias_embalagem=total_soma_avarias_embalagem,
                                    total_soma_avarias_vencimento=total_soma_avarias_vencimento,
                                    total_soma_avarias_estragado=total_soma_avarias_estragado,
@@ -488,10 +497,10 @@ def avarias_relatorio():
             Produto_Avaria.data_de_insercao >= data_inicial,
             Produto_Avaria.data_de_insercao <= data_final).scalar()
         total_soma_avarias = total_soma_avarias if total_soma_avarias is not None else 0
-        total_soma_avarias_cozinha = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        total_soma_avarias_usoeconsumo = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial,
             Produto_Avaria.data_de_insercao <= data_final,
-            Produto_Avaria.cozinha == "Sim").scalar()
+            Produto_Avaria.usoeconsumo == "Sim").scalar()
         total_soma_avarias_embalagem = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial,
             Produto_Avaria.data_de_insercao <= data_final,
@@ -507,8 +516,8 @@ def avarias_relatorio():
 
         if not total_soma_avarias:
             total_soma_avarias = "0.00"
-        if not total_soma_avarias_cozinha:
-            total_soma_avarias_cozinha = "0.00"
+        if not total_soma_avarias_usoeconsumo:
+            total_soma_avarias_usoeconsumo = "0.00"
         if not total_soma_avarias_embalagem:
             total_soma_avarias_embalagem = "0.00"
         if not total_soma_avarias_vencimento:
@@ -541,7 +550,7 @@ def avarias_relatorio():
 
         return render_template('avarias/emitir_relatorio.html', resultado=resultado,
                                total_soma_avarias=total_soma_avarias,
-                               total_soma_avarias_cozinha=total_soma_avarias_cozinha,
+                               total_soma_avarias_usoeconsumo=total_soma_avarias_usoeconsumo,
                                total_soma_avarias_embalagem=total_soma_avarias_embalagem,
                                total_soma_avarias_vencimento=total_soma_avarias_vencimento,
                                total_soma_avarias_estragado=total_soma_avarias_estragado,
@@ -576,10 +585,10 @@ def avarias_comparar():
             Produto_Avaria.data_de_insercao >= data_inicial1,
             Produto_Avaria.data_de_insercao <= data_final1).scalar()
         total_soma_avarias1 = total_soma_avarias1 if total_soma_avarias1 is not None else 0
-        total_soma_avarias_cozinha1 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        total_soma_avarias_usoeconsumo1 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial1,
             Produto_Avaria.data_de_insercao <= data_final1,
-            Produto_Avaria.cozinha == "Sim").scalar()
+            Produto_Avaria.usoeconsumo == "Sim").scalar()
         total_soma_avarias_embalagem1 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial1,
             Produto_Avaria.data_de_insercao <= data_final1,
@@ -595,8 +604,8 @@ def avarias_comparar():
 
         if not total_soma_avarias1:
             total_soma_avarias1 = 0
-        if not total_soma_avarias_cozinha1:
-            total_soma_avarias_cozinha1 = 0
+        if not total_soma_avarias_usoeconsumo1:
+            total_soma_avarias_usoeconsumo1 = 0
         if not total_soma_avarias_embalagem1:
             total_soma_avarias_embalagem1 = 0
         if not total_soma_avarias_vencimento1:
@@ -608,10 +617,10 @@ def avarias_comparar():
             Produto_Avaria.data_de_insercao >= data_inicial2,
             Produto_Avaria.data_de_insercao <= data_final2).scalar()
         total_soma_avarias2 = total_soma_avarias2 if total_soma_avarias2 is not None else 0
-        total_soma_avarias_cozinha2 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
+        total_soma_avarias_usoeconsumo2 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial2,
             Produto_Avaria.data_de_insercao <= data_final2,
-            Produto_Avaria.cozinha == "Sim").scalar()
+            Produto_Avaria.usoeconsumo == "Sim").scalar()
         total_soma_avarias_embalagem2 = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial2,
             Produto_Avaria.data_de_insercao <= data_final2,
@@ -627,8 +636,8 @@ def avarias_comparar():
 
         if not total_soma_avarias2:
             total_soma_avarias2 = 0
-        if not total_soma_avarias_cozinha2:
-            total_soma_avarias_cozinha2 = 0
+        if not total_soma_avarias_usoeconsumo2:
+            total_soma_avarias_usoeconsumo2 = 0
         if not total_soma_avarias_embalagem2:
             total_soma_avarias_embalagem2 = 0
         if not total_soma_avarias_vencimento2:
@@ -676,7 +685,7 @@ def avarias_comparar():
 
         return render_template('avarias/comparar.html',
                                total_soma_avarias1=total_soma_avarias1,
-                               total_soma_avarias_cozinha1=total_soma_avarias_cozinha1,
+                               total_soma_avarias_usoeconsumo1=total_soma_avarias_usoeconsumo1,
                                total_soma_avarias_embalagem1=total_soma_avarias_embalagem1,
                                total_soma_avarias_vencimento1=total_soma_avarias_vencimento1,
                                total_soma_avarias_estragado1=total_soma_avarias_estragado1,
@@ -686,7 +695,7 @@ def avarias_comparar():
                                avarias_vencidos_quantidade1=avarias_vencidos_quantidade1,
                                avarias_estragados_quantidade1=avarias_estragados_quantidade1,
                                total_soma_avarias2=total_soma_avarias2,
-                               total_soma_avarias_cozinha2=total_soma_avarias_cozinha2,
+                               total_soma_avarias_usoeconsumo2=total_soma_avarias_usoeconsumo2,
                                total_soma_avarias_embalagem2=total_soma_avarias_embalagem2,
                                total_soma_avarias_vencimento2=total_soma_avarias_vencimento2,
                                total_soma_avarias_estragado2=total_soma_avarias_estragado2,
@@ -729,7 +738,7 @@ def vencimentos_cadastrar():
         produto = Produto.query.filter(Produto.codigo_de_barras == codigo_de_barras).first()
         return render_template('vencimentos/cadastrar.html', produto=produto)
 
-    return render_template('avarias/cadastrar.html')
+    return render_template('vencimentos/cadastrar.html')
 
 
 @app.route('/vencimentos/cadastro', methods=['POST'])
@@ -961,6 +970,125 @@ def entregas_emitir_relatorio():
                            data_final=formatar_data(data_final))
 
 
+@app.route('/entregas/comparar_entregas', methods=['GET','POST'])
+@login_required
+@access_level_required(1)
+def entregas_comparar():
+    if request.method == 'POST':
+        data_inicial = request.form['data_inicial1']
+        data_final = request.form['data_final1']
+        subquery = db.session.query(
+            Entrega.motorista,
+            Entrega.rota,
+            Entrega.resultado_tempo,
+            Entrega.quantidade_de_entregas,
+            Entrega.data_da_entrega,
+            Entrega.reentregas
+        ).filter(
+            Entrega.data_da_entrega.between(data_inicial, data_final)
+        ).subquery()
+        total_positivo = func.count(case((subquery.c.resultado_tempo == 'Positivo', 1)))
+        total_negativo = func.count(case((subquery.c.resultado_tempo == 'Negativo', 1)))
+        total_sum = total_positivo - total_negativo
+        total_entregas = func.sum(subquery.c.quantidade_de_entregas)
+        total_reentregas = func.sum(subquery.c.reentregas)
+
+        resultados = db.session.query(
+            subquery.c.motorista,
+            total_positivo.label('total_positivo'),
+            total_negativo.label('total_negativo'),
+            total_sum.label('total_sum')
+        ).group_by(
+            subquery.c.motorista
+        ).order_by(
+            total_sum.desc()
+        ).all()
+
+        resultados_entregas = db.session.query(
+            subquery.c.rota,
+            total_entregas.label('total_entregas'),
+            total_reentregas.label('total_reentregas')
+        ).group_by(
+            subquery.c.rota
+        ).order_by(
+            total_entregas.desc()
+        ).all()
+
+        entregas = db.session.query(Entrega).filter(
+            Entrega.data_da_entrega.between(data_inicial, data_final)
+        ).order_by(
+            Entrega.data_da_entrega.desc()
+        ).all()
+
+        total_de_entregas = 0
+        for i in resultados_entregas:
+            total_de_entregas += i.total_entregas
+        total_de_reentregas = 0
+        for i in resultados_entregas:
+            total_de_reentregas += i.total_reentregas
+        mes = mes_atual()
+        data_inicial2 = request.form['data_inicial2']
+        data_final2 = request.form['data_final2']
+        subquery2 = db.session.query(
+            Entrega.motorista,
+            Entrega.rota,
+            Entrega.resultado_tempo,
+            Entrega.quantidade_de_entregas,
+            Entrega.data_da_entrega,
+            Entrega.reentregas
+        ).filter(
+            Entrega.data_da_entrega.between(data_inicial2, data_final2)
+        ).subquery()
+        total_positivo2 = func.count(case((subquery2.c.resultado_tempo == 'Positivo', 1)))
+        total_negativo2 = func.count(case((subquery2.c.resultado_tempo == 'Negativo', 1)))
+        total_sum2 = total_positivo2 - total_negativo2
+        total_entregas2 = func.sum(subquery2.c.quantidade_de_entregas)
+        total_reentregas2 = func.sum(subquery2.c.reentregas)
+
+        resultados2 = db.session.query(
+            subquery2.c.motorista,
+            total_positivo2.label('total_positivo'),
+            total_negativo2.label('total_negativo'),
+            total_sum2.label('total_sum')
+        ).group_by(
+            subquery2.c.motorista
+        ).order_by(
+            total_sum2.desc()
+        ).all()
+
+        resultados_entregas2 = db.session.query(
+            subquery2.c.rota,
+            total_entregas2.label('total_entregas'),
+            total_reentregas2.label('total_reentregas')
+        ).group_by(
+            subquery2.c.rota
+        ).order_by(
+            total_entregas2.desc()
+        ).all()
+
+        entregas2 = db.session.query(Entrega).filter(
+            Entrega.data_da_entrega.between(data_inicial2, data_final2)
+        ).order_by(
+            Entrega.data_da_entrega.desc()
+        ).all()
+
+        total_de_entregas2 = 0
+        for i in resultados_entregas2:
+            total_de_entregas2 += i.total_entregas
+        total_de_reentregas2 = 0
+        for i in resultados_entregas2:
+            total_de_reentregas2 += i.total_reentregas
+
+        return render_template('entregas/comparar_relatorio.html', total_de_reentregas=total_de_reentregas,
+                               total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2,
+                               total_de_reentregas2=total_de_reentregas2, mes=mes,
+                               entregas=entregas, entregas2=entregas2, data_agora=data_agora(), resultados=resultados,
+                               resultados2=resultados2,
+                               resultados_entregas=resultados_entregas, data_inicial=formatar_data(data_inicial),
+                               data_final=formatar_data(data_final))
+    return render_template('entregas/comparar_entregas.html')
+
+
 @app.route('/entregas/cadastrar', methods=['GET', 'POST'])
 @login_required
 @access_level_required(1)
@@ -1132,7 +1260,6 @@ def logar():
     return render_template("logar.html")
 
 
-
 @app.route('/entregas/erros', methods=["GET", "POST"])
 @access_level_required(1)
 @login_required
@@ -1156,7 +1283,8 @@ def entregas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
-    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros, erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros,
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
 
 
 @app.route('/entregas/cadastrar_erro', methods=["GET", "POST"])
@@ -1176,8 +1304,9 @@ def cadastrar_entregas_erro():
         descricao_do_erro = request.form['descricao_do_erro']
         criador = current_user.username
         erro = Erros_Logistica(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
-                     quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente, produto_erro=produto_erro,
-                     motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro,
+                               quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente,
+                               produto_erro=produto_erro,
+                               motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro,
                                rota_da_entrega=rota_da_entrega, criador=criador)
         db.session.add(erro)
         db.session.commit()
@@ -1185,7 +1314,37 @@ def cadastrar_entregas_erro():
     return render_template("/entregas/cadastrar_erro.html", funcionarios=funcionarios, rotas=rotas)
 
 
+@app.route('/entregas/editar_erro/<int:erro_id>', methods=["GET", "POST"])
+@login_required
+def entrega_editar(erro_id):
+    erros = Erros_Logistica.query.get_or_404(erro_id)
+    funcionarios = Funcionarios.query.all()
+    rotas = Rotas.query.all()
+    if request.method == "POST":
+        data_do_erro = request.form["data_do_erro"]
+        erro_funcionario = request.form['erro_funcionario']
+        erro_cliente = request.form['erro_cliente']
+        quantidade_de_erros = request.form['quantidade_de_erros']
+        motorista_da_entrega = request.form['motorista_da_entrega']
+        produto_erro = request.form['produto_erro']
+        rota_da_entrega = request.form['rota_da_entrega']
+        descricao_do_erro = request.form['descricao_do_erro']
+        criador = current_user.username
 
+        erros.data_do_erro = data_do_erro
+        erros.erro_funcionario = erro_funcionario
+        erros.quantidade_de_erros = quantidade_de_erros
+        erros.erro_cliente = erro_cliente
+        erros.produto_erro = produto_erro
+        erros.motorista_da_entrega = motorista_da_entrega
+        erros.descricao_do_erro = descricao_do_erro
+        erros.rota_da_entrega = rota_da_entrega
+        erros.criador = criador
+
+        db.session.add(erros)
+        db.session.commit()
+        return redirect(url_for("entregas_erros"))
+    return render_template('/entregas/editar_erro.html', erros=erros, funcionarios=funcionarios, rotas=rotas)
 
 
 @app.route('/vendas/erros', methods=["GET", "POST"])
@@ -1208,7 +1367,8 @@ def vendas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
-    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros, erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros,
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
 
 
 @app.route('/vendas/cadastrar_erro', methods=["GET", "POST"])
@@ -1226,12 +1386,46 @@ def cadastrar_vendas_erro():
         descricao_do_erro = request.form['descricao_do_erro']
         criador = current_user.username
         erro = Erros_Vendas(data_do_erro=data_do_erro, erro_funcionario=erro_funcionario,
-                     quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente, produto_erro=produto_erro,
-                     motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro, criador=criador)
+                            quantidade_de_erros=quantidade_de_erros, erro_cliente=erro_cliente,
+                            produto_erro=produto_erro,
+                            motorista_da_entrega=motorista_da_entrega, descricao_do_erro=descricao_do_erro,
+                            criador=criador)
         db.session.add(erro)
         db.session.commit()
         return redirect(url_for("cadastrar_erro"))
     return render_template("/vendas/cadastrar_erro.html", funcionarios=funcionarios)
+
+
+
+@app.route('/entregas/erros_relatorio', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def entregas_erros_relatorio():
+    if request.method == "POST":
+        data_inicial = request.form["data_inicial"]
+        data_final = request.form["data_final"]
+        erros = Erros_Logistica.query.filter(
+            Erros_Logistica.data_do_erro >= data_inicial,
+            Erros_Logistica.data_do_erro <= data_final
+        ).all()
+        erros_por_funcionario = db.session.query(
+            Erros_Logistica.erro_funcionario,
+            func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),
+
+        ).filter(
+            Erros_Logistica.data_do_erro >= data_inicial,
+            Erros_Logistica.data_do_erro <= data_final
+        ).group_by(
+            Erros_Logistica.erro_funcionario
+        ).all()
+
+        total_erros = 0
+        for i in erros_por_funcionario:
+            total_erros += i.total_erros
+
+        return render_template("/entregas/emitir_erro_relatorio.html", mes=mes_atual(), erros=erros,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+    return render_template('entregas/relatorio_erro.html')
 
 
 @app.route("/sair")

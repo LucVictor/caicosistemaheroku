@@ -23,7 +23,7 @@
     <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h5>
     <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h5>
     <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado }} </h5>
-    <h5>Custos enviados a cozinha: R${{ total_soma_avarias_cozinha }} </h5>
+    <h5>Custos enviados a cozinha: R${{ total_soma_avarias_usoeconsumo }} </h5>
     </div><br>
     <div class="resumoavarias">
      <h3>Descrição de itens:</h3>
@@ -56,7 +56,7 @@
     <th>Quantidade</th>
     <th>Custo</th>
     <th>Tipo de Avaria</th>
-    <th>Cozinha?</th>
+    <th>Uso e consumo?</th>
     <th>Usuário</th>
     <th class="botoesacao">Ação</th>
   </tr>
@@ -68,7 +68,7 @@
     <td>{{ avaria.quantidade }}</td>
     <td>R$ {{ avaria.preco_total }}</td>
       <td>{{ avaria.tipodeavaria }}</td>
-      <td>{{ avaria.cozinha }}</td>
+      <td>{{ avaria.usoeconsumo }}</td>
     <td>{{ avaria.criador }}</td>
       <td class="botoesacao"><form action="/avarias/deletar/{{ avaria.id }}" method="post">
     <input type="submit" value="Apagar"></form>
