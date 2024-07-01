@@ -1242,7 +1242,7 @@ def usuarios():
 def cadastrar_usuario():
     if request.method == "POST":
         user = Users(username=request.form.get("username"),
-                     password=request.form.get("password"), filial=request.form.get("filial"))
+                     password=request.form.get("password"), filial=request.form.get("filial"), acesso=request.form.get("acesso"))
         db.session.add(user)
         db.session.commit()
         return redirect(url_for("logar"))
