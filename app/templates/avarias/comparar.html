@@ -87,15 +87,15 @@
         <h3>Custos:</h3>
         {% if total_soma_avarias1>0 and total_soma_avarias2 >0 %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de avarias: +{{ (((total_soma_avarias2 - total_soma_avarias1) / total_soma_avarias1) * 100) | int }}%</h4>
+                <h4 class="vermelhocusto">Custos de uso e consumo: +{{ (((total_soma_avarias2 - total_soma_avarias1) / total_soma_avarias1) * 100) | int }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de avarias: -{{ (((total_soma_avarias1 - total_soma_avarias2) / total_soma_avarias2) * 100) | int }}%</h4>
+                <h4 class="verdecusto">Custos de uso e consumo: -{{ (((total_soma_avarias1 - total_soma_avarias2) / total_soma_avarias2) * 100) | int }}%</h4>
             {% endif %}
         {% else %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de avarias: +{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="vermelhocusto">Custos de uso e consumo: +{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de avarias: -{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="verdecusto">Custos de uso e consumo: -{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% endif %}
         {% endif %}
 
@@ -144,15 +144,15 @@
 
         {% if total_soma_avarias_usoeconsumo1>0 and total_soma_avarias_usoeconsumo2 >0 %}
             {% if total_soma_avarias_usoeconsumo1 < total_soma_avarias_usoeconsumo2 >0 %}
-                <h5 class="vermelho">Custos enviados a cozinha: +{{ (((total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1)/total_soma_avarias_usoeconsumo1)*100 )| int }}%</h5>
+                <h5 class="vermelho">Custos de uso e consumo: +{{ (((total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1)/total_soma_avarias_usoeconsumo1)*100 )| int }}%</h5>
             {% else %}
-                <h5 class="verde">Custos enviados a cozinha: -{{  (((total_soma_avarias_usoeconsumo1 - total_soma_avarias_usoeconsumo2)/total_soma_avarias_usoeconsumo2)*100 )| int }}%</h5>
+                <h5 class="verde">Custos de uso e consumo: -{{  (((total_soma_avarias_usoeconsumo1 - total_soma_avarias_usoeconsumo2)/total_soma_avarias_usoeconsumo2)*100 )| int }}%</h5>
             {% endif %}
         {% else %}
             {% if total_soma_avarias_usoeconsumo1 < total_soma_avarias_usoeconsumo2 >0 %}
-                <h5 class="vermelho">Custos enviados a cozinha: {{ -(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
+                <h5 class="vermelho">Custos de uso e consumo: {{ -(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
             {% else %}
-                <h5 class="verde">Custos enviados a cozinha: {{ +(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
+                <h5 class="verde">Custos de uso e consumo: {{ +(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
             {% endif %}
         {% endif %}
         </div>
