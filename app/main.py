@@ -89,6 +89,7 @@ class Entrega(db.Model):
     tempo_medio_entrega = db.Column(db.Time, nullable=False)
     resultado_tempo = db.Column(db.String(250), nullable=False)
     reentregas = db.Column(db.Integer, nullable=True)
+    entreganrealizadas = db.Column(db.Integer, nullable=True)
 
 
 class Rotas(db.Model):
@@ -1101,6 +1102,7 @@ def entrega_cadastrar():
         quantidade_de_entregas = int(request.form['quantidade_de_entregas'])
         tempo_total = datetime.strptime(request.form['tempo_total'], '%H:%M').time()
         reentregas = int(request.form['reentregas'])
+        entreganrealizadas = int(request.form['entreganrealizadas'])
         tempo_medio_total = hora_para_segundo(tempo_total) / quantidade_de_entregas
         tempo_medio_total = segundos_para_hora(tempo_medio_total)
 
@@ -1125,7 +1127,8 @@ def entrega_cadastrar():
             tempo_medio_total=tempo_medio_total,
             tempo_medio_entrega=tempo_medio_entrega,
             resultado_tempo=resultado_tempo,
-            reentregas=reentregas
+            reentregas=reentregas,
+            entreganrealizadas=entreganrealizadas
         )
         db.session.add(entrega)
         db.session.commit()

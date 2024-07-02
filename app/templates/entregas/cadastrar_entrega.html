@@ -18,7 +18,7 @@
         .form-group{
             padding: 10px;
         }
-        #quantidade_de_entregas, #reentregas{
+        #quantidade_de_entregas, #reentregas, #entreganrealizadas{
             width: 50px;
         }
         .caminhao{
@@ -55,6 +55,7 @@
                 {% endfor %}
             </select>
         </div>
+
         <div class="form-group">
           <label for="rota">Rota:</label>
             <select name="rota" id="rota">
@@ -70,6 +71,10 @@
               <div class="form-group">
           <label for="reentregas">Quantidade de Reentregas:</label>
           <input type="number" class="form-control" id="reentregas" value="0" name="reentregas" required>
+        </div>
+          <div class="form-group">
+          <label for="entreganrealizadas">Entregas não realizadas:</label>
+          <input type="number" class="form-control" id="entreganrealizadas" value="0" name="entreganrealizadas" required>
         </div>
         <div class="form-group">
           <label for="tempo_total">Tempo Total:</label>
