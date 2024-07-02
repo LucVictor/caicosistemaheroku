@@ -1,6 +1,11 @@
 {% extends "./template.html" %}
 {% block content %}
+    <style>
+    .h5{
+        font-size: 12px;
 
+    }
+    </style>
     <h2>Relatório de Avarias</h2>
     <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " á " + data_final.strftime('%d/%m/%Y') }}</h3><br>
     <div class="resumo">
@@ -39,7 +44,10 @@
     </div>
     </div>
 
-    <table>
+    <br>
+    <br>
+
+    <table class="tabelaavarias">
   <tr>
       <th>Data</th>
     <th>Código</th>

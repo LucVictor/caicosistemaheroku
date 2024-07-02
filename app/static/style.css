@@ -191,6 +191,7 @@ a{
 }
 .tabelaavarias{
     padding: 10px;
+    font-size: small;
 }
 .resumo{
     display: flex;
