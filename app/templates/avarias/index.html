@@ -67,7 +67,7 @@
       <td>{{ avaria.data_de_insercao.strftime('%d/%m/%Y') }}</td>
     <td>{{ avaria.codigo_do_produto }}</td>
     <td>{{ avaria.nome_do_produto }}</td>
-    <td>{{ avaria.quantidade }}</td>
+    <td>{{ avaria.quantidade | format_quantidade}}</td>
     <td>R$ {{ avaria.preco_total }}</td>
       <td>{{ avaria.tipodeavaria }}</td>
       <td>{{ avaria.usoeconsumo }}</td>
