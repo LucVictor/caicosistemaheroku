@@ -1,7 +1,11 @@
-FROM python:3.12.4-alpine
-COPY ./ /app
-WORKDIR /app
-RUN ls -a
-RUN pip3 install -r requirements.txt
+FROM python:3.9
 
-CMD [ "gunicorn ", "--bind", "0.0.0.0:5000", "wsgi:app" ]
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./app /code/app
+
+CMD ["gunicorn", "--conf", "app/gunicorn_conf.py", "--bind", "0.0.0.0:80", "app.main:app"]
