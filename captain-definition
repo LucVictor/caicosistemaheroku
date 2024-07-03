@@ -1,7 +1,7 @@
 {
 	"schemaVersion" :2 ,
 	"dockerfileLines" :[
-		"FROM python:3.11.9-alpine",
+		"FROM python:3.12.4-alpine",
 		"COPY ./ /app",
 		"WORKDIR /app",
 		"RUN ls -a",
