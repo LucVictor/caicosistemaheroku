@@ -3,4 +3,4 @@ COPY ./ /app
 WORKDIR /app
 RUN ls -a
 RUN pip3 install -r requirements.txt
-CMD [ \"gunicorn\", \"wsgi:app\", \"--workers\", \"4\" ]
+CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app", "--workers", "4" ]
