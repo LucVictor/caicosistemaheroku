@@ -64,7 +64,7 @@
    <td>{{ resultado.data_de_insercao.strftime('%d/%m/%Y') }}</td>
     <td>{{ resultado.codigo_do_produto }}</td>
     <td>{{ resultado.nome_do_produto }}</td>
-    <td>{{ resultado.quantidade }}</td>
+    <td>{{ resultado.quantidade | format_quantidade}}</td>
     <td>R$ {{ resultado.preco_total }}</td>
     <td>{{ resultado.tipodeavaria }}</td>
     <td>{{ resultado.usoeconsumo }}</td>
