@@ -383,7 +383,7 @@ def avarias_cadastrar():
 @login_required
 def avarias_cadastro():
     codigo = request.form['codigo_produto']
-    quantidade = int(request.form['quantidade'])
+    quantidade = Decimal(request.form['quantidade'])
     tipodeavaria = request.form['tipodeavaria']
     usoeconsumo = request.form['usoeconsumo']
     data_de_insercao = request.form['data_de_insercao']
@@ -393,7 +393,7 @@ def avarias_cadastro():
         nome_do_produto=produto.nome_do_produto,
         preco_do_produto=produto.preco_do_produto,
         quantidade=quantidade,
-        preco_total=quantidade * produto.preco_do_produto,
+        preco_total=quantidade * Decimal(produto.preco_do_produto),
         data_de_insercao=data_de_insercao,
         criador=current_user.username,
         tipodeavaria=tipodeavaria,
