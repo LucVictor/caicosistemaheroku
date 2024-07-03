@@ -1190,6 +1190,11 @@ def rotas_cadastrar():
         if request.method == 'POST':
             rota = request.form['rota']
             tempo_medio = request.form['tempo_medio']
+            atualizar = Rotas.query.filter_by(rota=rota).first()
+            if atualizar:
+                atualizar.tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M:%S').time()
+                db.session.commit()
+                return render_template("/entregas/rotas_cadastrar.html", erro='Rota atualizada')
             nova_rota = Rotas(rota=rota, tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M:%S').time())
             db.session.add(nova_rota)
             db.session.commit()
