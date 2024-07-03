@@ -1190,7 +1190,7 @@ def rotas_cadastrar():
         if request.method == 'POST':
             rota = request.form['rota']
             tempo_medio = request.form['tempo_medio']
-            nova_rota = Rotas(rota=rota, tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M').time())
+            nova_rota = Rotas(rota=rota, tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M:%S').time())
             db.session.add(nova_rota)
             db.session.commit()
             return render_template("/entregas/rotas_cadastrar.html", erro='Rota cadastrada')
