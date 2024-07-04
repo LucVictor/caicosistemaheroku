@@ -1228,7 +1228,7 @@ def funcionarios():
     return render_template('/adm/funcionarios.html', funcionarios=funcionarios)
 
 
-@app.route('/adm/deletar_funcionarios/<int:funcionario_id>', methods=['GET', 'POST'])
+@app.route('/adm/deletar_funcionario/<int:funcionario_id>', methods=['POST'])
 def deletar_funcionario(funcionario_id):
     funcionario = Funcionarios.query.filter_by(id=funcionario_id).first()
     db.session.delete(funcionario)
