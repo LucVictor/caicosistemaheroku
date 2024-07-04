@@ -1359,7 +1359,10 @@ def entrega_editar(erro_id):
 @access_level_required(1)
 @login_required
 def vendas_erros():
-    erros = Erros_Vendas.query.filter()
+    erros = Erros_Vendas.query.filter(
+            Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
+            Erros_Vendas.data_do_erro <= ultimo_dia_mes()).all()
+
     erros_por_funcionario = db.session.query(
         Erros_Vendas.erro_funcionario,
         func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
@@ -1375,8 +1378,38 @@ def vendas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
-    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros,
+    return render_template("/vendas/erros.html", mes=mes_atual(), erros=erros,
                            erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+
+@app.route('/vendas/erros_relatorio', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def relatorio_vendas_erros():
+    if request.method == 'POST':
+        data_inicial = request.form['data_inicial']
+        data_final = request.form['data_final']
+        erros = Erros_Vendas.query.filter(
+            Erros_Vendas.data_do_erro >= data_inicial,
+            Erros_Vendas.data_do_erro <= data_final).all()
+
+        erros_por_funcionario = db.session.query(
+            Erros_Vendas.erro_funcionario,
+            func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
+
+        ).filter(
+            Erros_Vendas.data_do_erro >= data_inicial,
+            Erros_Vendas.data_do_erro <= data_final
+        ).group_by(
+            Erros_Vendas.erro_funcionario
+        ).all()
+
+        total_erros = 0
+        for i in erros_por_funcionario:
+            total_erros += i.total_erros
+
+        return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+    return render_template('/vendas/relatorio.html')
 
 
 @app.route('/vendas/cadastrar_erro', methods=["GET", "POST"])
@@ -1400,7 +1433,7 @@ def cadastrar_vendas_erro():
                             criador=criador)
         db.session.add(erro)
         db.session.commit()
-        return redirect(url_for("cadastrar_erro"))
+        return redirect(url_for("vendas_erros"))
     return render_template("/vendas/cadastrar_erro.html", funcionarios=funcionarios)
 
 
@@ -1434,6 +1467,48 @@ def entregas_erros_relatorio():
         return render_template("/entregas/emitir_erro_relatorio.html", mes=mes_atual(), erros=erros,
                                erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
     return render_template('entregas/relatorio_erro.html')
+
+
+@app.route('/vendas/deletar/<int:erro_id>', methods=["post", 'get'])
+@login_required
+def deletar_erro_venda(erro_id):
+    erro = Erros_Vendas.query.get_or_404(erro_id)
+    db.session.delete(erro)
+    db.session.commit()
+    return redirect(url_for('vendas_erros'))
+
+
+@app.route('/vendas/editar_erro/<int:erro_id>', methods=["GET", "POST"])
+@login_required
+def vendas_editar_erro(erro_id):
+    erros = Erros_Vendas.query.get_or_404(erro_id)
+    funcionarios = Funcionarios.query.all()
+    rotas = Rotas.query.all()
+    if request.method == "POST":
+        data_do_erro = request.form["data_do_erro"]
+        erro_funcionario = request.form['erro_funcionario']
+        erro_cliente = request.form['erro_cliente']
+        quantidade_de_erros = request.form['quantidade_de_erros']
+        motorista_da_entrega = request.form['motorista_da_entrega']
+        produto_erro = request.form['produto_erro']
+        descricao_do_erro = request.form['descricao_do_erro']
+        criador = current_user.username
+
+        erros.data_do_erro = data_do_erro
+        erros.erro_funcionario = erro_funcionario
+        erros.quantidade_de_erros = quantidade_de_erros
+        erros.erro_cliente = erro_cliente
+        erros.produto_erro = produto_erro
+        erros.motorista_da_entrega = motorista_da_entrega
+        erros.descricao_do_erro = descricao_do_erro
+        erros.rota_da_entrega = rota_da_entrega
+        erros.criador = criador
+
+        db.session.add(erros)
+        db.session.commit()
+        return redirect(url_for("vendas_erros"))
+    return render_template('/vendas/editar_erro.html', erros=erros, funcionarios=funcionarios, rotas=rotas)
+
 
 
 @app.route("/sair")
