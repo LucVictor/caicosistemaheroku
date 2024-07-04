@@ -73,7 +73,7 @@
     <td>{{ erro.descricao_do_erro }}
     <td>{{ erro.criador }}</td>
     <td class="botoesacao">
-        <form action="/vendas/editar_erro/{{ erro.id }}" method="post">
+        <form action="/vendas/editar_erro/{{ erro.id }}" method="get">
         <input type="submit" value="Editar">
     </form>
         <form action="/vendas/deletar/{{ erro.id }}" method="post">
