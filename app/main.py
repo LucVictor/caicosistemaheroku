@@ -1501,7 +1501,6 @@ def vendas_editar_erro(erro_id):
         erros.produto_erro = produto_erro
         erros.motorista_da_entrega = motorista_da_entrega
         erros.descricao_do_erro = descricao_do_erro
-        erros.rota_da_entrega = rota_da_entrega
         erros.criador = criador
 
         db.session.add(erros)
