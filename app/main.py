@@ -17,7 +17,8 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://lucascod_banco:88335938@192.95.54.248/lucascod_banco"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://lucascod_banco:88335938@192.95.54.248/lucascod_banco"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://lucascod_sistema:QW01hM9UQqNt@177.54.147.142/lucascod_caico"
 app.config["SECRET_KEY"] = "secretkey"
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 28000,
@@ -256,7 +257,6 @@ def recalcular_rotas(rotax):
 @app.route('/')
 @login_required
 def index():
-    db.create_all()
     start_date = primeiro_dia_mes()
     end_date = ultimo_dia_mes()
 

@@ -56,7 +56,7 @@
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://sp-panel.01.heavyhost.com.br:3306</jdbc-url>
+      <jdbc-url>jdbc:mariadb://sp-panel.01.heavyhost.com.br:3306/lucascod_caico</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
