@@ -2,6 +2,15 @@ html{
         background: rgba(255, 165, 0, 0.16);
         font-family: 'Poppins', sans-serif;
 }
+footer{
+    text-align: center;
+    padding: 5px;
+    margin-top: 10px;
+    justify-content: center;
+    align-content: center;
+    display: flex;
+
+}
 .menu{
     display: flex;
     justify-content: space-between;
@@ -11,7 +20,9 @@ html{
     font-size: 16px;
 
 }
-
+.iconegithub{
+         mix-blend-mode: multiply;
+}
 .logo{
     padding-top: 4px;
      mix-blend-mode: multiply;
@@ -229,7 +240,16 @@ a{
 .resumoavarias{
     margin-left: 5px;
 }
+
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 10px;  /* this affects the margin in the printer settings */
+}
+
+
   }
+
+
 .resumoavarias{
     margin-left: 5px;
 }

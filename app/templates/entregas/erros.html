@@ -1,7 +1,15 @@
 {% extends "./template.html" %}
 {% block content %}
     <style>
+    @media print {
+    .resumo{
+        margin-bottom: 200px;
+    }
 
+}
+.tabelaerrosvendas{
+        font-size: small;
+    }
     </style>
 
        <h2>Listagem de Erros</h2>
@@ -30,9 +38,10 @@
 
 
     </div>
+    <div>
         <br>
     <br>
-    <table class="tabelaerros">
+    <table class="tabelaerrosvendas">
   <tr>
       <th>Data</th>
       <th>Funcionário</th>
@@ -45,7 +54,7 @@
       <th>Produtos</th>
       <th>Descrição do erro</th>
       <th>Criador</th>
-      <th>Ação</th>
+      <th class="botoesacao">Ação</th>
 
   </tr>
    {% for erro in erros  %}
@@ -63,10 +72,11 @@
         <form action="/entregas/editar_erro/{{ erro.id }}" method="get">
         <input type="submit" value="Editar">
     </form>
-        <form action="/entregas/apagar_erro/{{ erro.id }}" method="post">
+        <form action="/entregas/deletar_erro/{{ erro.id }}" method="post">
         <input type="submit" value="Apagar">
     </form></td>
   </tr>
         {% endfor %}
 </table>
+    </div>
 {% endblock %}

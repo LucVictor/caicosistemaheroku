@@ -1275,7 +1275,8 @@ def entregas_erros():
     erros = Erros_Logistica.query.filter(
         Erros_Logistica.data_do_erro >= primeiro_dia_mes(),
         Erros_Logistica.data_do_erro <= ultimo_dia_mes()
-    ).all()
+    ).order_by(
+            Erros_Logistica.data_do_erro.desc()).all()
     erros_por_funcionario = db.session.query(
         Erros_Logistica.erro_funcionario,
         func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),
@@ -1321,6 +1322,13 @@ def cadastrar_entregas_erro():
         return redirect(url_for("cadastrar_entregas_erro"))
     return render_template("/entregas/cadastrar_erro.html", funcionarios=funcionarios, rotas=rotas)
 
+@app.route('/entregas/deletar_erro/<int:erro_id>', methods=["post", 'get'])
+@login_required
+def deletar_erro_entrega(erro_id):
+    erro = Erros_Logistica.query.get_or_404(erro_id)
+    db.session.delete(erro)
+    db.session.commit()
+    return redirect(url_for('entregas_erros'))
 
 @app.route('/entregas/editar_erro/<int:erro_id>', methods=["GET", "POST"])
 @login_required
@@ -1361,7 +1369,8 @@ def entrega_editar(erro_id):
 def vendas_erros():
     erros = Erros_Vendas.query.filter(
             Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
-            Erros_Vendas.data_do_erro <= ultimo_dia_mes()).all()
+            Erros_Vendas.data_do_erro <= ultimo_dia_mes()).order_by(
+            Erros_Vendas.data_do_erro.desc()).all()
 
     erros_por_funcionario = db.session.query(
         Erros_Vendas.erro_funcionario,
@@ -1390,7 +1399,8 @@ def relatorio_vendas_erros():
         data_final = request.form['data_final']
         erros = Erros_Vendas.query.filter(
             Erros_Vendas.data_do_erro >= data_inicial,
-            Erros_Vendas.data_do_erro <= data_final).all()
+            Erros_Vendas.data_do_erro <= data_final).order_by(
+            Erros_Vendas.data_do_erro.desc()).all()
 
         erros_por_funcionario = db.session.query(
             Erros_Vendas.erro_funcionario,
@@ -1408,7 +1418,8 @@ def relatorio_vendas_erros():
             total_erros += i.total_erros
 
         return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
+                               data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
     return render_template('/vendas/relatorio.html')
 
 
@@ -1448,7 +1459,8 @@ def entregas_erros_relatorio():
         erros = Erros_Logistica.query.filter(
             Erros_Logistica.data_do_erro >= data_inicial,
             Erros_Logistica.data_do_erro <= data_final
-        ).all()
+        ).order_by(
+            Erros_Logistica.data_do_erro.desc()).all()
         erros_por_funcionario = db.session.query(
             Erros_Logistica.erro_funcionario,
             func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),

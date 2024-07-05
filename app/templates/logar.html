@@ -5,6 +5,9 @@
     <title>Login</title>
 </head>
 <style>
+    .iconegithub{
+         mix-blend-mode: multiply;
+}
     .divlogin{
     width: 100vw;
     height: 100vh;
@@ -17,7 +20,7 @@
     .box {
     border-radius: 20px;
         background: orange;
-    width: fit-content;
+    width: 200px;
     height: fit-content;
         padding: 20px 20px;
         display: grid ;
@@ -47,13 +50,25 @@ input{
 }
 
 .logar{
-    background: white;
-    border-radius: 5px;
+    width: fit-content;
     border-style: unset;
+    border-radius: 2px;
+    background: #ff5515;
 }
 .logar:hover{
     transform: scale(1.20);
 }
+.footer{
+    text-align: center;
+    padding: 5px;
+    margin-top: 20px;
+    justify-content: center;
+    align-content: center;
+    display: flex;
+    font-size: small;
+
+}
+
 </style>
 
 <body>
@@ -66,9 +81,16 @@ input{
       <label for="password">Senha:</label><br><br>
       <input type="password" name="password" /><br><br>
       <button type="submit" class="logar">Logar</button>
-    </form></div>
+    </form></div><br><br>
+    <div class="footer"><div>
+     <div><span>Mantido por @LucVictor</span></div>
+        <div><a href="https://github.com/LucVictor" target="_blank">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" class="iconegithub" alt="GitHub" width="30" height="30">
+        </a></div></div></div>
+</div>
 </div>
 
-</div>
+
 </body>
+
 </html>

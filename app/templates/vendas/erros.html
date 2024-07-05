@@ -1,13 +1,23 @@
 {% extends "./template.html" %}
 {% block content %}
     <style>
+    .tabelaerrosvendas{
+        font-size: small;
+    }
+@media print {
+    .resumo{
+        margin-bottom: 200px;
+    }
 
+
+}
     </style>
 
        <h2>Listagem de erros de vendas</h2>
         <h3>Referente ao mês de {{ mes }}</h3>
     <div class="resumo">
     <br>
+
     <div class="resumoerros">
     <h3>Erros por Funcionário</h3>
     <table class="tabelaerros">
@@ -30,9 +40,12 @@
 
 
     </div>
+
+    <div>
         <br>
     <br>
-    <table class="tabelaerros">
+
+    <table class="tabelaerrosvendas">
   <tr>
       <th>Data</th>
       <th>Funcionário</th>
@@ -41,8 +54,8 @@
       <th>Motorista</th>
       <th>Produtos</th>
       <th>Descrição do erro</th>
-      <th>Criador</th>
-      <th>Ação</th>
+      <th class="botoesacao">Criador</th>
+      <th class="botoesacao">Ação</th>
 
   </tr>
    {% for erro in erros %}
@@ -65,4 +78,5 @@
   </tr>
         {% endfor %}
 </table>
+    </div>
 {% endblock %}
