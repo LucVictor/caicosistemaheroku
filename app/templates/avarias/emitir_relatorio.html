@@ -5,6 +5,13 @@
         font-size: 12px;
 
     }
+    @media print {
+    .resumo{
+        margin-bottom: 200px;
+    }
+
+}
+
     </style>
     <h2>Relatório de Avarias</h2>
     <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " á " + data_final.strftime('%d/%m/%Y') }}</h3><br>
