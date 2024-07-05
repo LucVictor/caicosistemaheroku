@@ -3,7 +3,7 @@
     <style>
     @media print {
     .resumo{
-        margin-bottom: 200px;
+        margin-bottom: 10px;
     }
 
 }
@@ -13,7 +13,7 @@
     </style>
 
        <h2>Listagem de erros logísticos</h2>
-        <h3>Referente ao mês de {{ mes }}</h3>
+        <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} á {{ data_final.strftime('%d/%m/%Y') }}</h3>
     <div class="resumo">
     <br>
     <div class="resumoerros">
@@ -33,7 +33,7 @@
     </div>
 
     <div class="resumoerros">
-    <h3>Total de erros no mês: {{ total_erros }}</h3>
+    <h3>Total de erros: {{ total_erros }}</h3>
     </div>
 
 

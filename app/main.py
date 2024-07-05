@@ -1477,7 +1477,7 @@ def entregas_erros_relatorio():
             total_erros += i.total_erros
 
         return render_template("/entregas/emitir_erro_relatorio.html", mes=mes_atual(), erros=erros,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
     return render_template('entregas/relatorio_erro.html')
 
 
