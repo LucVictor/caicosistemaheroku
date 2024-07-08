@@ -988,22 +988,9 @@ def entregas_comparar():
         ).filter(
             Entrega.data_da_entrega.between(data_inicial, data_final)
         ).subquery()
-        total_positivo = func.count(case((subquery.c.resultado_tempo == 'Positivo', 1)))
-        total_negativo = func.count(case((subquery.c.resultado_tempo == 'Negativo', 1)))
-        total_sum = total_positivo - total_negativo
+
         total_entregas = func.sum(subquery.c.quantidade_de_entregas)
         total_reentregas = func.sum(subquery.c.reentregas)
-
-        resultados = db.session.query(
-            subquery.c.motorista,
-            total_positivo.label('total_positivo'),
-            total_negativo.label('total_negativo'),
-            total_sum.label('total_sum')
-        ).group_by(
-            subquery.c.motorista
-        ).order_by(
-            total_sum.desc()
-        ).all()
 
         resultados_entregas = db.session.query(
             subquery.c.rota,
@@ -1011,14 +998,10 @@ def entregas_comparar():
             total_reentregas.label('total_reentregas')
         ).group_by(
             subquery.c.rota
-        ).order_by(
-            total_entregas.desc()
         ).all()
 
         entregas = db.session.query(Entrega).filter(
             Entrega.data_da_entrega.between(data_inicial, data_final)
-        ).order_by(
-            Entrega.data_da_entrega.desc()
         ).all()
 
         total_de_entregas = 0
@@ -1028,6 +1011,7 @@ def entregas_comparar():
         for i in resultados_entregas:
             total_de_reentregas += i.total_reentregas
         mes = mes_atual()
+
         data_inicial2 = request.form['data_inicial2']
         data_final2 = request.form['data_final2']
         subquery2 = db.session.query(
@@ -1040,22 +1024,10 @@ def entregas_comparar():
         ).filter(
             Entrega.data_da_entrega.between(data_inicial2, data_final2)
         ).subquery()
-        total_positivo2 = func.count(case((subquery2.c.resultado_tempo == 'Positivo', 1)))
-        total_negativo2 = func.count(case((subquery2.c.resultado_tempo == 'Negativo', 1)))
-        total_sum2 = total_positivo2 - total_negativo2
+
         total_entregas2 = func.sum(subquery2.c.quantidade_de_entregas)
         total_reentregas2 = func.sum(subquery2.c.reentregas)
 
-        resultados2 = db.session.query(
-            subquery2.c.motorista,
-            total_positivo2.label('total_positivo'),
-            total_negativo2.label('total_negativo'),
-            total_sum2.label('total_sum')
-        ).group_by(
-            subquery2.c.motorista
-        ).order_by(
-            total_sum2.desc()
-        ).all()
 
         resultados_entregas2 = db.session.query(
             subquery2.c.rota,
@@ -1063,14 +1035,6 @@ def entregas_comparar():
             total_reentregas2.label('total_reentregas')
         ).group_by(
             subquery2.c.rota
-        ).order_by(
-            total_entregas2.desc()
-        ).all()
-
-        entregas2 = db.session.query(Entrega).filter(
-            Entrega.data_da_entrega.between(data_inicial2, data_final2)
-        ).order_by(
-            Entrega.data_da_entrega.desc()
         ).all()
 
         total_de_entregas2 = 0
@@ -1079,14 +1043,15 @@ def entregas_comparar():
         total_de_reentregas2 = 0
         for i in resultados_entregas2:
             total_de_reentregas2 += i.total_reentregas
+        rotas = Rotas.query.all()
 
-        return render_template('entregas/comparar_relatorio.html', total_de_reentregas=total_de_reentregas,
+
+        return render_template('entregas/comparar_entregas.html', total_de_reentregas=total_de_reentregas,
                                total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2,
                                total_de_reentregas2=total_de_reentregas2, mes=mes,
-                               entregas=entregas, entregas2=entregas2, data_agora=data_agora(), resultados=resultados,
-                               resultados2=resultados2,
-                               resultados_entregas=resultados_entregas, data_inicial=formatar_data(data_inicial),
-                               data_final=formatar_data(data_final))
+                               entregas=entregas, data_agora=data_agora(),
+                               resultados_entregas=resultados_entregas, resultados_entregas2=resultados_entregas2, data_inicial=formatar_data(data_inicial),
+                               data_final=formatar_data(data_final), rotas=rotas)
     return render_template('entregas/comparar_entregas.html')
 
 

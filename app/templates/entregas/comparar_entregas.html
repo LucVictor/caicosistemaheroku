@@ -31,10 +31,11 @@
     }
 
     </style>
-        {% if not total_entregas %}
+    <div class="resumo">
+        {% if total_entregas %}
         <div class="cadastrar_produto">
     <h2>Comparar Relatórios</h2>
-    <form action="/avarias/comparar" method="post">
+    <form action="/entregas/comparar_entregas" method="post">
         <h4>Primeiro relatório</h4>
         <label for="data_inicial1">Data inicial:</label><br>
         <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
@@ -52,3 +53,59 @@
     </form>
         </div>
     {% endif %}
+
+       <div class="resumoentregas">
+       <h2>Relatório 1</h2>
+       <h3>Entregas por rota</h3>
+   <table class="listagemtabela">
+    <tr>
+        <th>Rota:</th>
+        <th>Entregas</th>
+        <th>Reentregas</th>
+    </tr>
+        {% for i in resultados_entregas %}
+    <tr>
+        <td>{{ i.rota }}</td>
+        <td>{{ i.total_entregas }}</td>
+        <td>{{ i.total_reentregas }}</td>
+    </tr>
+        {% endfor %}
+
+    </table><br>
+</div>
+           <div class="resumoentregas">
+       <h2>Relatório 2</h2>
+       <h3>Entregas por rota</h3>
+   <table class="listagemtabela">
+    <tr>
+        <th>Rota:</th>
+        <th>Entregas</th>
+        <th>Reentregas</th>
+    </tr>
+        {% for i in resultados_entregas2 %}
+    <tr>
+        <td>{{ i.rota }}</td>
+        <td>{{ i.total_entregas }}</td>
+        <td>{{ i.total_reentregas }}</td>
+    </tr>
+        {% endfor %}
+
+    </table><br>
+</div>
+
+              <div class="resumoentregas">
+              <h2>Relatório 1</h2>
+       <h3>Total de Entregas: {{ total_de_entregas }}</h3>
+       <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
+
+               <br>
+</div>
+                  <div class="resumoentregas">
+              <h2>Relatório 2</h2>
+       <h3>Total de Entregas: {{ total_de_entregas2 }}</h3>
+       <h3>Total de Reentregas: {{ total_de_reentregas2 }}</h3>
+
+               <br>
+</div>
+    </div>
+{% endblock %}
