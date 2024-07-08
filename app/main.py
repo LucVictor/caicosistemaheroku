@@ -759,7 +759,7 @@ def vencimentos_cadastro():
     db.session.add(cadastrar_vencimentos)
     db.session.commit()
     db.session.close()
-    return redirect("/avarias/")
+    return redirect("/vencimentos/")
 
 
 @app.route('/vencimentos/editar/<int:vencimento_id>', methods=('GET', 'POST'))
