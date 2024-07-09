@@ -31,8 +31,10 @@
     }
 
     </style>
+
+
     <div class="resumo">
-        {% if total_entregas %}
+    {% if not resultados_entregas %}
         <div class="cadastrar_produto">
     <h2>Comparar Relatórios</h2>
     <form action="/entregas/comparar_entregas" method="post">
@@ -53,7 +55,7 @@
     </form>
         </div>
     {% endif %}
-
+    {% if total resultados_entregas %}
        <div class="resumoentregas">
        <h2>Relatório 1</h2>
        <h3>Entregas por rota</h3>
@@ -107,5 +109,6 @@
 
                <br>
 </div>
+    {% endif %}
     </div>
 {% endblock %}
