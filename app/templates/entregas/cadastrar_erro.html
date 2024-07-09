@@ -31,7 +31,7 @@
         <label for="erro_funcionario">Funcionário:</label>
                 <select name="erro_funcionario" id="erro_funcionario">
                 {% for i in funcionarios %}
-                    {% if i.funcao != 'Vendedor' and i.funcao != 'Ajudante' %}
+                    {% if i.funcao != 'Vendedor' or i.funcao != 'Ajudante' %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                 {% endfor %}
