@@ -761,7 +761,7 @@ def vencimentos_cadastrar():
 @login_required
 def vencimentos_cadastro():
     codigo = request.form['codigo_produto']
-    quantidade = int(request.form['quantidade'])
+    quantidade = Decimal(request.form['quantidade'])
     data_de_vencimento = request.form['data_vencimento']
     produto = Produto.query.filter(Produto.codigo_do_produto == codigo).first()
     cadastrar_vencimentos = Produto_Vencimento(
