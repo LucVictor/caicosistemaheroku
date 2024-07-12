@@ -82,6 +82,7 @@ class Entrega(db.Model):
     data_da_entrega = db.Column(db.Date, nullable=False)
     motorista = db.Column(db.String(250), nullable=False)
     ajudante = db.Column(db.String(250), nullable=False)
+    conferente = db.Column(db.String(250), nullable=True)
     rota = db.Column(db.String(250), nullable=False)
     quantidade_de_entregas = db.Column(db.Integer, nullable=False)
     tempo_total = db.Column(db.Time, nullable=False)
@@ -1095,6 +1096,7 @@ def entrega_cadastrar():
         data_da_entrega = datetime.strptime(request.form['data_da_entrega'], '%Y-%m-%d').date()
         motorista = request.form['motorista']
         ajudante = request.form['ajudante']
+        conferente = request.form['conferente']
         rota = request.form['rota']
         quantidade_de_entregas = int(request.form['quantidade_de_entregas'])
         tempo_total = datetime.strptime(request.form['tempo_total'], '%H:%M').time()
@@ -1117,6 +1119,7 @@ def entrega_cadastrar():
             data_da_entrega=data_da_entrega,
             motorista=motorista,
             ajudante=ajudante,
+            conferente=conferente,
             rota=rota,
             quantidade_de_entregas=quantidade_de_entregas,
             tempo_total=tempo_total,

@@ -55,6 +55,16 @@
                 {% endfor %}
             </select>
         </div>
+              <div class="form-group">
+          <label for="conferente">Conferente</label><br>
+            <select name="conferente" id="conferente">
+                {% for i in funcionarios %}
+                    {% if i.funcao == 'Conferente' %}
+                    <option class="lista">{{ i.nome }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
 
         <div class="form-group">
           <label for="rota">Rota:</label>

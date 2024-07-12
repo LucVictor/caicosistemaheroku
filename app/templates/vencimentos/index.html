@@ -1,5 +1,24 @@
 {% extends "./template.html" %}
 {% block content %}
+<style>
+table{
+    font-size: small;
+}
+    @media print {
+    table{
+        font-size: 10px;
+        margin-bottom: 200px;
+        width: 100vh;
+        padding: 1px 1px 1px;
+    }
+        th, tr, td{
+            padding: 1px 1px 1px;
+            width: fit-content;
+        }
+
+}
+</style>
+
     <h2>Listagem de vencimentos de produtos</h2>
     <table>
   <tr>
@@ -8,8 +27,8 @@
       <th>Quantidade</th>
       <th>Vencimento</th>
       <th>Dias</th>
-      <th>Ação</th>
-      <th>Usuário</th>
+      <th class="botoesacao">Ação</th>
+      <th class="botoesacao">Usuário</th>
   </tr>
    {% for vencimento in vencimentos %}
   <tr>
@@ -21,13 +40,13 @@
     <td class="{% if vencimento.dias_restantes <= 15 %}vermelho{% endif %}
                 {% if vencimento.dias_restantes > 15 <=30 %}amarelo{% endif %}
                 {% if vencimento.dias_restantes > 30 %}verde{% endif %}">{{ vencimento.dias_restantes }}</td>
-    <td class="acoes"><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
+    <td class="botoesacao"><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
     <input type="submit" value="Editar">
     </form>
     <form action="/vencimentos/deletar/{{ vencimento.id }}" method="post">
     <input type="submit" value="Apagar">
     </form></td>
-    <td>{{ vencimento.criador }}</td>
+    <td class="botoesacao">{{ vencimento.criador }}</td>
   </tr>
         {% endfor %}
 </table>

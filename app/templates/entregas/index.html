@@ -89,9 +89,10 @@
       <th>Data da entrega</th>
     <th>Motorista</th>
     <th>Ajudante</th>
+    <th>Conferente</th>
     <th>Rota</th>
     <th>Q. de Entrega</th>
-      <th>Reentregas</th>
+    <th>Reentregas</th>
     <th>Tempo total</th>
     <th>T. médio total</th>
       <th>Tempo de entregas</th>
@@ -104,6 +105,7 @@
       <td>{{ entrega.data_da_entrega.strftime('%d/%m/%Y') }}</td>
     <td>{{ entrega.motorista }}</td>
     <td>{{ entrega.ajudante }}</td>
+      <td>{{ entrega.conferente }}</td>
     <td>{{ entrega.rota }}</td>
     <td>{{ entrega.quantidade_de_entregas }}</td>
     <td>{{ entrega.reentregas }}</td>
