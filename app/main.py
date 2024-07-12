@@ -989,104 +989,73 @@ def entregas_emitir_relatorio():
 @app.route('/entregas/comparar_entregas', methods=['GET','POST'])
 @login_required
 @access_level_required(1)
-def entregas_comparar():
+def entregar_comparar_entregas():
+    entregas_por_rota = {}
+    total_entregas_periodo_1 = 0
+    total_reentregas_periodo_1 = 0
+    total_entregas_periodo_2 = 0
+    total_reentregas_periodo_2 = 0
     if request.method == 'POST':
-        data_inicial1 = request.form['data_inicial1']
-        data_final1 = request.form['data_final1']
+        data_inicial_1 = request.form['data_inicial1']
+        data_final_1 = request.form['data_final1']
+        data_inicial_2 = request.form['data_inicial2']
+        data_final_2 = request.form['data_final2']
 
-        # Primeira consulta
-        subquery1 = db.session.query(
-            Entrega.motorista,
+        # Obter entregas do período 1
+        resultados_periodo_1 = db.session.query(
             Entrega.rota,
-            Entrega.resultado_tempo,
-            Entrega.quantidade_de_entregas,
-            Entrega.data_da_entrega,
-            Entrega.reentregas
+            db.func.sum(Entrega.quantidade_de_entregas).label('total_entregas'),
+            db.func.sum(Entrega.reentregas).label('total_reentregas')
         ).filter(
-            Entrega.data_da_entrega.between(data_inicial1, data_final1)
-        ).subquery()
+            Entrega.data_da_entrega.between(data_inicial_1, data_final_1)
+        ).group_by(Entrega.rota).all()
 
-        total_entregas1 = func.sum(subquery1.c.quantidade_de_entregas)
-        total_reentregas1 = func.sum(subquery1.c.reentregas)
-
-        resultados_entregas1 = db.session.query(
-            subquery1.c.rota,
-            total_entregas1.label('total_entregas1'),
-            total_reentregas1.label('total_reentregas1')
-        ).group_by(
-            subquery1.c.rota
-        ).all()
-
-        # Inicializando o dicionário para armazenar os totais
-        rotas_totais = {}
-
-        for resultado in resultados_entregas1:
-            rota = resultado.rota
-            if rota not in rotas_totais:
-                rotas_totais[rota] = {'total1': 0, 'total2': 0, 'reentregas1': 0, 'reentregas2': 0}
-            rotas_totais[rota]['total1'] = resultado.total_entregas1
-            rotas_totais[rota]['reentregas1'] = resultado.total_reentregas1
-
-        # Segunda consulta
-        data_inicial2 = request.form['data_inicial2']
-        data_final2 = request.form['data_final2']
-
-        subquery2 = db.session.query(
-            Entrega.motorista,
+        # Obter entregas do período 2
+        resultados_periodo_2 = db.session.query(
             Entrega.rota,
-            Entrega.resultado_tempo,
-            Entrega.quantidade_de_entregas,
-            Entrega.data_da_entrega,
-            Entrega.reentregas
+            db.func.sum(Entrega.quantidade_de_entregas).label('total_entregas'),
+            db.func.sum(Entrega.reentregas).label('total_reentregas')
         ).filter(
-            Entrega.data_da_entrega.between(data_inicial2, data_final2)
-        ).subquery()
+            Entrega.data_da_entrega.between(data_inicial_2, data_final_2)
+        ).group_by(Entrega.rota).all()
 
-        total_entregas2 = func.sum(subquery2.c.quantidade_de_entregas)
-        total_reentregas2 = func.sum(subquery2.c.reentregas)
-
-        resultados_entregas2 = db.session.query(
-            subquery2.c.rota,
-            total_entregas2.label('total_entregas2'),
-            total_reentregas2.label('total_reentregas2')
-        ).group_by(
-            subquery2.c.rota
-        ).all()
-
-        for resultado in resultados_entregas2:
+        # Agrupar resultados e calcular totais
+        for resultado in resultados_periodo_1:
             rota = resultado.rota
-            if rota not in rotas_totais:
-                rotas_totais[rota] = {'total1': 0, 'total2': 0, 'reentregas1': 0, 'reentregas2': 0}
-            rotas_totais[rota]['total2'] = resultado.total_entregas2
-            rotas_totais[rota]['reentregas2'] = resultado.total_reentregas2
+            total_entregas_1 = resultado.total_entregas or 0
+            total_reentregas_1 = resultado.total_reentregas or 0
+            total_entregas_periodo_1 += total_entregas_1
+            total_reentregas_periodo_1 += total_reentregas_1
+            if rota not in entregas_por_rota:
+                entregas_por_rota[rota] = {'total_entregas_1': total_entregas_1, 'total_reentregas_1': total_reentregas_1,
+                                           'total_entregas_2': 0, 'total_reentregas_2': 0}
+            else:
+                entregas_por_rota[rota]['total_entregas_1'] = total_entregas_1
+                entregas_por_rota[rota]['total_reentregas_1'] = total_reentregas_1
 
-        # Calculando os totais gerais
-        total_de_entregas1 = sum([rotas_totais[rota]['total1'] for rota in rotas_totais])
-        total_de_entregas2 = sum([rotas_totais[rota]['total2'] for rota in rotas_totais])
-        total_de_reentregas1 = sum([rotas_totais[rota]['reentregas1'] for rota in rotas_totais])
-        total_de_reentregas2 = sum([rotas_totais[rota]['reentregas2'] for rota in rotas_totais])
-
-        mes = mes_atual()
-        entregas = db.session.query(Entrega).filter(
-            Entrega.data_da_entrega.between(data_inicial1, data_final1)
-        ).all()
-        rotas = Rotas.query.all()
-
+        for resultado in resultados_periodo_2:
+            rota = resultado.rota
+            total_entregas_2 = resultado.total_entregas or 0
+            total_reentregas_2 = resultado.total_reentregas or 0
+            total_entregas_periodo_2 += total_entregas_2
+            total_reentregas_periodo_2 += total_reentregas_2
+            if rota not in entregas_por_rota:
+                entregas_por_rota[rota] = {'total_entregas_1': 0, 'total_reentregas_1': 0,
+                                           'total_entregas_2': total_entregas_2, 'total_reentregas_2': total_reentregas_2}
+            else:
+                entregas_por_rota[rota]['total_entregas_2'] = total_entregas_2
+                entregas_por_rota[rota]['total_reentregas_2'] = total_reentregas_2
         return render_template('entregas/comparar_entregas.html',
-                               total_de_reentregas1=total_de_reentregas1,
-                               total_de_entregas1=total_de_entregas1,
-                               total_de_entregas2=total_de_entregas2,
-                               total_de_reentregas2=total_de_reentregas2,
-                               mes=mes,
-                               entregas=entregas,
-                               data_agora=data_agora(),
-                               rotas_totais=rotas_totais,
-                               data_inicial1=formatar_data(data_inicial1),
-                               data_final1=formatar_data(data_final1),
-                               data_inicial2=formatar_data(data_inicial2),
-                               data_final2=formatar_data(data_final2),
-                               rotas=rotas, calcular_porcentagem=calcular_porcentagem)
+                               entregas_por_rota=entregas_por_rota,
+                               total_entregas_periodo_1=total_entregas_periodo_1,
+                               total_reentregas_periodo_1=total_reentregas_periodo_1,
+                               total_entregas_periodo_2=total_entregas_periodo_2,
+                               total_reentregas_periodo_2=total_reentregas_periodo_2,
+                               data_inicial1=formatar_data(data_inicial_1), data_inicial2=formatar_data(data_inicial_2),
+                               data_final1=formatar_data(data_final_1), data_final2=formatar_data(data_final_2), calcular_porcentagem=calcular_porcentagem)
+
     return render_template('entregas/comparar_entregas.html')
+
 
 @app.route('/entregas/cadastrar', methods=['GET', 'POST'])
 @login_required
@@ -1137,6 +1106,8 @@ def entrega_cadastrar():
     rotas_lista = Rotas.query.all()
     funcionarios = Funcionarios.query.all()
     return render_template("/entregas/cadastrar_entrega.html", rotas_lista=rotas_lista, funcionarios=funcionarios)
+total_reentregas_periodo_2 = 0
+
 
 
 @app.route('/entregas/deletar_entrega/<int:entrega_id>', methods=["post"])
@@ -1473,6 +1444,7 @@ def entregas_erros_comparar():
                                data_final2=formatar_data(data_final_2), total_erros_periodo_1=total_erros_periodo_1,
                            total_erros_periodo_2=total_erros_periodo_2, calcular_porcentagem=calcular_porcentagem, total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2)
     return render_template('entregas/comparar_erros.html')
+
 
 
 

@@ -31,8 +31,8 @@
     }
 
     </style>
+    {% if not total_entregas_periodo_1 %}
     <div class="resumo">
-        {% if total_entregas %}
         <div class="cadastrar_produto">
     <h2>Comparar Relatórios</h2>
     <form action="/entregas/comparar_entregas" method="post">
@@ -51,61 +51,58 @@
         <input type="date" id="data_final2" name="data_final2" required><br><br>
         <input type="submit" value="Emitir">
     </form>
-        </div>
+        </div></div>
     {% endif %}
-
+{% if total_entregas_periodo_1 %}
+    <h1>Comparação de relatórios de entregas</h1>
+    <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} á {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
+    <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
+<div class="resumo">
        <div class="resumoentregas">
-       <h2>Relatório 1</h2>
+       <h2>Relatórios</h2>
        <h3>Entregas por rota</h3>
    <table class="listagemtabela">
     <tr>
         <th>Rota:</th>
-        <th>Entregas</th>
-        <th>Reentregas</th>
+        <th>Relatório 1</th>
+        <th>Relatório 2</th>
+        <th>%</th>
     </tr>
-        {% for i in resultados_entregas %}
+     {% for rota, entregas in entregas_por_rota.items() %}
     <tr>
-        <td>{{ i.rota }}</td>
-        <td>{{ i.total_entregas }}</td>
-        <td>{{ i.total_reentregas }}</td>
+        <td>{{ rota }}</td>
+        <td>{{ entregas.total_entregas_1 }}</td>
+        <td>{{ entregas.total_entregas_2 }}</td>
+        <td>{{ calcular_porcentagem(entregas.total_entregas_1, entregas.total_entregas_2) }}</td>
+    {% endfor %}
     </tr>
-        {% endfor %}
 
-    </table><br>
-</div>
-           <div class="resumoentregas">
-       <h2>Relatório 2</h2>
-       <h3>Entregas por rota</h3>
-   <table class="listagemtabela">
-    <tr>
-        <th>Rota:</th>
-        <th>Entregas</th>
-        <th>Reentregas</th>
-    </tr>
-        {% for i in resultados_entregas2 %}
-    <tr>
-        <td>{{ i.rota }}</td>
-        <td>{{ i.total_entregas }}</td>
-        <td>{{ i.total_reentregas }}</td>
-    </tr>
-        {% endfor %}
 
     </table><br>
 </div>
 
               <div class="resumoentregas">
-              <h2>Relatório 1</h2>
-       <h3>Total de Entregas: {{ total_de_entregas }}</h3>
-       <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
+
+              <h2>Totais</h2>
+                  <h3>Relatório 1</h3>
+       <h4>Total de Entregas: {{ total_entregas_periodo_1 }}</h4>
+       <h4>Total de Reentregas: {{ total_reentregas_periodo_1 }}</h4>
+       <h4>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_1 / total_entregas_periodo_1) * 100) }}%</h4><br>
+                  <h3>Relatório 2</h3>
+       <h4>Total de Entregas: {{ total_entregas_periodo_2 }}</h4>
+       <h4>Total de Reentregas:{{ total_reentregas_periodo_2 }} </h4>
+       <h4>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_2 / total_entregas_periodo_2) * 100) }}%</h4><br>
 
                <br>
 </div>
-                  <div class="resumoentregas">
-              <h2>Relatório 2</h2>
-       <h3>Total de Entregas: {{ total_de_entregas2 }}</h3>
-       <h3>Total de Reentregas: {{ total_de_reentregas2 }}</h3>
 
+        <div class="resumoentregas">
+              <h2>Comparação</h2>
+                  <h3>Relatórios</h3>
+            <h4>Total de Entregas: {{ calcular_porcentagem(total_entregas_periodo_1,total_entregas_periodo_2) }}</h4>
+            <h4>Total de Reentregas:  {{ calcular_porcentagem(total_reentregas_periodo_1,total_reentregas_periodo_2) }}</h4>
                <br>
 </div>
     </div>
+{% endif %}
 {% endblock %}

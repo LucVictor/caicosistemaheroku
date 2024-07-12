@@ -58,15 +58,16 @@
         </div>
     {% endif %}
     {% if total_soma_avarias1 %}
-
+        <h1>Comparação de relatórios de avarias</h1>
         <div class="resumo">
 
         <div class="resumoavarias">
         <h2>Relatório 1</h2>
-        <h2>Relatório de {{ data_inicial1.strftime('%d/%m/%Y') }} á {{ data_final1.strftime('%d/%m/%Y') }}</h2>
+        <h2>Relatório de {{ data_inicial1.strftime('%d/%m/%Y') }} à {{ data_final1.strftime('%d/%m/%Y') }}</h2>
         <h3>Custos:</h3>
         <h4>Custos de avarias: R${{ total_soma_avarias1 }} </h4>
-        <h4>Custos médio por avaria: R${{ total_soma_avarias1 }} </h4>
+        <h4>Quantidade de itens: {{ (avarias_quantidade1) | round_quantity }}</h4>
+        <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias1 / avarias_quantidade1) }} </h4>
             <h3>Descrição de custos:</h3>
         <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem1 }} </h5>
         <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento1 }} </h5>
@@ -76,10 +77,11 @@
         </div>
         <div class="resumoavarias">
         <h2>Relatório 2</h2>
-        <h2>Relatório de {{ data_inicial2.strftime('%d/%m/%Y') }} á {{ data_final2.strftime('%d/%m/%Y') }}</h2>
+        <h2>Relatório de {{ data_inicial2.strftime('%d/%m/%Y') }} à {{ data_final2.strftime('%d/%m/%Y') }}</h2>
         <h3>Custos:</h3>
         <h4>Custos de avarias: R${{ total_soma_avarias2 }} </h4>
-        <h4>Custos médio por avaria: R${{ total_soma_avarias2 }} </h4>
+        <h4>Quantidade de itens: {{ (avarias_quantidade2) | round_quantity }}</h4>
+        <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias2 / avarias_quantidade2) }} </h4>
         <h3>Descrição de custos:</h3>
         <h5>Custos avarias por embalagem: R${{ total_soma_avarias_embalagem2 }} </h5>
         <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento2 }} </h5>
