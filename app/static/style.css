@@ -52,7 +52,7 @@ footer{
     border-radius: 2px;
     position: relative;
     display: inline-block;
-    width: 100px;
+    width: 150px;
     background-color: orange;
     text-align: center;
     margin-left: 8px;
@@ -68,13 +68,13 @@ footer{
     background-color: orange;
     align-content: center;
     justify-content: center;
-        width: 100px;
+        width: fit-content;
     border-radius: 2px;
      z-index: 1000;
 }
 .linkbotoes {
     width: 100%;
-    display:inline-block
+    display:inline-block;
 }
 
 .botaovecimentosconteudo{
@@ -86,7 +86,7 @@ footer{
     justify-content: center;
     border-radius: 2px;
     z-index: 1000;
-    width: 100px;
+    width: 150px;
 
 }
 .linkbotoes:hover{
