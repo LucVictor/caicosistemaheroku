@@ -1,8 +1,13 @@
 {% extends "./template.html" %}
 {% block content %}
 <style>
+    @media print{
+        .resumo{
+            font-size: 12px;
+        }
+    }
 .resumo{
-    font-size: medium;
+    font-size: small;
 }
     h3,h2{
         text-align: center  ;
@@ -87,72 +92,71 @@
         <h3>Custos:</h3>
         {% if total_soma_avarias1>0 and total_soma_avarias2 >0 %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de uso e consumo: +{{ (((total_soma_avarias2 - total_soma_avarias1) / total_soma_avarias1) * 100) | int }}%</h4>
+                <h4 class="vermelhocusto">Aumentou: +{{ (((total_soma_avarias2 - total_soma_avarias1) / total_soma_avarias1) * 100) | int }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de uso e consumo: -{{ (((total_soma_avarias1 - total_soma_avarias2) / total_soma_avarias2) * 100) | int }}%</h4>
+                <h4 class="verdecusto">Reduziu: -{{ (((total_soma_avarias1 - total_soma_avarias2) / total_soma_avarias2) * 100) | int }}%</h4>
             {% endif %}
         {% else %}
             {% if total_soma_avarias1 < total_soma_avarias2 %}
-                <h4 class="vermelhocusto">Custos de uso e consumo: +{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="vermelhocusto">Aumentou: +{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% else %}
-                <h4 class="verdecusto">Custos de uso e consumo: -{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
+                <h4 class="verdecusto">Reduziu: -{{ total_soma_avarias2 + total_soma_avarias1 }}%</h4>
             {% endif %}
         {% endif %}
 
         <h3>Descrição de custos:</h3>
         {% if total_soma_avarias_embalagem1 > 0 and total_soma_avarias_embalagem2 >0 %}
             {% if total_soma_avarias_embalagem1 < total_soma_avarias_embalagem2 %}
-                <h5 class="vermelho">Custos avarias por embalagem: +{{ ((total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1) / total_soma_avarias_embalagem1 * 100) | int  }} %</h5>
+                <h5 class="vermelho">Avarias por embalagem: +{{ ((total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1) / total_soma_avarias_embalagem1 * 100) | int  }} %</h5>
             {% else %}
-                <h5 class="verde">Custos avarias por embalagem: -{{ ((total_soma_avarias_embalagem1 - total_soma_avarias_embalagem2) / total_soma_avarias_embalagem2 * 100) | int }}%</h5>
+                <h5 class="verde">Avarias por embalagem: -{{ ((total_soma_avarias_embalagem1 - total_soma_avarias_embalagem2) / total_soma_avarias_embalagem2 * 100) | int }}%</h5>
             {% endif %}
         {% else %}
             {% if total_soma_avarias_embalagem1 < total_soma_avarias_embalagem2 %}
-                <h5 class="vermelho">Custos avarias por embalagem: + {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
+                <h5 class="vermelho">Avarias por embalagem: + {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
             {% else %}
-                <h5 class="verde">Custos avarias por embalagem: {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
+                <h5 class="verde">Avarias por embalagem: {{ total_soma_avarias_embalagem2 - total_soma_avarias_embalagem1 }}%</h5>
             {% endif %}
         {% endif %}
 
         {% if total_soma_avarias_vencimento1 > 0 and total_soma_avarias_vencimento2 >0 %}
             {% if total_soma_avarias_vencimento1 < total_soma_avarias_vencimento2 %}
-                <h5 class="vermelho">Custos de avarias por vencimento: +{{ (((total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1) / total_soma_avarias_vencimento1) * 100) | int}}%</h5>
+                <h5 class="vermelho">Avarias por vencimento: +{{ (((total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1) / total_soma_avarias_vencimento1) * 100) | int}}%</h5>
             {% else %}
-                 <h5 class="verde">Custos de avarias por vencimento: -{{ (((total_soma_avarias_vencimento1 - total_soma_avarias_vencimento2) / total_soma_avarias_vencimento2) * 100) | int}}%</h5>
+                 <h5 class="verde">Avarias por vencimento: -{{ (((total_soma_avarias_vencimento1 - total_soma_avarias_vencimento2) / total_soma_avarias_vencimento2) * 100) | int}}%</h5>
             {% endif %}
         {% else %}
             {% if total_soma_avarias_vencimento1 < total_soma_avarias_vencimento2 %}
-                <h5 class="vermelho">Custos de avarias por vencimento: -{{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
+                <h5 class="vermelho">Avarias por vencimento: -{{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
             {% else %}
-                <h5 class="verde">Custos de avarias por vencimento: {{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
+                <h5 class="verde">Avarias por vencimento: {{total_soma_avarias_vencimento2 - total_soma_avarias_vencimento1}}%</h5>
             {% endif %}
         {% endif %}
 
         {% if total_soma_avarias_estragado1 > 0 and total_soma_avarias_estragado2 > 0 %}
             {% if total_soma_avarias_estragado1 < total_soma_avarias_estragado2 %}
-                <h5 class="vermelho">Custos de avarias estragadas: {{ ((total_soma_avarias_estragado2 - total_soma_avarias_estragado1) / total_soma_avarias_estragado1) *100 | int }} %</h5>
+                <h5 class="vermelho">Avarias estragadas: {{ ((total_soma_avarias_estragado2 - total_soma_avarias_estragado1) / total_soma_avarias_estragado1) *100 | int }} %</h5>
             {% else %}
-                <h5 class="verde">Custos de avarias estragadas: {{ ((total_soma_avarias_estragado1 - total_soma_avarias_estragado2) / total_soma_avarias_estragado2) *100 | int}} %</h5>
+                <h5 class="verde">Avarias estragadas: {{ ((total_soma_avarias_estragado1 - total_soma_avarias_estragado2) / total_soma_avarias_estragado2) *100 | int}} %</h5>
             {% endif %}
         {% else %}
             {% if total_soma_avarias_estragado1 < total_soma_avarias_estragado2 %}
-                <h5 class="vermelho">Custos de avarias estragadas: +{{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
+                <h5 class="vermelho">Avarias estragadas: +{{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
             {% else %}
-                <h5 class="verde">Custos de avarias estragadas: {{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
+                <h5 class="verde">Avarias estragadas: {{ (total_soma_avarias_estragado2 - total_soma_avarias_estragado1 )| int}}%</h5>
             {% endif %}
         {% endif %}
-
         {% if total_soma_avarias_usoeconsumo1>0 and total_soma_avarias_usoeconsumo2 >0 %}
             {% if total_soma_avarias_usoeconsumo1 < total_soma_avarias_usoeconsumo2 >0 %}
-                <h5 class="vermelho">Custos de uso e consumo: +{{ (((total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1)/total_soma_avarias_usoeconsumo1)*100 )| int }}%</h5>
+                <h5 class="vermelho">Uso e consumo: +{{ (((total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1)/total_soma_avarias_usoeconsumo1)*100 )| int }}%</h5>
             {% else %}
-                <h5 class="verde">Custos de uso e consumo: -{{  (((total_soma_avarias_usoeconsumo1 - total_soma_avarias_usoeconsumo2)/total_soma_avarias_usoeconsumo2)*100 )| int }}%</h5>
+                <h5 class="verde">Uso e consumo: -{{  (((total_soma_avarias_usoeconsumo1 - total_soma_avarias_usoeconsumo2)/total_soma_avarias_usoeconsumo2)*100 )| int }}%</h5>
             {% endif %}
         {% else %}
             {% if total_soma_avarias_usoeconsumo1 < total_soma_avarias_usoeconsumo2 >0 %}
-                <h5 class="vermelho">Custos de uso e consumo: {{ -(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
+                <h5 class="vermelho">Uso e consumo: {{ -(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
             {% else %}
-                <h5 class="verde">Custos de uso e consumo: {{ +(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
+                <h5 class="verde">Uso e consumo: {{ +(total_soma_avarias_usoeconsumo2 - total_soma_avarias_usoeconsumo1) | int }}% </h5>
             {% endif %}
         {% endif %}
         </div>
