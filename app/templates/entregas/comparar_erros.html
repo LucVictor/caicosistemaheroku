@@ -31,11 +31,11 @@
     }
 
     </style>
-        {% if not total_de_reentregas1 %}
+        {% if not erros_por_funcionario %}
     <div class="resumo">
         <div class="cadastrar_produto">
     <h2>Comparar Relatórios</h2>
-    <form action="/entregas/comparar_entregas" method="post">
+    <form action="/entregas/comparar_erros" method="post">
         <h4>Primeiro relatório</h4>
         <label for="data_inicial1">Data inicial:</label><br>
         <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
@@ -53,28 +53,28 @@
     </form>
         </div></div>
     {% endif %}
-    {% if total_de_reentregas1 %}
+    {% if erros_por_funcionario %}
 
-    <h1>Comparação de relatórios de entregas</h1>
+    <h1>Comparação de relatórios de erros logísticos</h1>
     <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} á {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
     <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
 <div class="resumo">
        <div class="resumoentregas">
        <h2>Relatórios</h2>
-       <h3>Entregas por rota</h3>
+       <h3>Erro por conferente</h3>
    <table class="listagemtabela">
     <tr>
-        <th>Rota:</th>
+        <th>Conferente</th>
         <th>Relatório 1</th>
         <th>Relatório 2</th>
         <th>%</th>
     </tr>
-        {%for rota, totais in rotas_totais.items() %}
+         {% for funcionario, erros in erros_por_funcionario.items()  %}
     <tr>
-        <td>{{ rota }}</td>
-        <td>{{ totais.total1 }}</td>
-        <td>{{ totais.total2 }}</td>
-        <td>{{ calcular_porcentagem(totais.total1, totais.total2) }} </td>
+        <td>{{ funcionario  }}</td>
+        <td>{{ erros.total1 }}</td>
+    <td>{{ erros.total2 }}</td>
+    <td>{{ calcular_porcentagem(erros.total1,  erros.total2) }}</td>
 
     </tr>
         {% endfor %}
@@ -85,18 +85,20 @@
               <div class="resumoentregas">
               <h2>Totais</h2>
                   <h3>Relatório 1</h3>
-       <h4>Total de Entregas: {{ total_de_entregas1 }}</h4>
-       <h4>Total de Reentregas: {{ total_de_reentregas1 }}</h4><br>
+       <h4>Total de erros: {{ total_erros_periodo_1  }}</h4>
+       <h4>Total de entregas:{{ total_de_entregas }}</h4>
+       <h4>Erros por entrega: {{  ((total_erros_periodo_1 / total_de_entregas) * 100) | round_quantity  }} % </h4> <br>
                   <h3>Relatório 2</h3>
-       <h4>Total de Entregas: {{ total_de_entregas2 }}</h4>
-       <h4>Total de Reentregas: {{ total_de_reentregas2 }}</h4>
+       <h4>Total de erros: {{ total_erros_periodo_2 }}</h4>
+       <h4>Total de entregas:{{ total_de_entregas2 }}</h4>
+        <h4>Erros por entrega: {{ ((total_erros_periodo_2 / total_de_entregas2) * 100) | round_quantity }}%</h4>
+
                <br>
 </div>
         <div class="resumoentregas">
               <h2>Comparação</h2>
-                  <h3>Relatórios</h3>
-            <h4>Total de Entregas: {{ calcular_porcentagem(total_de_entregas1,total_de_entregas2) }}</h4>
-            <h4>Total de Reentregas: {{ calcular_porcentagem(total_de_reentregas1,total_de_reentregas2) }}</h4>
+                <h3>Totais de erros</h3>
+                <h3> {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h3>
                <br>
 </div>
     </div>

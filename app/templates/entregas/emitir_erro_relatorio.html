@@ -34,6 +34,7 @@
 
     <div class="resumoerros">
     <h3>Total de erros: {{ total_erros }}</h3>
+    <h3> Erros por entrega: {{ ((total_erros / total_de_entregas) * 100) | round_quantity  }}%</h3>
     </div>
 
 
