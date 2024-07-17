@@ -35,7 +35,7 @@
     <div class="resumo">
         <div class="cadastrar_produto">
     <h2>Comparar Relatórios</h2>
-    <form action="/entregas/comparar_erros" method="post">
+    <form action="/vendas/comparar_erros" method="post">
         <h4>Primeiro relatório</h4>
         <label for="data_inicial1">Data inicial:</label><br>
         <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
@@ -55,13 +55,13 @@
     {% endif %}
     {% if erros_por_funcionario %}
 
-    <h1>Comparação de relatórios de erros logísticos</h1>
+    <h1>Comparação de relatórios de erros de Vendas</h1>
     <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
     <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
 <div class="resumo">
        <div class="resumoentregas">
        <h2>Relatórios</h2>
-       <h3>Erro por conferente</h3>
+       <h3>Erro por vendedor</h3>
    <table class="listagemtabela">
     <tr>
         <th>Conferente</th>
@@ -87,18 +87,18 @@
                   <h3>Relatório 1</h3>
        <h4>Total de erros: {{ total_erros_periodo_1  }}</h4>
        <h4>Total de entregas:{{ total_de_entregas }}</h4>
-       <h4>Erros por entrega: {{  "%.2f" %  ((total_erros_periodo_1 / total_de_entregas) * 100)  }} % </h4> <br>
+       <h4>Erros por entrega: {{   "%.2f" % ((total_erros_periodo_1 / total_de_entregas)*100) }} % </h4> <br>
                   <h3>Relatório 2</h3>
        <h4>Total de erros: {{ total_erros_periodo_2 }}</h4>
        <h4>Total de entregas:{{ total_de_entregas2 }}</h4>
-        <h4>Erros por entrega: {{  "%.2f" %  ((total_erros_periodo_2 / total_de_entregas2) * 100)  }}%</h4>
+        <h4>Erros por entrega: {{  "%.2f" % ((total_erros_periodo_2 / total_de_entregas2) * 100) }}%</h4>
 
                <br>
 </div>
         <div class="resumoentregas">
               <h2>Comparação</h2>
-                <h3>Totais de erros: {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h3>
-                <h3>Erros por entrega: {{ calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h3>
+                <h3>Total de erros:{{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h3>
+            <h3>Média de erros: {{  calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h3>
                <br>
 </div>
     </div>

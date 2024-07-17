@@ -1360,6 +1360,68 @@ def entrega_editar(erro_id):
     return render_template('/entregas/editar_erro.html', erros=erros, funcionarios=funcionarios, rotas=rotas)
 
 
+@app.route('/vendas/erros', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def vendas_erros():
+    erros = Erros_Vendas.query.filter(
+            Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
+            Erros_Vendas.data_do_erro <= ultimo_dia_mes()).order_by(
+            Erros_Vendas.data_do_erro.desc()).all()
+
+    erros_por_funcionario = db.session.query(
+        Erros_Vendas.erro_funcionario,
+        func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
+
+    ).filter(
+        Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
+        Erros_Vendas.data_do_erro <= ultimo_dia_mes()
+    ).group_by(
+        Erros_Vendas.erro_funcionario
+    ).all()
+
+    total_erros = 0
+    for i in erros_por_funcionario:
+        total_erros += i.total_erros
+
+    return render_template("/vendas/erros.html", mes=mes_atual(), erros=erros,
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+
+
+
+
+@app.route('/vendas/erros_relatorio', methods=["GET", "POST"])
+@access_level_required(1)
+@login_required
+def relatorio_vendas_erros():
+    if request.method == 'POST':
+        data_inicial = request.form['data_inicial']
+        data_final = request.form['data_final']
+        erros = Erros_Vendas.query.filter(
+            Erros_Vendas.data_do_erro >= data_inicial,
+            Erros_Vendas.data_do_erro <= data_final).order_by(
+            Erros_Vendas.data_do_erro.desc()).all()
+
+        erros_por_funcionario = db.session.query(
+            Erros_Vendas.erro_funcionario,
+            func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
+
+        ).filter(
+            Erros_Vendas.data_do_erro >= data_inicial,
+            Erros_Vendas.data_do_erro <= data_final
+        ).group_by(
+            Erros_Vendas.erro_funcionario
+        ).all()
+
+        total_erros = 0
+        for i in erros_por_funcionario:
+            total_erros += i.total_erros
+
+        return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
+                               data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
+    return render_template('/vendas/relatorio.html')
+
 @app.route('/entregas/comparar_erros', methods=['GET','POST'])
 def entregas_erros_comparar():
     if request.method == "POST":
@@ -1444,68 +1506,6 @@ def entregas_erros_comparar():
                                data_final2=formatar_data(data_final_2), total_erros_periodo_1=total_erros_periodo_1,
                            total_erros_periodo_2=total_erros_periodo_2, calcular_porcentagem=calcular_porcentagem, total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2)
     return render_template('entregas/comparar_erros.html')
-
-
-
-
-@app.route('/vendas/erros', methods=["GET", "POST"])
-@access_level_required(1)
-@login_required
-def vendas_erros():
-    erros = Erros_Vendas.query.filter(
-            Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
-            Erros_Vendas.data_do_erro <= ultimo_dia_mes()).order_by(
-            Erros_Vendas.data_do_erro.desc()).all()
-
-    erros_por_funcionario = db.session.query(
-        Erros_Vendas.erro_funcionario,
-        func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
-
-    ).filter(
-        Erros_Vendas.data_do_erro >= primeiro_dia_mes(),
-        Erros_Vendas.data_do_erro <= ultimo_dia_mes()
-    ).group_by(
-        Erros_Vendas.erro_funcionario
-    ).all()
-
-    total_erros = 0
-    for i in erros_por_funcionario:
-        total_erros += i.total_erros
-
-    return render_template("/vendas/erros.html", mes=mes_atual(), erros=erros,
-                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
-
-@app.route('/vendas/erros_relatorio', methods=["GET", "POST"])
-@access_level_required(1)
-@login_required
-def relatorio_vendas_erros():
-    if request.method == 'POST':
-        data_inicial = request.form['data_inicial']
-        data_final = request.form['data_final']
-        erros = Erros_Vendas.query.filter(
-            Erros_Vendas.data_do_erro >= data_inicial,
-            Erros_Vendas.data_do_erro <= data_final).order_by(
-            Erros_Vendas.data_do_erro.desc()).all()
-
-        erros_por_funcionario = db.session.query(
-            Erros_Vendas.erro_funcionario,
-            func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros'),
-
-        ).filter(
-            Erros_Vendas.data_do_erro >= data_inicial,
-            Erros_Vendas.data_do_erro <= data_final
-        ).group_by(
-            Erros_Vendas.erro_funcionario
-        ).all()
-
-        total_erros = 0
-        for i in erros_por_funcionario:
-            total_erros += i.total_erros
-
-        return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
-                               data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
-    return render_template('/vendas/relatorio.html')
 
 
 @app.route('/vendas/cadastrar_erro', methods=["GET", "POST"])
@@ -1621,6 +1621,90 @@ def vendas_editar_erro(erro_id):
         return redirect(url_for("vendas_erros"))
     return render_template('/vendas/editar_erro.html', erros=erros, funcionarios=funcionarios, rotas=rotas)
 
+@app.route('/vendas/comparar_erros', methods=['GET','POST'])
+def vendas_erros_comparar():
+    if request.method == "POST":
+        data_inicial_1 = request.form["data_inicial1"]
+        data_final_1 = request.form["data_final1"]
+        data_inicial_2 = request.form["data_inicial2"]
+        data_final_2 = request.form["data_final2"]
+        erros_por_funcionario = {}
+        total_erros_periodo_1 = 0
+        total_erros_periodo_2 = 0
+        resultados_periodo_1 = db.session.query(
+            Erros_Vendas.erro_funcionario,
+            db.func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros')
+        ).filter(
+            Erros_Vendas.data_do_erro.between(data_inicial_1, data_final_1)
+        ).group_by(Erros_Vendas.erro_funcionario).all()
+
+        # Obter erros do período 2
+        resultados_periodo_2 = db.session.query(
+            Erros_Vendas.erro_funcionario,
+            db.func.sum(Erros_Vendas.quantidade_de_erros).label('total_erros')
+        ).filter(
+            Erros_Vendas.data_do_erro.between(data_inicial_2, data_final_2)
+        ).group_by(Erros_Vendas.erro_funcionario).all()
+
+        # Agrupar resultados e calcular totais
+        for resultado in resultados_periodo_1:
+            funcionario = resultado.erro_funcionario
+            total1 = resultado.total_erros
+            total_erros_periodo_1 += total1
+            if funcionario not in erros_por_funcionario:
+                erros_por_funcionario[funcionario] = {'total1': total1, 'total2': 0}
+            else:
+                erros_por_funcionario[funcionario]['total1'] = total1
+
+        for resultado in resultados_periodo_2:
+            funcionario = resultado.erro_funcionario
+            total2 = resultado.total_erros
+            total_erros_periodo_2 += total2
+            if funcionario not in erros_por_funcionario:
+                erros_por_funcionario[funcionario] = {'total1': 0, 'total2': total2}
+            else:
+                erros_por_funcionario[funcionario]['total2'] = total2
+
+        subquery = db.session.query(
+            Entrega.quantidade_de_entregas
+        ).filter(
+            Entrega.data_da_entrega.between(data_inicial_1, data_final_1)
+        ).subquery()
+
+        total_entregas = func.sum(subquery.c.quantidade_de_entregas)
+        resultados_entregas = db.session.query(
+            subquery.c.quantidade_de_entregas,
+            total_entregas.label('total_entregas')
+        ).all()
+
+        total_de_entregas = 0
+        for i in resultados_entregas:
+            total_de_entregas += i.total_entregas
+
+
+
+        subquery2 = db.session.query(
+            Entrega.quantidade_de_entregas
+        ).filter(
+            Entrega.data_da_entrega.between(data_inicial_2, data_final_2)
+        ).subquery()
+
+        total_entregas2 = func.sum(subquery2.c.quantidade_de_entregas)
+        resultados_entregas2 = db.session.query(
+            subquery2.c.quantidade_de_entregas,
+            total_entregas2.label('total_entregas')
+        ).all()
+
+        total_de_entregas2 = 0
+        for i in resultados_entregas2:
+            total_de_entregas2 += i.total_entregas
+
+        return render_template('vendas/comparar_erros.html',  erros_por_funcionario=erros_por_funcionario,
+                               data_inicial1=formatar_data(data_inicial_1),
+                               data_final1=formatar_data(data_final_1), data_inicial2=formatar_data(data_inicial_2),
+                               data_final2=formatar_data(data_final_2), total_erros_periodo_1=total_erros_periodo_1,
+                           total_erros_periodo_2=total_erros_periodo_2, calcular_porcentagem=calcular_porcentagem, total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2)
+    return render_template('vendas/comparar_erros.html')
 
 
 @app.route("/sair")
