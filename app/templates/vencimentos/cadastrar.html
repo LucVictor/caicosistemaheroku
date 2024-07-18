@@ -11,7 +11,7 @@
         <input type="text" id="nome_produto" name="nome_produto" minlength="600" value="{{ produto.nome_do_produto }}" required ><br><br>
 
         <label for="quantidade">Quantidade: </label><br>
-        <input type="number" id="quantidade" name="quantidade" step="0.001" value="0" required><br><br>
+        <input type="number" id="quantidade" name="quantidade" step="0.001" min="0" value="0" required><br><br>
 
         <label for="data_vencimento">Data de Vencimento:</label><br>
         <input type="date" id="data_vencimento" name="data_vencimento"><br><br>

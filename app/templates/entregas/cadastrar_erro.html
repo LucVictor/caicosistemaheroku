@@ -31,8 +31,8 @@
         <label for="erro_funcionario">Funcionário:</label>
                 <select name="erro_funcionario" id="erro_funcionario">
                 {% for i in funcionarios %}
-                    {% if i.funcao != 'Vendedor' or i.funcao != 'Ajudante' %}
-                    <option class="lista">{{ i.nome }}</option>
+                    {% if i.funcao == 'Conferente' or i.funcao == 'Motorista' %}
+                        <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                 {% endfor %}
             </select><br><br>
@@ -41,17 +41,17 @@
         <input type="text" id="erro_cliente" name="erro_cliente" required ><br><br>
 
         <label for="rota_da_entrega">Rota:</label><br>
-            <select name="rota_da_entrega" id="rota_da_entrega">
+            <select name="rota_da_entrega" id="rota_da_entrega" required>
             {% for i in rotas %}
                 <option class="lista">{{ i.rota }}</option>
             {% endfor %}
             </select><br><br>
 
         <label for="quantidade_de_erros">Quantidade de erros:</label>
-        <input type="number" id="quantidade_de_erros" name="quantidade_de_erros" required><br><br>
+        <input type="number" id="quantidade_de_erros" name="quantidade_de_erros" min="1"  required><br><br>
 
         <label for="motorista_da_entrega">Motorista:</label>
-        <select name="motorista_da_entrega" id="motorista_da_entrega">
+        <select name="motorista_da_entrega" id="motorista_da_entrega" required>
             {% for i in funcionarios %}
                 {% if i.funcao == 'Motorista' %}
                 <option class="lista">{{ i.nome }}</option>
@@ -60,10 +60,10 @@
             <option class="lista"> - </option>
             </select><br><br>
         <label for="produto_erro">Produtos do erro:</label><br>
-        <textarea name="produto_erro" id="produto_erro" rows="14" cols="10"> </textarea><br><br>
+        <textarea name="produto_erro" id="produto_erro" rows="14" cols="10" required> </textarea><br><br>
 
         <label for="descricao_do_erro">Descrição do erro:</label><br>
-        <textarea name="descricao_do_erro" id="descricao_do_erro" rows="14" cols="10"> </textarea><br><br>
+        <textarea name="descricao_do_erro" id="descricao_do_erro" rows="14" cols="10" required> </textarea><br><br>
 
 
         <input type="submit" value="Cadastrar">
