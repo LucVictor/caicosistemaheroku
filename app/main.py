@@ -719,7 +719,7 @@ def avarias_comparar():
                                avarias_quantidade2=avarias_quantidade2,
                                avarias_embalagem_quantidade2=avarias_embalagem_quantidade2,
                                avarias_vencidos_quantidade2=avarias_vencidos_quantidade2,
-                               avarias_estragados_quantidade2=avarias_estragados_quantidade2)
+                               avarias_estragados_quantidade2=avarias_estragados_quantidade2, calcular_porcentagem=calcular_porcentagem)
     return render_template('avarias/comparar.html')
 
 
@@ -1417,8 +1417,24 @@ def relatorio_vendas_erros():
         for i in erros_por_funcionario:
             total_erros += i.total_erros
 
+        subquery = db.session.query(
+            Entrega.quantidade_de_entregas
+        ).filter(
+            Entrega.data_da_entrega.between(data_inicial, data_final)
+        ).subquery()
+
+        total_entregas = func.sum(subquery.c.quantidade_de_entregas)
+        resultados_entregas = db.session.query(
+            subquery.c.quantidade_de_entregas,
+            total_entregas.label('total_entregas')
+        ).all()
+
+        total_de_entregas = 0
+        for i in resultados_entregas:
+            total_de_entregas += i.total_entregas
+
         return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas,
                                data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
     return render_template('/vendas/relatorio.html')
 
