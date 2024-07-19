@@ -9,17 +9,17 @@
 <body>
 <div class="menu">
     <div class="logo"><img src="{{ url_for('static', filename='imagens/logo.png') }}" width="40"></div>
-    <div class="botoesmenu">
+    <div class="botoesmenu">{% if current_user.is_authenticated %}
     <div class="botaoavarias">Avarias
         <div class="botaoavariasconteudo">
             <a href="/avarias/" class="linkbotoes">Visualizar</a>
-            {% if current_user.is_authenticated %}
+
             <a href="/avarias/procurar" class="linkbotoes">Cadastrar</a>
             <a href="/avarias/relatorio" class="linkbotoes">Relatório</a>
             <a href="/avarias/comparar" class="linkbotoes">Comparar</a>
-            {% endif %}
+
         </div>
-    </div>
+    </div>{% endif %}
         <div class="botaovecimentos">Vencimentos
         <div class="botaovecimentosconteudo">
             <a  href="/vencimentos/" class="linkbotoes">Visualizar</a>
@@ -54,16 +54,19 @@
             <a  href="/vendas/erros_relatorio" class="linkbotoes">Relatório de Erros</a>
             <a  href="/vendas/comparar_erros" class="linkbotoes">Comparar Erros</a>
         </div></div>{% endif %}
-                 <div class="botaovecimentos">{{(current_user.username).upper()}}
-        <div class="botaovecimentosconteudo">
-            {% if current_user.is_authenticated and current_user.acesso > 1%}
-            <a  href="/adm/funcionarios" class="linkbotoes">Listar Funcionários</a>
-            <a  href="/adm/cadastrar_funcionario" class="linkbotoes">Cadastrar Funcionário</a>
-            <a  href="/adm/usuarios" class="linkbotoes">Listar Usuários</a>
-            <a  href="/adm/cadastrar_usuario" class="linkbotoes">Cadastrar Usuário</a>
+                {% if current_user.is_authenticated %}
+                    <div class="botaovecimentos">{{(current_user.username).upper()}}
+                    <div class="botaovecimentosconteudo">
+                    <a href="/sair" class="linkbotoes">Sair</a>
+                    {% if current_user.is_authenticated and current_user.acesso > 1%}
+                    <a  href="/adm/funcionarios" class="linkbotoes">Listar Funcionários</a>
+                    <a  href="/adm/cadastrar_funcionario" class="linkbotoes">Cadastrar Funcionário</a>
+                    <a  href="/adm/usuarios" class="linkbotoes">Listar Usuários</a>
+                    <a  href="/adm/cadastrar_usuario" class="linkbotoes">Cadastrar Usuário</a>
 
             {% endif %}
-            <a href="/sair" class="linkbotoes">Sair</a>
+                    {% endif %}
+
          </div></div>
 
     
