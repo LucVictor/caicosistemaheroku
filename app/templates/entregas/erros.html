@@ -25,15 +25,32 @@
         <tr>
             <th>Funcionário</th>
             <th>Erros</th>
+            <th>Pedidos</th>
+            <th>Erros %</th>
         </tr>
         {% for erro_por_funcionario in erros_por_funcionario %}
         <tr>
             <td>{{ erro_por_funcionario.erro_funcionario }}</td>
             <td>{{ erro_por_funcionario.total_erros }}</td>
-        </tr>
+            {% for i in range(3) %}
+                {% if resultados_entregas[i][0] == erro_por_funcionario.erro_funcionario%}
+                <td>{{ resultados_entregas[i][1] }}</td>
+                    {% if resultados_entregas[i][1] > 0 %}
+                        <td>{{ "%.2f" % ((erro_por_funcionario.total_erros/ resultados_entregas[i][1]  )*100) }}%</td>
+                    {% elif erro_por_funcionario.total_erros < 1 %}
+                        <td>0</td>
+                    {% endif %}
+                {% endif %}
+
+                {% endfor %}
+
         {% endfor %}
+
+        </tr>
     </table>
+
     </div>
+
 
     <div class="resumoerros">
     <h3>Total de erros no mês: {{ total_erros }}</h3>

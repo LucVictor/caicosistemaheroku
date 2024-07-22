@@ -28,7 +28,8 @@
         {% for erro_por_funcionario in erros_por_funcionario %}
         <tr>
             <td>{{ erro_por_funcionario.erro_funcionario }}</td>
-            <td>{{ erro_por_funcionario.total_erros }}</td>
+            <td>{{ (erro_por_funcionario.total_erros) }}</td>
+
         </tr>
         {% endfor %}
     </table>
@@ -36,6 +37,10 @@
 
     <div class="resumoerros">
     <h3>Total de erros no mês: {{ total_erros }}</h3>
+    {% if total_de_entregas > 0 %}
+        <h4>Erros por entregas: {{ "%.2f" % ((total_erros/total_de_entregas)*100) }}%</h4>
+    {% endif %}
+
     </div>
 
 

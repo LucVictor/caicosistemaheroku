@@ -431,7 +431,6 @@ def avarias_relatorio():
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
                                                     Produto_Avaria.data_de_insercao <= data_final).order_by(
                 Produto_Avaria.data_de_insercao.desc()).all()
-
             total_soma_avarias = db.session.query(func.sum(Produto_Avaria.preco_total)).filter(
                 Produto_Avaria.codigo_do_produto == codigo,
                 Produto_Avaria.data_de_insercao >= data_inicial,
@@ -492,7 +491,8 @@ def avarias_relatorio():
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
                                                     Produto_Avaria.data_de_insercao <= data_final).order_by(
                 Produto_Avaria.preco_total.desc()).limit(10).all()
-
+            if total_soma_avarias == 0:
+                redirect(url_for('/avarias/relatorio'))
             return render_template('avarias/emitir_relatorio.html', resultado=resultado,
                                    total_soma_avarias=total_soma_avarias,
                                    total_soma_avarias_usoeconsumo=total_soma_avarias_usoeconsumo,
@@ -911,7 +911,7 @@ def entregas_index():
                            total_de_entregas=total_de_entregas, mes=mes, rotas=rotas, entregas=entregas,
                            data_agora=data_agora(),
                            resultados=resultados
-                           , resultados_entregas=resultados_entregas)
+                           , resultados_entregas=resultados_entregas, calcular_porcentagem=calcular_porcentagem)
 
 
 @app.route('/entregas/relatorio', methods=['get'])
@@ -1264,20 +1264,22 @@ def entregas_erros():
         Entrega.resultado_tempo,
         Entrega.quantidade_de_entregas,
         Entrega.data_da_entrega,
-        Entrega.reentregas
+        Entrega.reentregas,
+        Entrega.conferente
     ).filter(
         Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
     ).subquery()
 
     total_entregas = func.sum(subquery.c.quantidade_de_entregas)
     resultados_entregas = db.session.query(
-        subquery.c.rota,
+        subquery.c.conferente,
         total_entregas.label('total_entregas')
     ).group_by(
-        subquery.c.rota
+        subquery.c.conferente
     ).order_by(
-        total_entregas.desc()
+        subquery.c.conferente.asc()
     ).all()
+
 
     total_de_entregas = 0
     for i in resultados_entregas:
@@ -1288,8 +1290,8 @@ def entregas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
-    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros,
-                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas)
+    return render_template("/entregas/erros.html", tamanho=tamanho, mes=mes_atual(), erros=erros,resultados_entregas=resultados_entregas,
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas, calcular_porcentagem=calcular_porcentagem)
 
 
 @app.route('/entregas/cadastrar_erro', methods=["GET", "POST"])
@@ -1383,8 +1385,38 @@ def vendas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
+    subquery = db.session.query(
+        Entrega.motorista,
+        Entrega.rota,
+        Entrega.resultado_tempo,
+        Entrega.quantidade_de_entregas,
+        Entrega.data_da_entrega,
+        Entrega.reentregas,
+        Entrega.conferente
+    ).filter(
+        Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
+    ).subquery()
+
+    total_entregas = func.sum(subquery.c.quantidade_de_entregas)
+    resultados_entregas = db.session.query(
+        subquery.c.conferente,
+        total_entregas.label('total_entregas')
+    ).group_by(
+        subquery.c.conferente
+    ).order_by(
+        subquery.c.conferente.asc()
+    ).all()
+
+    total_de_entregas = 0
+    for i in resultados_entregas:
+        total_de_entregas += i.total_entregas
+
+    total_erros = 0
+    for i in erros_por_funcionario:
+        total_erros += i.total_erros
+
     return render_template("/vendas/erros.html", mes=mes_atual(), erros=erros,
-                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros)
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas )
 
 
 

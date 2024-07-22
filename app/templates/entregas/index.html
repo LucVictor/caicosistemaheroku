@@ -76,6 +76,7 @@
               <div class="resumoentregas">
        <h3>Total de Entregas: {{ total_de_entregas }}</h3>
        <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
+       <h4>Reentregas por entregas: {{ "%.2f" % ((total_de_reentregas / total_de_entregas)*100) }}%</h4>
 
                <br>
 </div>
