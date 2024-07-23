@@ -1290,7 +1290,7 @@ def entregas_erros():
     for i in erros_por_funcionario:
         total_erros += i.total_erros
 
-    return render_template("/entregas/erros.html", tamanho=tamanho, mes=mes_atual(), erros=erros,resultados_entregas=resultados_entregas,
+    return render_template("/entregas/erros.html", mes=mes_atual(), erros=erros,resultados_entregas=resultados_entregas,
                            erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas, calcular_porcentagem=calcular_porcentagem)
 
 
