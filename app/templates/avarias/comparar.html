@@ -131,7 +131,7 @@
 
         </div>
         </div>
-    {% endif %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -142,7 +142,7 @@
           labels: ["Relatório 1" , "Relatório 2"],
           datasets: [{
             label: 'Custos',
-            data: {{ array_total | tojson}},
+            data: {{ array_total | tojson }},
               backgroundColor: "orange",
             borderWidth: 1
           }]
@@ -161,5 +161,5 @@
         }
       });
 </script>
-
+    {% endif %}
 {% endblock %}
