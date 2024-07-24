@@ -17,8 +17,7 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://lucascod_banco:88335938@192.95.54.248/lucascod_banco"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://lucascod_sistema:QW01hM9UQqNt@177.54.147.142/lucascod_caico"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URL', 'mysql+pymysql://usuario:password@endereco/banco')
 app.config["SECRET_KEY"] = "secretkey"
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 28000,
@@ -481,11 +480,11 @@ def avarias_relatorio():
                 Produto_Avaria.data_de_insercao >= data_inicial,
                 Produto_Avaria.data_de_insercao <= data_final, Produto_Avaria.tipodeavaria == "Estragado").scalar()
             if not avarias_embalagem_quantidade:
-                avarias_embalagem_quantidade = "0"
+                avarias_embalagem_quantidade = 0
             if not avarias_vencidos_quantidade:
-                avarias_vencidos_quantidade = "0"
+                avarias_vencidos_quantidade = 0
             if not avarias_estragados_quantidade:
-                avarias_estragados_quantidade = "0"
+                avarias_estragados_quantidade = 0
 
             dez_itens = Produto_Avaria.query.filter(Produto_Avaria.codigo_do_produto == codigo,
                                                     Produto_Avaria.data_de_insercao >= data_inicial,
@@ -531,15 +530,15 @@ def avarias_relatorio():
             Produto_Avaria.tipodeavaria == "Estragado").scalar()
 
         if not total_soma_avarias:
-            total_soma_avarias = "0.00"
+            total_soma_avarias = 0
         if not total_soma_avarias_usoeconsumo:
-            total_soma_avarias_usoeconsumo = "0.00"
+            total_soma_avarias_usoeconsumo = 0
         if not total_soma_avarias_embalagem:
-            total_soma_avarias_embalagem = "0.00"
+            total_soma_avarias_embalagem = 0
         if not total_soma_avarias_vencimento:
-            total_soma_avarias_vencimento = "0.00"
+            total_soma_avarias_vencimento = 0
         if not total_soma_avarias_estragado:
-            total_soma_avarias_estragado = "0.00"
+            total_soma_avarias_estragado = 0
 
         avarias_quantidade = db.session.query(func.sum(Produto_Avaria.quantidade)).filter(
             Produto_Avaria.data_de_insercao >= data_inicial,
@@ -554,11 +553,11 @@ def avarias_relatorio():
             Produto_Avaria.data_de_insercao >= data_inicial,
             Produto_Avaria.data_de_insercao <= data_final, Produto_Avaria.tipodeavaria == "Estragado").scalar()
         if not avarias_embalagem_quantidade:
-            avarias_embalagem_quantidade = "0"
+            avarias_embalagem_quantidade = 0
         if not avarias_vencidos_quantidade:
-            avarias_vencidos_quantidade = "0"
+            avarias_vencidos_quantidade = 0
         if not avarias_estragados_quantidade:
-            avarias_estragados_quantidade = "0"
+            avarias_estragados_quantidade = 0
 
         dez_itens = Produto_Avaria.query.filter(Produto_Avaria.data_de_insercao >= data_inicial,
                                                 Produto_Avaria.data_de_insercao <= data_final).order_by(
@@ -698,9 +697,11 @@ def avarias_comparar():
             avarias_vencidos_quantidade2 = 0
         if not avarias_estragados_quantidade2:
             avarias_estragados_quantidade2 = 0
-
+        array_total=[]
+        array_total.append(total_soma_avarias1)
+        array_total.append(total_soma_avarias2)
         return render_template('avarias/comparar.html',
-                               total_soma_avarias1=total_soma_avarias1,
+                               total_soma_avarias1=total_soma_avarias1, array_total=array_total,
                                total_soma_avarias_usoeconsumo1=total_soma_avarias_usoeconsumo1,
                                total_soma_avarias_embalagem1=total_soma_avarias_embalagem1,
                                total_soma_avarias_vencimento1=total_soma_avarias_vencimento1,
@@ -1044,7 +1045,15 @@ def entregar_comparar_entregas():
             else:
                 entregas_por_rota[rota]['total_entregas_2'] = total_entregas_2
                 entregas_por_rota[rota]['total_reentregas_2'] = total_reentregas_2
+        arry_entregas=[]
+        arry_reentregas=[]
+        arry_reentregas.append(total_reentregas_periodo_1)
+        arry_reentregas.append(total_reentregas_periodo_2)
+        arry_entregas.append(total_entregas_periodo_1)
+        arry_entregas.append(total_entregas_periodo_2)
         return render_template('entregas/comparar_entregas.html',
+                               arry_reentregas=arry_reentregas,
+                               arry_entregas=arry_entregas,
                                entregas_por_rota=entregas_por_rota,
                                total_entregas_periodo_1=total_entregas_periodo_1,
                                total_reentregas_periodo_1=total_reentregas_periodo_1,

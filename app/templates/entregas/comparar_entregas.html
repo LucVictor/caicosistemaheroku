@@ -40,7 +40,8 @@
     <h1>Comparação de relatórios de entregas</h1>
     <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} á {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
     <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
-<div class="resumo">
+
+    <div class="resumo">
        <div class="resumoentregas">
        <h2>Relatórios</h2>
        <h3>Entregas por rota</h3>
@@ -85,7 +86,66 @@
             <h4>Total de Entregas: {{ calcular_porcentagem(total_entregas_periodo_1,total_entregas_periodo_2) }}</h4>
             <h4>Total de Reentregas:  {{ calcular_porcentagem(total_reentregas_periodo_1,total_reentregas_periodo_2) }}</h4>
                <br>
+                    <canvas id="myChart2"></canvas><br>
+        <canvas id="myChart1"></canvas>
 </div>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+    const ctx1 = document.getElementById('myChart1');
+  const ctx2 = document.getElementById('myChart2');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ["Relatório 1" , "Relatório 2"],
+          datasets: [{
+            label: 'Reentregas',
+            data: {{  arry_reentregas  | tojson }},
+              backgroundColor: "orange",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+                min:0,
+                ticks:{
+                  stepSize: 20
+                }
+
+            }
+          }
+        }
+      });
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ["Relatório 1" , "Relatório 2"],
+          datasets: [{
+            label: 'Entregas',
+            data: {{  arry_entregas  | tojson }},
+              backgroundColor: "orange", display: true,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+                ticks:{
+                  stepSize: 100
+                }
+            }
+          }
+        }
+      });
+
+</script>
 {% endif %}
 {% endblock %}

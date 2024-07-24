@@ -59,5 +59,19 @@
       <jdbc-url>jdbc:mariadb://177.54.147.142:3306/lucascod_caico</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="@caicomatriz-db.lucascoding.com.br" uuid="0ea7aacc-a79e-4d9e-a3c4-aa03049f736f">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://caicomatriz-db.lucascoding.com.br:3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="@caicomatriz-db.lucascoding.com.br [2]" uuid="2a7b60c9-99fe-408a-b9ea-bf550daf0539">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://caicomatriz-db.lucascoding.com.br:3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
