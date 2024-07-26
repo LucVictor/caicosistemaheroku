@@ -40,7 +40,7 @@
         {% for i in dez_itens %}
         <tr>
             <td>{{ i.codigo_do_produto }}</td>
-                <td>R${{  i.preco_total }}</td>
+                <td>{{  i.preco_total }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -53,15 +53,15 @@
     <table id="tabela" class="table table-sm text-center align-middle">
     <thead>
     <tr class="align-middle">
-      <th>Data</th>
-    <th>Código</th>
-    <th>Produto</th>
-    <th>Quantidade</th>
-    <th>Custo</th>
-    <th>Tipo de Avaria</th>
-    <th>Uso e consumo?</th>
-    <th>Usuário</th>
-    <th class="botoesacao">Ação</th>
+      <th class="text-center">Data</th>
+    <th class="text-center">Código</th>
+    <th class="text-center">Produto</th>
+    <th class="text-center">Quantidade</th>
+    <th class="text-center ">Custo</th>
+    <th class="text-center">Tipo de Avaria</th>
+    <th class="text-center">Uso e consumo?</th>
+    <th class="text-center">Usuário</th>
+    <th class="botoesacao text-center">Ação</th>
   </tr>
     </thead>
     <tbody>
@@ -71,7 +71,7 @@
     <td>{{ avaria.codigo_do_produto }}</td>
     <td>{{ avaria.nome_do_produto }}</td>
     <td>{{ avaria.quantidade | format_quantidade}}</td>
-    <td>R$ {{ avaria.preco_total }}</td>
+    <td class="col-auto">R$ {{ avaria.preco_total }}</td>
       <td>{{ avaria.tipodeavaria }}</td>
       <td>{{ avaria.usoeconsumo }}</td>
     <td>{{ avaria.criador }}</td>
@@ -82,7 +82,6 @@
         {% endfor %}
     </tbody>
 </table>
-    </div>
     </div>
 
 {% endblock %}
