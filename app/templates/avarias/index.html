@@ -1,41 +1,38 @@
 {% extends "./template.html" %}
 {% block content %}
-    <style>
-    h3{
-        text-align: center  ;
-    }
-    </style>
+
     <h2>Listagem de Avarias</h2>
-        <h3>Referente ao mês de {{ mes }}</h3>
-    <div class="resumo">
-    <div class="resumoavarias">
-    <h3>Custos:</h3>
-    <h4>Custos de avarias: R${{ total_soma_avarias - total_soma_avarias_usoeconsumo }} </h4>
-    <h4>Uso e consumo: R${{ total_soma_avarias_usoeconsumo }} </h4>
-    <h4>Total: R${{ total_soma_avarias }} </h4>
+        <h5>Referente ao mês de {{ mes }}</h5>
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+
+    <div class="border border-black m-3 p-2 h-50">
+    <h5>Custos:</h5>
+    <h5>Custos de avarias: R${{ total_soma_avarias - total_soma_avarias_usoeconsumo }} </h5>
+    <h5>Uso e consumo: R${{ total_soma_avarias_usoeconsumo }} </h5>
+    <h5>Total: R${{ total_soma_avarias }} </h5>
         {% if total_soma_avarias and total_soma_avarias  %}
-            <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h4>
+            <h5>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h5>
         {% else %}
-                    <h4>Custos médio por avaria: R$0</h4>
+                    <h5>Custos médio por avaria: R$0</h5>
         {% endif %}
 
-    </div><br>
-    <div class="resumoavarias">
-            <h3>Descrição de custos:</h3>
+    </div>
+
+    <div class="border border-black m-3 p-2 h-50">
+            <h5>Descrição de custos:</h5>
     <h5>Custos de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h5>
     <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h5>
     <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado }} </h5>
     <h5>Custos de uso e consumo: R${{ total_soma_avarias_usoeconsumo }} </h5>
-    </div><br>
-    <div class="resumoavarias">
-     <h3>Descrição de itens:</h3>
+     <h5 class="mt-3">Descrição de itens:</h5>
     <h5>Quantidade de embalagem: {{ avarias_embalagem_quantidade | int}}</h5>
     <h5>Quantidade de vencidos: {{ avarias_vencidos_quantidade | int }}</h5>
     <h5>Quantidade de estragados: {{ avarias_estragados_quantidade | int }}</h5>
     </div>
-    <div class="resumoavarias">
-        <h3>10 maiores custos</h3>
-    <table class="dez_itens">
+
+    <div class="border border-black m-3 p-2 ">
+        <h5>10 maiores custos</h5>
+    <table  class="m-auto">
         <tr>
             <th>Código</th>
             <th>Custo</th>
@@ -48,12 +45,14 @@
         {% endfor %}
     </table>
     </div>
+
     </div>
-    <br>
-    <br>
-    <div class="tabelaavarias">
-    <table>
-  <tr>
+
+
+    <div class="table-responsive">
+    <table id="tabela" class="table table-sm text-center align-middle">
+    <thead>
+    <tr class="align-middle">
       <th>Data</th>
     <th>Código</th>
     <th>Produto</th>
@@ -64,6 +63,8 @@
     <th>Usuário</th>
     <th class="botoesacao">Ação</th>
   </tr>
+    </thead>
+    <tbody>
    {% for avaria in avarias %}
   <tr>
       <td>{{ avaria.data_de_insercao.strftime('%d/%m/%Y') }}</td>
@@ -79,6 +80,9 @@
     </td>
   </tr>
         {% endfor %}
+    </tbody>
 </table>
     </div>
+    </div>
+
 {% endblock %}

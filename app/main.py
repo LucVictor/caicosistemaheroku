@@ -1604,8 +1604,7 @@ def entregas_erros_relatorio():
             Erros_Logistica.data_do_erro.desc()).all()
         erros_por_funcionario = db.session.query(
             Erros_Logistica.erro_funcionario,
-            func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),
-
+            func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros')
         ).filter(
             Erros_Logistica.data_do_erro >= data_inicial,
             Erros_Logistica.data_do_erro <= data_final

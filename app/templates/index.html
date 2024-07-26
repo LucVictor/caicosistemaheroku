@@ -1,23 +1,12 @@
 {% extends "template.html" %}
 {% block content %}
-<style>
-    h3{
-        text-align: center  ;
-    }
-    .resumoavarias{
-        margin-left: 30px;
-    }
-    footer{
-        margin-top: 50px;
-    }
-</style>
-<div>
-<div class="resumo">
+<div class="d-flex justify-content-center m-1 p-1 text-center">
 
-<div class="resumoavarias">
+<div class="border border-black m-3 p-2 d-flex align-self-start justify-content-center align-items-center">
 
+    <div>
     <h3>Produtos Próximos ao Vencimento</h3>
-    <table class="dez_itens">
+    <table>
         <tr>
             <th>Produto</th>
             <th>Quant</th>
@@ -31,13 +20,14 @@
         </tr>
         {% endfor %}
     </table>
+    </div>
 </div>
 
-<div class="resumoavarias">
+<div class="border m-3 p-2 border-black align-self-center justify-content-center align-items-center">
 <h3>Gráfico de custos</h3>
 <canvas id="myChart2"></canvas>
     <h3>Últimas avarias</h3>
-    <table class="dez_itens">
+    <table>
         <tr>
             <th>Código</th>
             <th>Custo</th>
@@ -50,6 +40,8 @@
         {% endfor %}
     </table>
 </div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
