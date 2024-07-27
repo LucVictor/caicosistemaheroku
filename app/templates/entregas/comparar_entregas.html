@@ -1,51 +1,39 @@
 {% extends "./template.html" %}
 {% block content %}
-<style>
-@media print {
-    .resumoentregas{
-        font-size: smaller;
-
-    }
-
-}
-
-    h3,h2{
-        text-align: center  ;
-    }
-
-    </style>
     {% if not total_entregas_periodo_1 %}
-    <div class="resumo">
+    <div class="text-black p-1 m-auto border-orange w-25">
         <div class="cadastrar_produto">
-    <h2>Comparar Relatórios</h2>
-    <form action="/entregas/comparar_entregas" method="post">
-        <h4>Primeiro relatório</h4>
-        <label for="data_inicial1">Data inicial:</label><br>
-        <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
-
+    <h4>Comparar Relatórios</h4>
+    <form class="m-auto w-75" action="/entregas/comparar_entregas" method="post">
+        <div class="mb-1 mt-3">
+        <h6>Primeiro relatório</h6>
+        <label for="data_inicial1">Data inicial:</label>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_inicial1" name="data_inicial1" required>
+        </div>
         <label for="data_final1">Data final</label><br>
-        <input type="date" id="data_final1" name="data_final1" required><br><br>
-
-         <h4>Segundo relatório</h4>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_final1" name="data_final1" required>
+        <div class="mt-3">
+         <h6>Segundo relatório</h6>
         <label for="data_inicial2">Data inicial:</label><br>
-        <input type="date" id="data_inicial2" name="data_inicial2" required><br><br>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_inicial2" name="data_inicial2" required>
 
         <label for="data_final2">Data final</label><br>
-        <input type="date" id="data_final2" name="data_final2" required><br><br>
-        <input type="submit" value="Emitir">
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_final2" name="data_final2" required>
+        </div>
+        <input class="btn btn-warning  mt-2" type="submit" value="Emitir">
     </form>
         </div></div>
     {% endif %}
 {% if total_entregas_periodo_1 %}
-    <h1>Comparação de relatórios de entregas</h1>
-    <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} á {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
-    <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
+    <h5>Comparação de relatórios de entregas</h5>
+    <h6>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} á {{ data_final1.strftime('%d/%m/%Y')  }}</h6>
+    <h6>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h6>
 
-    <div class="resumo">
-       <div class="resumoentregas">
-       <h2>Relatórios</h2>
-       <h3>Entregas por rota</h3>
-   <table class="listagemtabela">
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+       <div class="border border-black m-3 p-2 h-50">
+       <h4>Relatórios</h4>
+       <h5>Entregas por rota</h5>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Rota:</th>
         <th>Relatório 1</th>
@@ -65,26 +53,26 @@
     </table><br>
 </div>
 
-              <div class="resumoentregas">
-
-              <h2>Totais</h2>
-                  <h3>Relatório 1</h3>
-       <h4>Total de Entregas: {{ total_entregas_periodo_1 }}</h4>
-       <h4>Total de Reentregas: {{ total_reentregas_periodo_1 }}</h4>
-       <h4>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_1 / total_entregas_periodo_1) * 100) }}%</h4><br>
-                  <h3>Relatório 2</h3>
-       <h4>Total de Entregas: {{ total_entregas_periodo_2 }}</h4>
-       <h4>Total de Reentregas:{{ total_reentregas_periodo_2 }} </h4>
-       <h4>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_2 / total_entregas_periodo_2) * 100) }}%</h4><br>
+              <div class="border border-black m-3 p-2 h-50">
+                  <div></div>
+              <h4>Totais</h4>
+                  <h5>Relatório 1</h5>
+       <h6>Total de Entregas: {{ total_entregas_periodo_1 }}</h6>
+       <h6>Total de Reentregas: {{ total_reentregas_periodo_1 }}</h6>
+       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_1 / total_entregas_periodo_1) * 100) }}%</h6><br>
+                  <h5>Relatório 2</h5>
+       <h6>Total de Entregas: {{ total_entregas_periodo_2 }}</h6>
+       <h6>Total de Reentregas:{{ total_reentregas_periodo_2 }} </h6>
+       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_2 / total_entregas_periodo_2) * 100) }}%</h6><br>
 
                <br>
 </div>
 
-        <div class="resumoentregas">
-              <h2>Comparação</h2>
-                  <h3>Relatórios</h3>
-            <h4>Total de Entregas: {{ calcular_porcentagem(total_entregas_periodo_1,total_entregas_periodo_2) }}</h4>
-            <h4>Total de Reentregas:  {{ calcular_porcentagem(total_reentregas_periodo_1,total_reentregas_periodo_2) }}</h4>
+        <div class="border border-black m-3 p-2 h-50">
+              <h4>Comparação</h4>
+                  <h5>Relatórios</h5>
+            <h6>Total de Entregas: {{ calcular_porcentagem(total_entregas_periodo_1,total_entregas_periodo_2) }}</h6>
+            <h6>Total de Reentregas:  {{ calcular_porcentagem(total_reentregas_periodo_1,total_reentregas_periodo_2) }}</h6>
                <br>
                     <canvas id="myChart2"></canvas><br>
         <canvas id="myChart1"></canvas>

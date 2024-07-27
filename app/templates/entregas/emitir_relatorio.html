@@ -1,31 +1,13 @@
 {% extends "./template.html" %}
 {% block content %}
-<style>
-    @media print {
-    .resumo{
-        margin-bottom: 80px;
-    }
-    .page-break{
-        .tabela_de_erros_vendas: always;
-        }
 
-}
-.resumo{
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-.tabelaentregas{
-    font-size: small;
-}
-</style>
-        <h2>Listagem de entregas</h2>
-        <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " à " + data_final.strftime('%d/%m/%Y') }}</h3>
+        <h3>Listagem de entregas</h3>
+        <h4>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " à " + data_final.strftime('%d/%m/%Y') }}</h4>
 
-    <div class="resumo">
-    <div class="resumoentregas">
-    <h2>Rank de motoristas</h2>
-   <table class="listagemtabela">
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+    <div class="border border-black m-3 p-2 h-50">
+    <h3>Rank de motoristas</h3>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Nome:</th>
         <th>Positivos</th>
@@ -45,9 +27,10 @@
     </table>
 </div>
 
-       <div class="resumoentregas">
-       <h2>Entregas por rota</h2>
-   <table class="listagemtabela">
+       <div class="border border-black m-3 p-2 h-50">
+       <div>
+           <h3>Entregas por rota</h3>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Rota:</th>
         <th>Entregas</th>
@@ -62,22 +45,22 @@
     </tr>
         {% endfor %}
 
-    </table><br>
+    </table>
+       </div>
 </div>
 
 
-           <div class="resumoentregas">
-       <h3>Total de Entregas: {{ total_de_entregas }}</h3>
-       <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
-
+       <div class="border border-black m-3 p-2 h-50 ">
+           <div class="d-inline-flex h-75 m-auto flex-column">
+       <h4>Total de Entregas: {{ total_de_entregas }}</h4>
+       <h4>Total de Reentregas: {{ total_de_reentregas }}</h4>
+</div>
                <br>
 </div>
 </div>
-    <br>
-    <br>
-    <br>
-    <div>
-    <table class="tabelaentregas">
+
+    <div class="table-responsive m-2 p-2">
+    <table class="table-bordered table table-sm text-center align-middle border-black">
   <tr>
       <th>Data da entrega</th>
     <th>Motorista</th>
