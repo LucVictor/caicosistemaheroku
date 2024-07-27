@@ -1,23 +1,13 @@
 {% extends "./template.html" %}
 {% block content %}
-<style>
 
-.resumo{
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
-}
-.tabelaentregas{
-    font-size: small;
-}
-</style>
         <h2>Listagem de entregas</h2>
-        <h3>Referente ao mês de {{ mes }}</h3>
+        <h4>Referente ao mês de {{ mes }}</h4>
 
-    <div class="resumo">
-    <div class="resumoentregas">
-    <h3>Rank de motoristas</h3>
-   <table class="listagemtabela">
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+    <div class="border border-black m-3 p-2 h-25">
+    <h4>Rank de motoristas</h4>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Nome:</th>
         <th>Positivos</th>
@@ -37,9 +27,9 @@
     </table>
 </div>
 
-       <div class="resumoentregas">
-       <h3>Entregas por rota</h3>
-   <table class="listagemtabela">
+       <div class="border border-black m-3 p-2">
+       <h4>Entregas por rota</h4>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Rota:</th>
         <th>Entregas</th>
@@ -56,9 +46,9 @@
 
     </table><br>
 </div>
-    <div class="resumoentregas">
-    <h3>Média tempo de Entrega</h3>
-   <table class="listagemtabela">
+    <div class="border border-black m-3 p-2 h-50">
+    <h4>Média tempo de Entrega</h4>
+   <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
         <th>Rota:</th>
         <th>Média de Entrega</th>
@@ -73,19 +63,16 @@
 
     </table><br>
 </div>
-              <div class="resumoentregas">
-       <h3>Total de Entregas: {{ total_de_entregas }}</h3>
-       <h3>Total de Reentregas: {{ total_de_reentregas }}</h3>
-       <h4>Reentregas por entregas: {{ "%.2f" % ((total_de_reentregas / total_de_entregas)*100) }}%</h4>
+              <div class="border border-black m-3 p-2 h-50">
+       <h4>Total de Entregas: {{ total_de_entregas }}</h4>
+       <h4>Total de Reentregas: {{ total_de_reentregas }}</h4>
+       <h5>Reentregas por entregas: {{ "%.2f" % ((total_de_reentregas / total_de_entregas)*100) }}%</h5>
 
-               <br>
 </div>
 </div>
-    <br>
-    <br>
-    <br>
-    <div>
-    <table class="tabelaentregas">
+
+    <div class="table-responsive m-auto p-2">
+    <table class="table-bordered table table-sm text-center align-middle border-black">
   <tr>
       <th>Data da entrega</th>
     <th>Motorista</th>

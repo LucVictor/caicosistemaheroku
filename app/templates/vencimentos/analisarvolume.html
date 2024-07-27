@@ -1,7 +1,9 @@
 {% extends "./template.html" %}
 {% block content %}
+
+    <div class="table-responsive m-2 p-2">
     <h2>Listagem de vencimentos de produtos</h2>
-    <table>
+    <table class="table-bordered table table-sm text-center align-middle border-black w-auto m-auto">
   <tr>
       <th>Código</th>
       <th>Produto</th>
@@ -21,12 +23,12 @@
     <td>{{ dados.media_mensal }}</td>
 
     {% if dados.media_diaria == 0 %}
-        <td class="vermelho">Negativo</td>
+        <td class="bg-danger">Negativo</td>
     {% else %}
         {% if dados.quantidade / dados.media_diaria > dados.dias_restantes  %}
-             <td class="vermelho">Negativo</td>
+             <td class="bg-danger">Negativo</td>
         {% else %}
-            <td class="verde">Positivo</td>
+            <td class="bg-success">Positivo</td>
         {% endif %}
     {% endif %}
       {% if dados.media_diaria == 0 %}
@@ -42,4 +44,5 @@
 
         {% endfor %}
 </table>
+    </div>
 {% endblock %}

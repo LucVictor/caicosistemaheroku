@@ -1,100 +1,67 @@
 {% extends "./template.html" %}
 {% block content %}
-    <style>
-        select, .lista{
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .cadastro_rota{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: solid #ffcc77 3px;
-            border-radius: 5px;
-            padding: 10px 10px 10px 10px;
-            background-color: #ffcc77;
-        }
-        .form-group{
-            padding: 10px;
-        }
-        #quantidade_de_entregas, #reentregas, #entreganrealizadas{
-            width: 50px;
-        }
-        .caminhao{
-            mix-blend-mode: multiply;
-        }
-    </style>
-    <div class="cadastro_rota">
-      <form method="POST" action="/entregas/cadastrar">
+    <div class="text-black p-1 m-auto border-orange fs-5 w-25">
+      <form class="w-75 m-auto" method="POST" action="/entregas/cadastrar">
         <div>    <h2 class="vermelho">{{ erro }}</h2>
-    <h2 class="verde">{{ sucesso }}</h2></div>
-        <div><h3>Cadastro de entrega</h3></div>
-        <div><img class="caminhao" src="../static/imagens/caminhao.png" width="150" alt=""></div>
-        <div class="form-group">
-          <label for="data_da_entrega">Data da Entrega:</label><br><br>
-          <input type="date" class="form-control" id="data_da_entrega" name="data_da_entrega" required>
-        </div>
-        <div class="form-group">
-          <label for="motorista">Motorista</label><br>
-            <select name="motorista" id="motorista">
+        <h2 class="verde">{{ sucesso }}</h2></div>
+        <h3>Cadastro de entrega</h3>
+
+
+        <div class="mb-3"><img class="caminhao" src="../static/imagens/caminhao.png" width="150" alt=""></div>
+
+        <div class="mb-3 m-auto"><label for="data_da_entrega">Data da Entrega:</label><br>
+        <input type="date" class="form-control text-center w-50 m-auto" id="data_da_entrega" name="data_da_entrega" required></div>
+
+          <div class="mb-3 m-auto"><label for="motorista">Motorista:</label><br>
+            <select name="motorista" class="form-control text-center w-50 m-auto" id="motorista">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Motorista' %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                 {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-          <label for="ajudante">Ajudante</label><br>
-            <select name="ajudante" id="ajudante">
+            </select></div>
+
+          <div class="mb-3 m-auto"><label for="ajudante">Ajudante:</label><br>
+            <select class="form-control text-center w-50 m-auto" name="ajudante" id="ajudante">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Ajudante' %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                 {% endfor %}
-            </select>
-        </div>
-              <div class="form-group">
-          <label for="conferente">Conferente</label><br>
-            <select name="conferente" id="conferente">
+            </select></div>
+
+        <div class="mb-3 m-auto"><label for="conferente">Conferente:</label><br>
+            <select class="form-control text-center w-50 m-auto" name="conferente" id="conferente">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Conferente' %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                 {% endfor %}
-            </select>
-        </div>
+            </select></div>
 
-        <div class="form-group">
-          <label for="rota">Rota:</label>
-            <select name="rota" id="rota">
+        <div class="mb-3 m-auto"><label for="rota">Rota:</label><br>
+            <select class="form-control text-center w-50 m-auto" name="rota" id="rota">
                 {% for i in rotas_lista %}
                 <option class="lista">{{ i.rota }}</option>
                 {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-          <label for="quantidade_de_entregas">Quantidade de Entregas:</label>
-          <input type="number" class="form-control" id="quantidade_de_entregas" value="0" min="1" name="quantidade_de_entregas" required>
-        </div>
-              <div class="form-group">
-          <label for="reentregas">Quantidade de Reentregas:</label>
-          <input type="number" class="form-control" id="reentregas" value="0" min="0" name="reentregas" required>
-        </div>
-          <div class="form-group">
-          <label for="entreganrealizadas">Entregas não realizadas:</label>
-          <input type="number" class="form-control" id="entreganrealizadas" value="0" min="0" name="entreganrealizadas" required>
-        </div>
-        <div class="form-group">
-          <label for="tempo_total">Tempo Total:</label>
-          <input type="time" class="form-control" id="tempo_total" name="tempo_total" required>
-        </div>
-        <div class="form-group">
-          <label for="tempo_total_entrega">Tempo Total de Entrega:</label>
-          <input type="time" class="form-control" id="tempo_total_entrega" name="tempo_total_entrega" required>
-        </div>
-        <button type="submit">Cadastrar</button>
-      </form>
+            </select></div>
+          <div class="mb-3 m-auto"><label for="quantidade_de_entregas">Entregas:</label><br>
+          <input class="form-control text-center w-50 m-auto" type="number" id="quantidade_de_entregas" value="0" min="1" name="quantidade_de_entregas" required></div>
+
+          <div class="mb-3 m-auto"><label for="reentregas">Reentregas:</label>
+              <input class="form-control text-center w-50 m-auto" type="number" class="" id="reentregas" value="0" min="0" name="reentregas" required></div>
+
+          <div class="mb-3 m-auto"><label for="entreganrealizadas">Entregas não realizadas:</label>
+              <input type="number" class="form-control text-center w-50 m-auto" id="entreganrealizadas" value="0" min="0" name="entreganrealizadas" required></div>
+
+          <div class="mb-3 m-auto"><label for="tempo_total">Tempo Total:</label>
+          <input type="time" class="form-control text-center w-50 m-auto" id="tempo_total" name="tempo_total" required></div>
+
+          <div class="mb-3 m-auto"><label for="tempo_total_entrega">Tempo Total de Entrega:</label>
+              <input type="time" class="form-control text-center w-50 m-auto" id="tempo_total_entrega" name="tempo_total_entrega" required></div>
+
+              <button class="btn btn-warning" type="submit">Cadastrar</button>
+        </form>
+
     </div>
 {% endblock %}

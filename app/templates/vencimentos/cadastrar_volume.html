@@ -1,8 +1,8 @@
 {% extends "./template.html" %}
 {% block content %}
-    <div class="cadastrar_produto">
-    <h2>Cadastro de Volume de Vendas</h2>
-    <img class="procurarimg" src="../static/imagens/cadastrar.png" width="80" alt=""><br>
+    <div class="text-black p-1 m-auto border-orange w-25 text-center">
+    <h3>Cadastro de Volume</h3>
+    <img class="procurarimg m-2 p-1" src="../static/imagens/cadastrar.png" width="80" alt=""><br>
     <form action="/vencimentos/cadastrar_volume" method="post">
         <label for="codigo_produto">Código do Produto:</label><br>
         <input type="number" id="codigo_produto" name="codigo_produto" value=""  required><br><br>

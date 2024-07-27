@@ -4,7 +4,7 @@
 
 }
 .btn-custom-orange {
-    background-color: #f58c24; /* Cor laranja */
+    background-color: orange; /* Cor laranja */
     color: black; /* Cor do texto */
     border: none; /* Remover bordas se necessário */
 }
@@ -16,17 +16,24 @@
 .dropdown-menu {
     min-width: auto; /* Allow width to fit content */
     text-align: left;
+    color: black;
 }
-.navbar-brand{
+.border-orange{
+    border-style: solid;
+    border-radius: 7px;
+    border-width: 1px;
+    border-color: orange;
+    background-color: #ffcc77;
+}
+.navbar-brand, .procurarimg, .caminhao{
     mix-blend-mode:multiply;
 }
 .dropdown-menu{
     font-size: 14px;
-    background-color: #f58c24; /* Cor laranja */
+    background-color: orange; /* Cor laranja */
     color: rgb(0, 0, 0); /* Cor do texto */
     border: none; /* Remover bordas se necessário */
 }
 .dropdown-item:hover, .dropdown-item:target, .dropdown-item:active, .dropdown-item:focus{
     background-color: #e64a19;
 }
-
