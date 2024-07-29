@@ -2,23 +2,27 @@
 {% block content %}
 
         {% if not total_soma_avarias1 %}
-        <div class="text-black p-1 m-auto border-orange w-25">
+    <div class="text-black p-1 m-auto border-orange w-25">
     <h3>Comparar Relatórios</h3>
-    <form action="/avarias/comparar" method="post">
+
+        <form class="w-50 mt-2 m-auto" action="/avarias/comparar" method="post">
+        <div class="mt-4">
         <h5>Primeiro relatório</h5>
-        <label for="data_inicial1">Data inicial:</label><br>
-        <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
+        <label class="m-1" for="data_inicial1">Data inicial:</label>
+        <input class="form-control text-center " type="date" id="data_inicial1" name="data_inicial1" required>
 
-        <label for="data_final1">Data final</label><br>
-        <input type="date" id="data_final1" name="data_final1" required><br><br>
+        <label class="m-2" for="data_final1">Data final</label>
+        <input class="mb-2 form-control text-center" type="date" id="data_final1" name="data_final1" required>
+        </div>
 
-         <h5>Segundo relatório</h5>
-        <label for="data_inicial2">Data inicial:</label><br>
-        <input type="date" id="data_inicial2" name="data_inicial2" required><br><br>
+        <div class="mt-4">
+        <h5>Segundo relatório</h5>
+        <label class="mt-1" for="data_inicial2">Data inicial:</label>
+        <input class="form-control text-center" type="date" id="data_inicial2" name="data_inicial2" required>
 
-        <label for="data_final2">Data final</label><br>
-        <input type="date" id="data_final2" name="data_final2" required><br><br>
-        <input type="submit" value="Emitir">
+        <label class="m-2" for="data_final2">Data final</label>
+        <input class="mb-2 form-control text-center" type="date" id="data_final2" name="data_final2" required>
+        <input class="btn btn-warning m-2" type="submit" value="Emitir"></div>
     </form>
         </div>
     {% endif %}

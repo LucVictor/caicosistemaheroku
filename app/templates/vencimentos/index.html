@@ -3,9 +3,10 @@
 
     <h2>Listagem de vencimentos de produtos</h2>
     <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="table-responsive m-2 p-2">
-    <table class="table-bordered table table-sm text-center align-middle border-black">
-  <tr>
+    <div class="table-responsive background-suave  m-2 p-2">
+    <table class="table-bordered text-center align-middle border-black">
+  <thead>
+        <tr>
       <th>Código</th>
       <th>Produto</th>
       <th>Quantidade</th>
@@ -16,9 +17,10 @@
       {% endif %}
       <th>Usuário</th>
 
-  </tr>
+  </tr></thead>
    {% for vencimento in vencimentos %}
-  <tr>
+  <tbody>
+       <tr>
     <td>{{ vencimento.codigo_do_produto }}</td>
     <td>{{ vencimento.nome_do_produto }}</td>
     <td>{{ vencimento.quantidade | format_quantidade }}
@@ -28,16 +30,16 @@
                 {% if vencimento.dias_restantes < 30 %}bg-warning{% endif %}
                 {% if vencimento.dias_restantes >= 30 %}bg-success{% endif %}">{{ vencimento.dias_restantes }}</td>
     {% if current_user.is_authenticated %}
-        <td><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
-        <input class="m-1" type="submit" value="Editar">
+        <td class="flexNoBoards"><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
+        <input class="btn btn-sm btn-warning me-1" type="submit" value="Editar">
         </form>
         <form action="/vencimentos/deletar/{{ vencimento.id }}" method="post">
-        <input type="submit" value="Apagar">
+        <input class="btn btn-sm btn-warning" type="submit" value="Apagar">
         </form></td>
     {% endif %}
     <td class="botoesacao">{{ vencimento.criador }}</td>
   </tr>
-        {% endfor %}
+        {% endfor %}</tbody>
 </table>
     </div>
     </div>

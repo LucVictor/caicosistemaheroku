@@ -1,4 +1,10 @@
-
+.background-suave{
+    border-radius: 7px;
+}
+.flexNoBoards{
+    display: flex;
+    border: none;
+}
 .fs-12{
     font-size: 12px;
 
