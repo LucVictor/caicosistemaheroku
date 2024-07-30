@@ -1554,7 +1554,8 @@ def entregas_erros_comparar():
 
         total_de_entregas2 = 0
         for i in resultados_entregas2:
-            total_de_entregas2 += i.total_entregas
+            if i.total_entregas:
+                total_de_entregas2 += i.total_entregas
 
         return render_template('entregas/comparar_erros.html',  erros_por_funcionario=erros_por_funcionario,
                                data_inicial1=formatar_data(data_inicial_1),

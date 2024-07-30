@@ -1,24 +1,11 @@
 {% extends "./template.html" %}
 {% block content %}
-    <style>
-    @media print {
-    .resumo{
-        margin-bottom: 10px;
-    }
-
-}
-.tabelaerrosentregas{
-        font-size: small;
-    }
-    </style>
-
-       <h2>Listagem de erros logísticos</h2>
-        <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} à {{ data_final.strftime('%d/%m/%Y') }}</h3>
-    <div class="resumo">
-    <br>
-    <div class="resumoerros">
-    <h3>Erros por Funcionário</h3>
-    <table class="tabelaerros">
+       <h3>Listagem de erros logísticos</h3>
+        <h4>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} à {{ data_final.strftime('%d/%m/%Y') }}</h4>
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <h5>Erros por Funcionário</h5>
+    <table class="table-bordered text-center m-auto align-middle border-black  ">
         <tr>
             <th>Funcionário</th>
             <th>Erros</th>
@@ -32,18 +19,19 @@
     </table>
     </div>
 
-    <div class="resumoerros">
-    <h3>Total de erros: {{ total_erros }}</h3>
-    <h3> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100) }}%</h3>
+    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <h5>Total de erros: {{ total_erros }}</h5>
+    <h5> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100) }}%</h5>
     </div>
 
 
     </div>
         <br>
     <br>
-    <div>
-    <table class="tabelaerrosentregas">
-  <tr>
+    <div class="table-responsive background-suave fs-14">
+    <table class="table-bordered text-center align-middle border-black">
+    <thead>
+        <tr>
       <th>Data</th>
       <th>Funcionário</th>
       <th>Cliente</th>
@@ -58,25 +46,26 @@
       <th class="botoesacao">Ação</th>
 
   </tr>
-   {% for erro in erros  %}
+   {% for erro in erros  %}</thead>
+       <tbody>
   <tr>
     <td>{{ erro.data_do_erro.strftime('%d/%m/%Y') }}</td>
     <td>{{ erro.erro_funcionario }}</td>
-    <td>{{ erro.erro_cliente}}</td>
-    <td>{{ erro.motorista_da_entrega }}</td>
-    <td>{{ erro.rota_da_entrega }}</td>
+    <td class="p-1">{{ erro.erro_cliente}}</td>
+    <td class="p-1">{{ erro.motorista_da_entrega }}</td>
+    <td class="p-1">{{ erro.rota_da_entrega }}</td>
     <td>{{ erro.quantidade_de_erros}}</td>
     <td>{{ erro.produto_erro }}</td>
     <td>{{ erro.descricao_do_erro }}
-    <td>{{ erro.criador }}</td>
-    <td class="botoesacao">
+    <td class="p-1">{{ erro.criador }}</td>
+    <td class="">
         <form action="/entregas/editar_erro/{{ erro.id }}" method="get">
-        <input type="submit" value="Editar">
+        <input class="btn btn-warning btn-sm mt-1 mb-1" type="submit" value="Editar">
     </form>
         <form action="/entregas/deletar_erro/{{ erro.id }}" method="post">
-        <input type="submit" value="Apagar">
+        <input class="btn btn-warning btn-sm mb-1" type="submit" value="Apagar">
     </form></td>
   </tr>
-        {% endfor %}
+        {% endfor %}</tbody>
 </table></div>
 {% endblock %}

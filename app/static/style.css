@@ -1,12 +1,16 @@
 .background-suave{
-    border-radius: 7px;
+
 }
 .flexNoBoards{
     display: flex;
     border: none;
 }
+flexNoBoardErros{
+    display: flex;
+    border-left: 1px;
+}
 .fs-12{
-    font-size: 12px;
+    font-size: 14px;
 
 }
 .btn-custom-orange {
