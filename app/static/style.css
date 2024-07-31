@@ -46,4 +46,14 @@ flexNoBoardErros{
 }
 .dropdown-item:hover, .dropdown-item:target, .dropdown-item:active, .dropdown-item:focus{
     background-color: #e64a19;
+ color: black;
+}
+textarea {
+   resize: none;
+}
+.dropdown-item{
+    color: black;
+}
+.tabela, .tabela tr, .tabela th, .tabela td{
+    border: black 1px solid;
 }

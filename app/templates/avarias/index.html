@@ -5,7 +5,7 @@
         <h5>Referente ao mês de {{ mes }}</h5>
     <div class="d-flex justify-content-center m-1 p-1 text-center">
 
-    <div class="border border-black m-3 p-2 h-50 border-orange">
+    <div class="shadow border border-black m-3 p-2 h-50">
     <h5>Custos:</h5>
     <h5>Custos de avarias: R${{ total_soma_avarias - total_soma_avarias_usoeconsumo }} </h5>
     <h5>Uso e consumo: R${{ total_soma_avarias_usoeconsumo }} </h5>
@@ -18,7 +18,7 @@
 
     </div>
 
-    <div class="border border-black m-3 p-2 h-50 border-orange">
+    <div class="shadow border border-black m-3 p-2 h-50">
             <h5>Descrição de custos:</h5>
     <h5>Custos de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h5>
     <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h5>
@@ -30,7 +30,7 @@
     <h5>Quantidade de estragados: {{ avarias_estragados_quantidade | int }}</h5>
     </div>
 
-    <div class="border border-black m-3 p-2 border-orange">
+    <div class="shadow border border-black m-3 p-2">
         <h5>10 maiores custos</h5>
     <table  class="table-bordered m-auto table-sm text-center align-middle border-black">
         <tr>
@@ -50,7 +50,7 @@
 
 
     <div class="table-responsive m-2 p-2 fs-12">
-    <table class="table-bordered m-auto background-suave table-sm text-center align-middle border-black">
+    <table class="shadow-lg table-bordered m-auto background-suave table-sm text-center align-middle border-black">
     <thead>
     <tr class="align-middle">
       <th class="text-center">Data</th>

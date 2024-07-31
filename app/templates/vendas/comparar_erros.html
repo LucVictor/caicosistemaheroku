@@ -1,70 +1,44 @@
 {% extends "./template.html" %}
 {% block content %}
-<style>
-.resumo{
-    font-size: medium;
-}
-    h3,h2{
-        text-align: center  ;
-    }
-    .resumoavarias{
-        margin-left: 30px;
-    }
-    .vermelhocusto{
-        width: fit-content;
-        margin-top: 2px;
-        padding: 2px;
-        background-color: rgb(251, 73, 73);
-        margin: auto;
-    }
-    .verdecusto{
-        width: fit-content;
-        background: green;
-        margin-top: 2px;
-        margin: auto;
-        padding: 2px;
-    }
-    .vermelho, .verde{
-        width: fit-content;
-        margin-top: 2px;
-        padding: 2px;
-    }
 
-    </style>
         {% if not erros_por_funcionario %}
-    <div class="resumo">
+<div class="text-black p-1 m-auto border-orange w-25">
         <div class="cadastrar_produto">
-    <h2>Comparar Relatórios</h2>
-    <form action="/vendas/comparar_erros" method="post">
-        <h4>Primeiro relatório</h4>
-        <label for="data_inicial1">Data inicial:</label><br>
-        <input type="date" id="data_inicial1" name="data_inicial1" required><br><br>
+    <h3>Comparar Relatórios</h3>
 
+    <form class="m-auto w-75" action="/vendas/comparar_erros" method="post">
+        <div class="mb-1 mt-3">
+        <h6>Primeiro relatório</h6>
+        <label for="data_inicial1">Data inicial:</label>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_inicial1" name="data_inicial1" required>
+        </div>
         <label for="data_final1">Data final</label><br>
-        <input type="date" id="data_final1" name="data_final1" required><br><br>
-
-         <h4>Segundo relatório</h4>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_final1" name="data_final1" required>
+        <div class="mt-3">
+         <h6>Segundo relatório</h6>
         <label for="data_inicial2">Data inicial:</label><br>
-        <input type="date" id="data_inicial2" name="data_inicial2" required><br><br>
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_inicial2" name="data_inicial2" required>
 
         <label for="data_final2">Data final</label><br>
-        <input type="date" id="data_final2" name="data_final2" required><br><br>
-        <input type="submit" value="Emitir">
+        <input class="form-control text-center w-75 m-auto mb-2" type="date" id="data_final2" name="data_final2" required>
+        </div>
+        <input class="btn btn-warning  mt-2" type="submit" value="Emitir">
     </form>
         </div></div>
     {% endif %}
+
     {% if erros_por_funcionario %}
 
-    <h1>Comparação de relatórios de erros de Vendas</h1>
-    <h3>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</h3>
-    <h3>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</h3>
-<div class="resumo">
-       <div class="resumoentregas">
-       <h2>Relatórios</h2>
-       <h3>Erro por vendedor</h3>
-   <table class="listagemtabela">
+    <h2>Comparação de relatórios de erros de Vendas</h2>
+    <h4>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</h4>
+    <h4>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</h4>
+<div class="d-flex justify-content-center m-1 p-1 text-center">
+       <div class="background-suave border-orange border-black m-3 p-2 h-25">
+       <h3>Relatórios</h3>
+       <h4>Erro por vendedor</h4>
+   <table class="table-bordered m-auto text-center align-middle border-black">
     <tr>
-        <th>Conferente</th>
+        <th>Vendedor</th>
         <th>Relatório 1</th>
         <th>Relatório 2</th>
         <th>%</th>
@@ -82,23 +56,23 @@
     </table><br>
 </div>
 
-              <div class="resumoentregas">
-              <h2>Totais</h2>
-                  <h3>Relatório 1</h3>
-       <h4>Total de erros: {{ total_erros_periodo_1  }}</h4>
-       <h4>Total de entregas:{{ total_de_entregas }}</h4>
-       <h4>Erros por entrega: {{   "%.2f" % ((total_erros_periodo_1 / total_de_entregas)*100) }} % </h4> <br>
-                  <h3>Relatório 2</h3>
-       <h4>Total de erros: {{ total_erros_periodo_2 }}</h4>
-       <h4>Total de entregas:{{ total_de_entregas2 }}</h4>
-        <h4>Erros por entrega: {{  "%.2f" % ((total_erros_periodo_2 / total_de_entregas2) * 100) }}%</h4>
+              <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+              <h3>Totais</h3>
+                  <h4>Relatório 1</h4>
+       <h5>Total de erros: {{ total_erros_periodo_1  }}</h5>
+       <h5>Total de entregas:{{ total_de_entregas }}</h5>
+       <h5>Erros por entrega: {{   "%.2f" % ((total_erros_periodo_1 / total_de_entregas)*100) }} % </h5> <br>
+                  <h4>Relatório 2</h4>
+       <h5>Total de erros: {{ total_erros_periodo_2 }}</h5>
+       <h5>Total de entregas:{{ total_de_entregas2 }}</h5>
+        <h5>Erros por entrega: {{  "%.2f" % ((total_erros_periodo_2 / total_de_entregas2) * 100) }}%</h5>
 
                <br>
 </div>
-        <div class="resumoentregas">
-              <h2>Comparação</h2>
-                <h3>Total de erros:{{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h3>
-            <h3>Média de erros: {{  calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h3>
+        <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+              <h3>Comparação</h3>
+                <h4>Total de erros:{{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h4>
+            <h4>Média de erros: {{  calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h4>
                <br>
 </div>
     </div>

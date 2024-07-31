@@ -1,19 +1,19 @@
 {% extends "./template.html" %}
 {% block content %}
-    <div class="text-black p-1 m-auto border-orange fs-5 w-25">
-      <form class="w-75 m-auto" method="POST" action="/entregas/cadastrar">
+    <div class="shadow-lg text-black p-1 m-auto border-orange fs-5 w-25">
+      <form class="m-auto" method="POST" action="/entregas/cadastrar">
         <div>    <h2 class="vermelho">{{ erro }}</h2>
         <h2 class="verde">{{ sucesso }}</h2></div>
         <h3>Cadastro de entrega</h3>
 
 
-        <div class="mb-3"><img class="caminhao" src="../static/imagens/caminhao.png" width="150" alt=""></div>
+        <div class="mb-3"><img class="caminhao" src="../static/imagens/caminhao.png" width="120" alt=""></div>
 
-        <div class="mb-3 m-auto"><label for="data_da_entrega">Data da Entrega:</label><br>
+        <div class="mb-3 m-auto"><label for="data_da_entrega">Data da Entrega:</label>
         <input type="date" class="form-control text-center w-50 m-auto" id="data_da_entrega" name="data_da_entrega" required></div>
 
           <div class="mb-3 m-auto"><label for="motorista">Motorista:</label><br>
-            <select name="motorista" class="form-control text-center w-50 m-auto" id="motorista">
+            <select name="motorista" class="form-select text-center w-50 m-auto" id="motorista">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Motorista' %}
                     <option class="lista">{{ i.nome }}</option>
@@ -22,7 +22,7 @@
             </select></div>
 
           <div class="mb-3 m-auto"><label for="ajudante">Ajudante:</label><br>
-            <select class="form-control text-center w-50 m-auto" name="ajudante" id="ajudante">
+            <select class="form-select text-center w-50 m-auto" name="ajudante" id="ajudante">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Ajudante' %}
                     <option class="lista">{{ i.nome }}</option>
@@ -31,7 +31,7 @@
             </select></div>
 
         <div class="mb-3 m-auto"><label for="conferente">Conferente:</label><br>
-            <select class="form-control text-center w-50 m-auto" name="conferente" id="conferente">
+            <select class="form-select text-center w-50 m-auto" name="conferente" id="conferente">
                 {% for i in funcionarios %}
                     {% if i.funcao == 'Conferente' %}
                     <option class="lista">{{ i.nome }}</option>
@@ -40,7 +40,7 @@
             </select></div>
 
         <div class="mb-3 m-auto"><label for="rota">Rota:</label><br>
-            <select class="form-control text-center w-50 m-auto" name="rota" id="rota">
+            <select class="form-select text-center w-50 m-auto" name="rota" id="rota">
                 {% for i in rotas_lista %}
                 <option class="lista">{{ i.rota }}</option>
                 {% endfor %}

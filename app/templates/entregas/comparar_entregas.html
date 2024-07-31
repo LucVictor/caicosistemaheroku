@@ -1,7 +1,7 @@
 {% extends "./template.html" %}
 {% block content %}
     {% if not total_entregas_periodo_1 %}
-    <div class="text-black p-1 m-auto border-orange w-25">
+    <div class="shadow-lg text-black p-1 m-auto border-orange w-25">
         <div class="cadastrar_produto">
     <h4>Comparar Relatórios</h4>
     <form class="m-auto w-75" action="/entregas/comparar_entregas" method="post">
@@ -30,7 +30,7 @@
     <h6>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} á {{ data_final2.strftime('%d/%m/%Y')  }}</h6>
 
     <div class="d-flex justify-content-center m-1 p-1 text-center">
-       <div class="border border-black m-3 p-2 h-50">
+       <div class="shadow border border-black m-3 p-2 h-50">
        <h4>Relatórios</h4>
        <h5>Entregas por rota</h5>
    <table class="table-bordered table table-sm text-center align-middle border-black">
@@ -53,8 +53,7 @@
     </table><br>
 </div>
 
-              <div class="border border-black m-3 p-2 h-50">
-                  <div></div>
+              <div class="shadow border text-center border-black m-3 p-2 h-25">
               <h4>Totais</h4>
                   <h5>Relatório 1</h5>
        <h6>Total de Entregas: {{ total_entregas_periodo_1 }}</h6>
@@ -68,7 +67,7 @@
                <br>
 </div>
 
-        <div class="border border-black m-3 p-2 h-50">
+        <div class="shadow border border-black m-3 p-2 h-50">
               <h4>Comparação</h4>
                   <h5>Relatórios</h5>
             <h6>Total de Entregas: {{ calcular_porcentagem(total_entregas_periodo_1,total_entregas_periodo_2) }}</h6>

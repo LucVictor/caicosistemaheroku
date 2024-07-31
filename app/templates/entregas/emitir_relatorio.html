@@ -5,7 +5,7 @@
         <h4>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " à " + data_final.strftime('%d/%m/%Y') }}</h4>
 
     <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="border border-black m-3 p-2 h-50">
+    <div class="shadow border border-black m-3 p-2 h-50">
     <h3>Rank de motoristas</h3>
    <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
@@ -27,7 +27,7 @@
     </table>
 </div>
 
-       <div class="border border-black m-3 p-2 h-50">
+       <div class="shadow border border-black m-3 p-2 h-50">
        <div>
            <h3>Entregas por rota</h3>
    <table class="table-bordered table table-sm text-center align-middle border-black">
@@ -50,7 +50,7 @@
 </div>
 
 
-       <div class="border border-black m-3 p-2 h-50 ">
+       <div class="shadow border border-black m-3 p-2 h-50 ">
            <div class="d-inline-flex h-75 m-auto flex-column">
        <h4>Total de Entregas: {{ total_de_entregas }}</h4>
        <h4>Total de Reentregas: {{ total_de_reentregas }}</h4>
@@ -60,7 +60,7 @@
 </div>
 
     <div class="table-responsive m-2 p-2">
-    <table class="table-bordered table table-sm text-center align-middle border-black">
+    <table class="shadow-lg table-bordered m-auto table-sm text-center align-middle border-black">
   <tr>
       <th>Data da entrega</th>
     <th>Motorista</th>
@@ -90,7 +90,7 @@
   <td>{{ entrega.resultado_tempo }}</td>
    <td class="botoesacao">
     <form action="/entregas/deletar_entrega/{{ entrega.id }}" method="post">
-    <input type="submit" value="Apagar">
+    <input  class="btn btn-sm btn-warning m-2" type="submit" value="Apagar">
     </form></td>
   </tr>
         {% endfor %}

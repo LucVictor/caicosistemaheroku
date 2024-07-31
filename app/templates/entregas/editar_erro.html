@@ -1,64 +1,40 @@
 {% extends "./template.html" %}
 {% block content %}
-    <style>
-    #quantidade_de_erros{
-        width: 50px;
-    }
-    #produto_erro{
-        width: 300px;
-        height: 50px;
-        text-align: start;
-        resize: none;
-    }
-    #descricao_do_erro{
-        width: 300px;
-        height: 100px;
-        text-align: start;
-        resize: none;
+    <div class="shadow-lg text-black p-1 m-auto border-orange w-25">
+    <h3>Formulário de erro</h3>
+    <div class="mb-3"> <img class="procurarimg" src="{{ url_for('static', filename='imagens/erro.png') }}" width="80" alt=""></div>
+    <form  action="/entregas/editar_erro/{{ erros.id }}" method="POST">
+         <div class="mb-3 m-auto"><label for="data_do_erro">Data do erro:</label>
+             <input class="form-control text-center w-50 m-auto" type="date" id="data_do_erro" name="data_do_erro" value="{{ erros.data_do_erro }}" required></div>
 
-    }
-    #erro_cliente{
-        width: 300px;
-    }
-    #erro_id{
-        display: none;
-    }
-    </style>
-    <div class="cadastrar_produto">
-    <h2>Formulário de erro</h2>
-   <img class="procurarimg" src="{{ url_for('static', filename='imagens/erro.png') }}" width="100" alt=""><br>
-    <form action="/entregas/editar_erro/{{ erros.id }}" method="POST">
-        <label for="data_do_erro">Data do erro:</label><br>
-        <input type="date" id="data_do_erro" name="data_do_erro" value="{{ erros.data_do_erro }}" required><br><br>
-
-        <label for="erro_funcionario">Funcionário:</label>
-                <select name="erro_funcionario" id="erro_funcionario" value="{{ erros.erro_funcionario }}">
+         <div class="mb-3 m-auto"><label for="erro_funcionario">Funcionário:</label>
+                <select class="form-select text-center w-50 m-auto" name="erro_funcionario" id="erro_funcionario" value="{{ erros.erro_funcionario }}">
                     <option class="lista">{{ erros.erro_funcionario }}</option>
                     {% for i in funcionarios %}
                     {% if i.funcao != 'Vendedor' and i.nome != erros.erro_funcionario %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                     {% endfor %}
-            </select><br><br>
+                </select></div>
 
-        <label for="erro_cliente">Cliente:</label><br>
-        <input type="text" id="erro_cliente" name="erro_cliente" value="{{ erros.erro_cliente }}" required ><br><br>
+        <div class="mb-3 m-auto"><label for="erro_cliente">Cliente:</label><br>
+            <input class="form-control text-center m-auto" type="text" id="erro_cliente" name="erro_cliente" value="{{ erros.erro_cliente }}" required ></div>
 
-        <label for="rota_da_entrega">Rota:</label><br>
-            <select name="rota_da_entrega" id="rota_da_entrega" value="{{ erros.rota_da_entrega }}" required>
+        <div class="mb-3 m-auto"><label for="rota_da_entrega">Rota:</label><br>
+            <select class="form-select text-center w-50 m-auto" name="rota_da_entrega" id="rota_da_entrega" value="{{ erros.rota_da_entrega }}" required>
                 <option class="lista">{{ erros.rota_da_entrega }}</option>
             {% for i in rotas %}
                 {% if i.rota != erros.rota_da_entrega%}
                     <option class="lista">{{ i.rota }}</option>
                 {% endif %}
             {% endfor %}
-            </select><br><br>
+            </select></div>
 
-        <label for="quantidade_de_erros">Quantidade de erros:</label>
-        <input type="number" id="quantidade_de_erros" name="quantidade_de_erros" value="{{ erros.quantidade_de_erros}}" required><br><br>
+        <div class="mb-3 m-auto"><label for="quantidade_de_erros">Quantidade de erros:</label>
+            <input class="form-control text-center w-50 m-auto" type="number" id="quantidade_de_erros" name="quantidade_de_erros" value="{{ erros.quantidade_de_erros}}" required></div>
 
-        <label for="motorista_da_entrega">Motorista:</label>
-        <select name="motorista_da_entrega" id="motorista_da_entrega" >
+        <div class="mb-3 m-auto"><label for="motorista_da_entrega">Motorista:</label>
+        <select class="form-select text-center w-50 m-auto" name="motorista_da_entrega" id="motorista_da_entrega" >
             <option class="lista">{{ erros.motorista_da_entrega }}</option>
             {% for i in funcionarios %}
                 {% if i.funcao == 'Motorista' and i.nome != erros.motorista_da_entrega%}
@@ -66,15 +42,15 @@
                 {% endif %}
             {% endfor %}
             <option class="lista"> - </option>
-            </select><br><br>
-        <label for="produto_erro">Produtos do erro:</label><br>
-        <textarea name="produto_erro" id="produto_erro" rows="14" cols="10">{{erros.produto_erro}}</textarea><br><br>
+        </select></div>
+        <div class="mb-3 m-auto"><label for="produto_erro">Produtos do erro:</label>
+            <textarea class="form-control text-left m-auto" name="produto_erro" id="produto_erro" >{{erros.produto_erro}}</textarea></div>
 
-        <label for="descricao_do_erro">Descrição do erro:</label><br>
-        <textarea name="descricao_do_erro" id="descricao_do_erro" rows="14" cols="10">{{erros.descricao_do_erro}}</textarea><br><br>
+        <div class="mb-3 m-auto"><label for="descricao_do_erro">Descrição do erro:</label>
+        <textarea class="form-control text-left m-auto" name="descricao_do_erro" id="descricao_do_erro" >{{erros.descricao_do_erro}}</textarea></div>
 
 
-        <input type="submit" value="Editar">
+        <input  class="btn btn-warning mb-1" type="submit" value="Editar">
     </form>
 </div>
 {% endblock %}

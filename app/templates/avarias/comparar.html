@@ -2,7 +2,7 @@
 {% block content %}
 
         {% if not total_soma_avarias1 %}
-    <div class="text-black p-1 m-auto border-orange w-25">
+    <div class=" shadow text-black p-1 m-auto border-orange w-25">
     <h3>Comparar Relatórios</h3>
 
         <form class="w-50 mt-2 m-auto" action="/avarias/comparar" method="post">
@@ -27,10 +27,10 @@
         </div>
     {% endif %}
     {% if total_soma_avarias1 %}
-        <h1>Comparação de relatórios de avarias</h1>
-        <div class="d-flex justify-content-center m-1 p-1 text-center">
+        <h2>Comparação de relatórios de avarias</h2>
+        <div class="d-flex justify-content-center text-center">
 
-        <div class="border border-black m-3 p-2 h-50">
+        <div class="shadow border border-black m-3 p-2 h-50">
         <h3>Relatório 1</h3>
         <h3>Relatório de {{ data_inicial1.strftime('%d/%m/%Y') }} à {{ data_final1.strftime('%d/%m/%Y') }}</h3>
         <h4>Custos:</h4>
@@ -44,7 +44,7 @@
         <h5>Custo de uso e consumo: R${{ total_soma_avarias_usoeconsumo1 }} </h5>
 
         </div>
-        <div class="border border-black m-3 p-2 h-50">
+        <div class="shadow border border-black m-3 p-2 h-50">
         <h3>Relatório 2</h3>
         <h3>Relatório de {{ data_inicial2.strftime('%d/%m/%Y') }} à {{ data_final2.strftime('%d/%m/%Y') }}</h3>
         <h4>Custos:</h4>
@@ -57,7 +57,7 @@
         <h5>Custos de avarias estragadas: R${{ total_soma_avarias_estragado2 }} </h5>
         <h5>Custo de uso e consumo: R${{ total_soma_avarias_usoeconsumo2 }} </h5>
         </div>
-        <div class="border border-black m-3 p-2 h-50 fs-12">
+        <div class="shadow border border-black m-3 p-2 h-50 fs-12">
         <h3>Comparação</h3>
 
         <h4>Custos:</h4>

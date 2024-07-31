@@ -1,43 +1,29 @@
 {% extends "./template.html" %}
 {% block content %}
     {% if not total_erros %}
-    <div class="cadastrar_produto">
-    <h2>Emitir relatório de erros</h2>
-    <form action="/vendas/erros_relatorio" method="post">
+    <div class="text-black p-1 m-auto border-orange w-25">
+    <h2>Relatório de erros</h2>
+    <form class="m-2 w-50 m-auto" action="/vendas/erros_relatorio" method="post">
 
-        <label for="data_inicial">Data inicial:</label><br>
-        <input type="date" id="data_inicial" name="data_inicial" required><br><br>
+        <label  class="m-2"  for="data_inicial">Data inicial:</label>
+        <input class="form-control text-center" type="date" id="data_inicial" name="data_inicial" required>
 
-        <label for="data_final">Data final</label><br>
-        <input type="date" id="data_final" name="data_final" required><br><br>
+        <label  class="m-2"  for="data_final">Data final</label>
+        <input class="form-control text-center" type="date" id="data_final" name="data_final" required>
 
-        <input type="submit" value="Emitir">
+        <input  class="btn btn-warning m-2" type="submit" value="Emitir">
     </form>
         </div>
     {% endif %}
 
     {% if total_erros %}
-     <style>
-    .tabelaerrosvendas{
-        font-size: small;
-    }
-@media print {
-    .resumo{
-        margin-bottom: 200px;
-    }
-
-
-}
-    </style>
 
        <h2>Listagem de erros de vendas</h2>
         <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} á {{ data_final.strftime('%d/%m/%Y') }}</h3>
-    <div class="resumo">
-    <br>
-
-    <div class="resumoerros">
+    <div class="d-flex justify-content-center m-1 p-1 text-center">
+    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
     <h3>Erros por Funcionário</h3>
-    <table class="tabelaerros">
+    <table class="table-bordered m-auto text-center align-middle border-black">
         <tr>
             <th>Funcionário</th>
             <th>Erros</th>
@@ -51,7 +37,7 @@
     </table>
     </div>
 
-    <div class="resumoerros">
+    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
     <h3>Total de erros: {{ total_erros }}</h3>
     <h3>Erros por entrega : {{ "%.2f" % ((total_erros / total_de_entregas) * 100) }}%</h3>
     </div>
@@ -59,11 +45,9 @@
 
     </div>
 
-    <div>
-        <br>
-    <br>
+  <div class="table-responsive background-suave fs-14 m-2">
 
-    <table class="tabelaerrosvendas">
+    <table class="table-bordered text-center m-auto align-middle border-black">
   <tr>
       <th>Data</th>
       <th>Vendedor</th>
@@ -88,10 +72,10 @@
     <td>{{ erro.criador }}</td>
     <td class="botoesacao">
         <form action="/vendas/editar_erro/{{ erro.id }}" method="get">
-        <input type="submit" value="Editar">
+        <input class="btn btn-warning btn-sm mt-1 mb-1" type="submit" value="Editar">
     </form>
         <form action="/vendas/deletar/{{ erro.id }}" method="post">
-        <input type="submit" value="Apagar">
+        <input class="btn btn-warning btn-sm mb-1" type="submit" value="Apagar">
     </form></td>
   </tr>
         {% endfor %}

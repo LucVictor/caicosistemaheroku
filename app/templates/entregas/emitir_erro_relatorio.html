@@ -3,9 +3,9 @@
        <h3>Listagem de erros logísticos</h3>
         <h4>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} à {{ data_final.strftime('%d/%m/%Y') }}</h4>
     <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <div class="border shadow border-black m-3 p-2 h-25">
     <h5>Erros por Funcionário</h5>
-    <table class="table-bordered text-center m-auto align-middle border-black  ">
+    <table class="tabela text-center align-middle border-black m-auto">
         <tr>
             <th>Funcionário</th>
             <th>Erros</th>
@@ -19,7 +19,7 @@
     </table>
     </div>
 
-    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <div class="border shadow border-black m-3 p-2 h-25">
     <h5>Total de erros: {{ total_erros }}</h5>
     <h5> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100) }}%</h5>
     </div>
@@ -28,8 +28,8 @@
     </div>
         <br>
     <br>
-    <div class="table-responsive background-suave fs-14">
-    <table class="table-bordered text-center align-middle border-black">
+    <div class="table-responsive m-2 p-2 fs-12">
+    <table class="shadow-lg table-bordered m-auto background-suave table-sm text-center align-middle border-black">
     <thead>
         <tr>
       <th>Data</th>

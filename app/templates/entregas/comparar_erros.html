@@ -2,7 +2,7 @@
 {% block content %}
 
         {% if not erros_por_funcionario %}
-<div class="text-black p-1 m-auto border-orange w-25">
+<div class="shadow-lg text-black p-1 m-auto border-orange w-25">
         <div class="cadastrar_produto">
     <h3>Comparar Relatórios</h3>
     <form class="m-auto w-75" action="/entregas/comparar_erros" method="post">
@@ -27,11 +27,11 @@
     {% endif %}
     {% if erros_por_funcionario %}
 
-    <h2>Comparação de relatórios de erros logísticos</h2>
+    <h3>Comparação de relatórios de erros logísticos</h3>
     <h4>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</h4>
     <h4>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</h4>
 <div class="d-flex justify-content-center m-1 p-1 text-center">
-       <div class="border border-black m-3 p-2 h-50">
+       <div class="shadow border border-black m-3 p-2 h-50">
        <h3>Relatórios</h3>
        <h4>Erro por conferente</h4>
    <table class="table-bordered table table-sm text-center align-middle border-black">
@@ -54,7 +54,7 @@
     </table><br>
 </div>
 
-              <div class="d-flex-inline border border-black m-3 p-2 h-50">
+              <div class="shadow d-flex-inline border border-black m-3 p-2 h-50">
                   <div class="mb-2"><h4>Relatório 1</h4>
        <h5>Total de erros: {{ total_erros_periodo_1  }}</h5>
        <h5>Total de entregas: {{ total_de_entregas }}</h5>
@@ -66,10 +66,10 @@
         <h5>Erros por entrega: {{  "%.2f" %  ((total_erros_periodo_2 / total_de_entregas2) * 100)  }}%</h5>
              </div>
 </div>
-        <div class="border border-black m-3 p-2 h-50 fs-12">
-              <h3>Comparação</h3>
-                <h4>Totais de erros: {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h4>
-                <h4>Erros por entrega: {{ calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h4>
+        <div class="shadow border border-black m-3 p-2 h-50 fs-12">
+              <h4>Comparação</h4>
+                <h5>Totais de erros: {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h5>
+                <h5>Erros por entrega: {{ calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h5>
                <br>
 </div>
     </div>
