@@ -1,6 +1,9 @@
 .background-suave{
 
 }
+body {
+  height: 100%
+}
 .flexNoBoards{
     display: flex;
     border: none;
@@ -33,9 +36,9 @@ flexNoBoardErros{
     border-radius: 7px;
     border-width: 1px;
     border-color: orange;
-    background-color: #ffcc77;
+
 }
-.navbar-brand, .procurarimg, .caminhao{
+.navbar-brand, .procurarimg, .caminhao, .logo{
     mix-blend-mode:multiply;
 }
 .dropdown-menu{
