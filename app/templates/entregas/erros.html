@@ -39,7 +39,11 @@
 
     <div class="shadow border-orange m-3 p-2 h-25">
     <h5>Total de erros no mês: {{ total_erros }}</h5>
+    {% if total_de_entregas > 0 %}
     <h5> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100)  }}%</h5>
+        {% else %}
+    <h5> Erros por entrega: 0%</h5>
+        {% endif %}
     </div>
 
 

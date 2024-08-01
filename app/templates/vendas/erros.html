@@ -3,7 +3,7 @@
        <h3>Listagem de erros de vendas</h3>
         <h4>Referente ao mês de {{ mes }}</h4>
     <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <div class="background-suave  border-orange  m-3 p-2 h-25">
     <h4>Erros por Funcionário</h4>
     <table class="table-bordered m-auto text-center align-middle border-black">
         <tr>
@@ -20,7 +20,7 @@
     </table>
     </div>
 
-    <div class="background-suave  border-orange border-black m-3 p-2 h-25">
+    <div class="background-suave  border-orange  m-3 p-2 h-25">
     <h4>Total de erros no mês: {{ total_erros }}</h4>
     {% if total_de_entregas > 0 %}
         <h5>Erros por entregas: {{ "%.2f" % ((total_erros/total_de_entregas)*100) }}%</h5>
@@ -33,7 +33,7 @@
 
     <div>
     <div class="table-responsive background-suave fs-14 m-2">
-    <table class="table-bordered text-center align-middle border-black">
+    <table class="table-bordered m-auto text-center align-middle border-black">
     <thead>
   <tr>
       <th >Data</th>

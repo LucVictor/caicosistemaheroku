@@ -66,7 +66,11 @@
               <div class="shadow border-orange m-3 p-2 h-50">
        <h5>Total de Entregas: {{ total_de_entregas }}</h5>
        <h5>Total de Reentregas: {{ total_de_reentregas }}</h5>
+       {% if total_de_entregas > 0 %}
        <h6>Reentregas por entregas: {{ "%.2f" % ((total_de_reentregas / total_de_entregas)*100) }}%</h6>
+       {% else %}
+                  <h6>Reentregas por entregas: 0%</h6>
+                  {% endif %}
 
 </div>
 </div>
