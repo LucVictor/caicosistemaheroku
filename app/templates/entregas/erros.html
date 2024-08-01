@@ -3,8 +3,8 @@
 
        <h3>Listagem de Erros</h3>
         <h4>Referente ao mês de {{ mes }}</h4>
-    <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="border shadow border-black m-3 p-2 h-25">
+    <div class="resumo d-flex justify-content-center m-1 p-1 text-center">
+    <div class="border-orange shadow m-3 p-2 h-25">
     <h5>Erros por Funcionário</h5>
     <table class="tabela text-center align-middle border-black">
         <tr>
@@ -37,7 +37,7 @@
     </div>
 
 
-    <div class="shadow border border-black m-3 p-2 h-25">
+    <div class="shadow border-orange m-3 p-2 h-25">
     <h5>Total de erros no mês: {{ total_erros }}</h5>
     <h5> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100)  }}%</h5>
     </div>
@@ -59,7 +59,7 @@
       <th>Produtos</th>
       <th>Descrição do erro</th>
       <th>Criador</th>
-      <th >Ação</th>
+      <th class="botoesacao">Ação</th>
 
   </tr></thead>
    {% for erro in erros  %}
@@ -76,10 +76,10 @@
     <td>{{ erro.criador }}</td>
     <td >
         <form action="/entregas/editar_erro/{{ erro.id }}" method="get">
-        <input class="btn btn-warning btn-sm mt-1 mb-1" type="submit" value="Editar">
+        <input class="botoesacao btn btn-warning btn-sm mt-1 mb-1" type="submit" value="Editar">
     </form>
         <form action="/entregas/deletar_erro/{{ erro.id }}" method="post">
-        <input class="btn btn-warning btn-sm mb-1" type="submit" value="Apagar">
+        <input class="botoesacao btn btn-warning btn-sm mb-1" type="submit" value="Apagar">
     </form></td>
   </tr>
         {% endfor %}</tbody>

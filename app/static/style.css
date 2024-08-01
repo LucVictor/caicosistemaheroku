@@ -60,3 +60,11 @@ textarea {
 .tabela, .tabela tr, .tabela th, .tabela td{
     border: black 1px solid;
 }
+
+@media print {
+  .menu,
+  .banner, footer, .navbar, .botoesacao { display: none; }
+    .resumo{
+        page-break-after: always;
+    }
+ }

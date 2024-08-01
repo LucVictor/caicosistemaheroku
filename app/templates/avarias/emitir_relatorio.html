@@ -4,15 +4,15 @@
 
     <h2>Relatório de Avarias</h2>
     <h3>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') + " à " + data_final.strftime('%d/%m/%Y') }}</h3><br>
-    <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="shadow border border-black m-3 p-2 h-50">
+    <div class="resumo d-flex justify-content-center m-1 p-1 text-center">
+    <div class="shadow border-orange m-3 p-2 h-50">
     <h3>Custos:</h3>
     <h4>Custos de avarias: R${{ total_soma_avarias - total_soma_avarias_usoeconsumo }} </h4>
     <h4>Uso e consumo: R${{ total_soma_avarias_usoeconsumo }} </h4>
     <h4>Total: R${{ total_soma_avarias }} </h4>
     <h4>Custos médio por avaria: R${{ "{:.2f}".format(total_soma_avarias / avarias_quantidade) }} </h4>
     </div><br>
-    <div class=" shadow border border-black m-3 p-2 h-50">
+    <div class=" shadow  border-orange m-3 p-2 h-50">
             <h3>Descrição de custos:</h3>
     <h5>Custos de avarias por embalagem: R${{ total_soma_avarias_embalagem }} </h5>
     <h5>Custos de avarias por vencimento: R${{ total_soma_avarias_vencimento }} </h5>
@@ -24,7 +24,7 @@
     <h5>Quantidade de vencidos: {{ avarias_vencidos_quantidade |int }}</h5>
     <h5>Quantidade de estragados: {{ avarias_estragados_quantidade |int }}</h5>
     </div>
-    <div class="shadow border border-black m-3 p-2 h-50">
+    <div class="shadow border-orange  m-3 p-2 h-50">
         <h3>10 maiores custos</h3>
     <table class="table-bordered m-auto table-sm text-center align-middle border-black">
         <tr>

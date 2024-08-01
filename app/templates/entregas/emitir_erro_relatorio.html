@@ -2,8 +2,8 @@
 {% block content %}
        <h3>Listagem de erros logísticos</h3>
         <h4>Referente ao período de {{ data_inicial.strftime('%d/%m/%Y') }} à {{ data_final.strftime('%d/%m/%Y') }}</h4>
-    <div class="d-flex justify-content-center m-1 p-1 text-center">
-    <div class="border shadow border-black m-3 p-2 h-25">
+    <div class="resumo d-flex justify-content-center m-1 p-1 text-center">
+    <div class="border-orange shadow m-3 p-2 h-25">
     <h5>Erros por Funcionário</h5>
     <table class="tabela text-center align-middle border-black m-auto">
         <tr>
@@ -19,7 +19,7 @@
     </table>
     </div>
 
-    <div class="border shadow border-black m-3 p-2 h-25">
+    <div class="border-orange shadow k m-3 p-2 h-25">
     <h5>Total de erros: {{ total_erros }}</h5>
     <h5> Erros por entrega: {{ "%.2f" % ((total_erros / total_de_entregas) * 100) }}%</h5>
     </div>
@@ -58,7 +58,7 @@
     <td>{{ erro.produto_erro }}</td>
     <td>{{ erro.descricao_do_erro }}
     <td class="p-1">{{ erro.criador }}</td>
-    <td class="">
+    <td class="botoesacao">
         <form action="/entregas/editar_erro/{{ erro.id }}" method="get">
         <input class="btn btn-warning btn-sm mt-1 mb-1" type="submit" value="Editar">
     </form>

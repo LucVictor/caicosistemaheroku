@@ -2,7 +2,7 @@
 {% block content %}
 <div class="d-flex justify-content-center m-1 p-1 text-center">
 
-<div class="border mb-auto mt-2 p-2 shadow border-black align-self-center justify-content-center align-items-center">
+<div class="border-orange mb-auto mt-2 p-2 shadow align-self-center justify-content-center align-items-center">
 
     <div>
     <h3>Produtos Próximos ao Vencimento</h3>
@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<div class="border m-2 p-2 shadow border-black align-self-center justify-content-center align-items-center">
+<div class="border-orange m-2 p-2 shadow  align-self-center justify-content-center align-items-center">
 <h3>Gráfico de custos</h3>
 <canvas id="myChart2"></canvas>
     <h3>Últimas avarias</h3>
@@ -56,7 +56,8 @@
       datasets: [{
         label: 'R$',
         data: {{ total_values | tojson }},
-        borderWidth: 1
+        borderWidth: 1,
+          backgroundColor: "orange"
       }]
     },
     options: {
@@ -75,13 +76,15 @@ new Chart(ctx2, {
       datasets: [{
         label: 'R$',
         data: {{ total_values | tojson }},
-        borderWidth: 1
+        borderWidth: 1,
+          backgroundColor: "orange", borderColor: "orange"
 
       }]
     },
     options: {
       scales: {
         y: {
+
           beginAtZero: true
         }
       }
