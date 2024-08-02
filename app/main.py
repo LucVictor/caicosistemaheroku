@@ -1618,22 +1618,36 @@ def entregas_erros_relatorio():
             total_erros += i.total_erros
 
         subquery = db.session.query(
-            Entrega.quantidade_de_entregas
+            Entrega.motorista,
+            Entrega.rota,
+            Entrega.resultado_tempo,
+            Entrega.quantidade_de_entregas,
+            Entrega.data_da_entrega,
+            Entrega.reentregas,
+            Entrega.conferente
         ).filter(
             Entrega.data_da_entrega.between(data_inicial, data_final)
         ).subquery()
 
         total_entregas = func.sum(subquery.c.quantidade_de_entregas)
         resultados_entregas = db.session.query(
-            subquery.c.quantidade_de_entregas,
+            subquery.c.conferente,
             total_entregas.label('total_entregas')
+        ).group_by(
+            subquery.c.conferente
+        ).order_by(
+            subquery.c.conferente.asc()
         ).all()
 
         total_de_entregas = 0
         for i in resultados_entregas:
             total_de_entregas += i.total_entregas
 
-        return render_template("/entregas/emitir_erro_relatorio.html", mes=mes_atual(), erros=erros,
+        total_erros = 0
+        for i in erros_por_funcionario:
+            total_erros += i.total_erros
+
+        return render_template("/entregas/emitir_erro_relatorio.html", mes=mes_atual(), erros=erros,resultados_entregas=resultados_entregas,
                                erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final), total_de_entregas=total_de_entregas)
     return render_template('entregas/relatorio_erro.html')
 
