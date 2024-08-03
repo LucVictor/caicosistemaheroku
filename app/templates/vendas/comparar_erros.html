@@ -4,7 +4,7 @@
         {% if not erros_por_funcionario %}
 <div class="text-black p-1 m-auto shadow-lg border-orange w-25">
         <div class="cadastrar_produto">
-    <h4>Comparar Relatórios</h4>
+    <H5>Comparar Relatórios</H5>
 
     <form class="m-auto w-75" action="/vendas/comparar_erros" method="post">
         <div class="mb-1 mt-3">
@@ -30,12 +30,12 @@
     {% if erros_por_funcionario %}
 
     <h2>Comparação de relatórios de erros de Vendas</h2>
-    <h4>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</h4>
-    <h4>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</h4>
+    <H5>Relatório 1: {{ data_inicial1.strftime('%d/%m/%Y')  }} à {{ data_final1.strftime('%d/%m/%Y')  }}</H5>
+    <H5>Relatório 2: {{ data_inicial2.strftime('%d/%m/%Y')  }} à {{ data_final2.strftime('%d/%m/%Y')  }}</H5>
 <div class="d-flex justify-content-center m-1 p-1 text-center">
        <div class="background-suave border-orange border-black m-3 p-2 h-25">
-       <h3>Relatórios</h3>
-       <h4>Erro por vendedor</h4>
+       <H4>Relatórios</H4>
+       <H5>Erro por vendedor</H5>
    <table class="table-bordered m-auto text-center align-middle border-black">
     <tr>
         <th>Vendedor</th>
@@ -57,12 +57,12 @@
 </div>
 
               <div class="background-suave  border-orange border-black m-3 p-2 h-25">
-              <h3>Totais</h3>
-                  <h4>Relatório 1</h4>
+              <H4>Totais</H4>
+                  <H5>Relatório 1</H5>
        <h5>Total de erros: {{ total_erros_periodo_1  }}</h5>
        <h5>Total de entregas:{{ total_de_entregas }}</h5>
        <h5>Erros por entrega: {{   "%.2f" % ((total_erros_periodo_1 / total_de_entregas)*100) }} % </h5> <br>
-                  <h4>Relatório 2</h4>
+                  <H5>Relatório 2</H5>
        <h5>Total de erros: {{ total_erros_periodo_2 }}</h5>
        <h5>Total de entregas:{{ total_de_entregas2 }}</h5>
         <h5>Erros por entrega: {{  "%.2f" % ((total_erros_periodo_2 / total_de_entregas2) * 100) }}%</h5>
@@ -70,11 +70,45 @@
                <br>
 </div>
         <div class="background-suave  border-orange border-black m-3 p-2 h-25">
-              <h3>Comparação</h3>
-                <h4>Total de erros:{{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h4>
-            <h4>Média de erros: {{  calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h4>
-               <br>
+              <H4>Comparação</H4>
+                <H5>Total de erros:{{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</H5>
+                <H5>Média de erros: {{  calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</H5>
+                <canvas id="myChart1"></canvas>
+                <br>
 </div>
     </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx1 = document.getElementById('myChart1');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ["Relatório 1" , "Relatório 2"],
+          datasets: [{
+            label: 'Erros',
+            data: {{  array_erros  | tojson }},
+              backgroundColor: "orange",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+                min:0,
+                ticks:{
+                  stepSize: 20
+                }
+
+            }
+          }
+        }
+      });
+
+</script>
 {% endif %}
 {% endblock %}

@@ -69,9 +69,41 @@
         <div class="shadow border-orange m-3 p-2 h-50 fs-12">
               <h4>Comparação</h4>
                 <h5>Totais de erros: {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h5>
-                <h5>Erros por entrega: {{ calcular_porcentagem((total_erros_periodo_1 / total_de_entregas), (total_erros_periodo_2 / total_de_entregas2)) }}</h5>
-               <br>
+                <h5>Erros por entrega: {{ "%.2f" % ((total_erros_periodo_1 / total_de_entregas) / (total_erros_periodo_2 / total_de_entregas2) *100) }}</h5>
+                <canvas id="myChart1"></canvas>
 </div>
     </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx1 = document.getElementById('myChart1');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ["Relatório 1" , "Relatório 2"],
+          datasets: [{
+            label: 'Erros',
+            data: {{  array_erros  | tojson }},
+              backgroundColor: "orange",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+                min:0,
+                ticks:{
+                  stepSize: 20
+                }
+
+            }
+          }
+        }
+      });
+
+</script>
 {% endif %}
 {% endblock %}
