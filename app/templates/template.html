@@ -20,6 +20,7 @@
               <img src="../static/imagens/logo.png" alt="" width="40">
             </a>
           </div>
+        {% if current_user.is_authenticated %}
         <div class="d-flex ms-auto p-2">
             <div class="dropdown mr-2">
                 <a class="me-2 btn btn-secondary btn-sm dropdown-toggle btn-custom-orange"href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,7 +34,7 @@
                 <li><a class="dropdown-item" href="/avarias/comparar">Comparar</a></li>
               </ul>
             </div>
-
+            {% endif %}
             <div class="dropdown me-2">
                 <a class="btn btn-secondary btn-sm dropdown-toggle btn-custom-orange" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Vencimentos
@@ -41,11 +42,13 @@
 
                 <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/vencimentos/">Visualizar</a></li>
+                    {% if current_user.is_authenticated %}
                 <li><a class="dropdown-item" href="/vencimentos/procurar">Cadastrar</a></li>
                 <li><a class="dropdown-item" href="/vencimentos/analisarvolume">Analisar</a></li>
                 <li><a class="dropdown-item" href="/vencimentos/cadastrar_volume">Cadastrar Volume</a></li>
-              </ul>
-            </div>{% if current_user.is_authenticated %}
+              </ul>{% endif %}
+            </div>
+            {% if current_user.is_authenticated %}
             {% if current_user.acesso > 1 %}
             <div class="dropdown me-2 ">
                 <a class="btn btn-secondary btn-sm dropdown-toggle btn-custom-orange" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
