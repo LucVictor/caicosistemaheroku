@@ -13,9 +13,9 @@
       <th>Vencimento</th>
       <th>Dias</th>
       {% if current_user.is_authenticated %}
-      <th >Ação</th>
+      <th class="botoesacao" >Ação</th>
       {% endif %}
-      <th>Usuário</th>
+      <th >Usuário</th>
 
   </tr></thead>
    {% for vencimento in vencimentos %}
@@ -30,14 +30,14 @@
                 {% if vencimento.dias_restantes < 30 %}bg-warning{% endif %}
                 {% if vencimento.dias_restantes >= 30 %}bg-success{% endif %}">{{ vencimento.dias_restantes }}</td>
     {% if current_user.is_authenticated %}
-        <td class="flexNoBoards"><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
+        <td class="flexNoBoards botoesacao"><form action="/vencimentos/editar/{{ vencimento.id }}" method="get">
         <input class="btn btn-sm btn-warning me-1" type="submit" value="Editar">
         </form>
         <form action="/vencimentos/deletar/{{ vencimento.id }}" method="post">
         <input class="btn btn-sm btn-warning" type="submit" value="Apagar">
         </form></td>
     {% endif %}
-    <td class="botoesacao">{{ vencimento.criador }}</td>
+    <td class="">{{ vencimento.criador }}</td>
   </tr>
         {% endfor %}</tbody>
 </table>
