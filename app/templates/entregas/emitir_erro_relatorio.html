@@ -16,7 +16,7 @@
         <tr>
             <td>{{ erro_por_funcionario.erro_funcionario }}</td>
             <td>{{ erro_por_funcionario.total_erros }}</td>
-            {% for i in range(3) %}
+            {% for i in range(total_array_resultados_entregas) %}
                 {% if resultados_entregas[i][0] == erro_por_funcionario.erro_funcionario%}
                 <td>{{ resultados_entregas[i][1] }}</td>
                     {% if resultados_entregas[i][1] > 0 %}
