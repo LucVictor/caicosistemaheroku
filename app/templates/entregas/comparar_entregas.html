@@ -58,12 +58,20 @@
                   <h5>Relatório 1</h5>
        <h6>Total de Entregas: {{ total_entregas_periodo_1 }}</h6>
        <h6>Total de Reentregas: {{ total_reentregas_periodo_1 }}</h6>
-       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_1 / total_entregas_periodo_1) * 100) }}%</h6><br>
+       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_1 / total_entregas_periodo_1) * 100) }}%</h6>
+                  {% if b > 0 %}
+       <h6>Média de entregas por dia: {{ "%.0f" % (total_entregas_periodo_1 / b) }}</h6>
+       <h6>Média de reentregas por dia: {{ "%.0f" % (total_reentregas_periodo_1 / b) }}</h6>
+        {% endif %}<br>
+
                   <h5>Relatório 2</h5>
        <h6>Total de Entregas: {{ total_entregas_periodo_2 }}</h6>
        <h6>Total de Reentregas:{{ total_reentregas_periodo_2 }} </h6>
-       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_2 / total_entregas_periodo_2) * 100) }}%</h6><br>
-
+       <h6>Entrega por reentrega: {{ "{:.2f}".format((total_reentregas_periodo_2 / total_entregas_periodo_2) * 100) }}%</h6>
+       {% if d > 0 %}
+       <h6>Média de entregas por dia: {{ "%.0f" % (total_entregas_periodo_2 / d ) }}</h6>
+       <h6>Média de reentregas por dia: {{ "%.0f" % (total_reentregas_periodo_2 / d) }}</h6>
+        {% endif %}
                <br>
 </div>
 

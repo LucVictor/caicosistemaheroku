@@ -229,9 +229,35 @@ def entregar_comparar_entregas():
         arry_reentregas.append(total_reentregas_periodo_2)
         arry_entregas.append(total_entregas_periodo_1)
         arry_entregas.append(total_entregas_periodo_2)
+
+        total_dias1 = db.session.query(Entrega).filter(
+            Entrega.data_da_entrega.between(data_inicial_1, data_final_1)
+        ).order_by(
+            Entrega.data_da_entrega.desc()
+        ).all()
+        a = 0
+        b = 0
+        for i in total_dias1:
+            if i.data_da_entrega != a:
+                a = i.data_da_entrega
+                b = b + 1
+
+        total_dias2 = db.session.query(Entrega).filter(
+            Entrega.data_da_entrega.between(data_inicial_2, data_final_2)
+        ).order_by(
+            Entrega.data_da_entrega.desc()
+        ).all()
+
+        c = 0
+        d = 0
+        for i in total_dias2:
+            if i.data_da_entrega != c:
+                c = i.data_da_entrega
+                d = b + 1
+
         return render_template('entregas/comparar_entregas.html',
                                arry_reentregas=arry_reentregas,
-                               arry_entregas=arry_entregas,
+                               arry_entregas=arry_entregas, b=b, d=d,
                                entregas_por_rota=entregas_por_rota,
                                total_entregas_periodo_1=total_entregas_periodo_1,
                                total_reentregas_periodo_1=total_reentregas_periodo_1,
