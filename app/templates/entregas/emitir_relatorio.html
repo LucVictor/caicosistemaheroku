@@ -54,6 +54,10 @@
            <div class="d-inline-flex h-75 m-auto flex-column">
        <h4>Total de Entregas: {{ total_de_entregas }}</h4>
        <h4>Total de Reentregas: {{ total_de_reentregas }}</h4>
+                      {% if b > 0 %}
+       <h6>Média de entregas por dia: {{ "%.0f" % (total_de_entregas / b) }}</h6>
+       <h6>Média de reentregas por dia: {{ "%.0f" % (total_de_reentregas / b) }}</h6>
+        {% endif %}
 </div>
                <br>
 </div>

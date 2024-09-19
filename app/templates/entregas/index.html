@@ -71,7 +71,10 @@
        {% else %}
                   <h6>Reentregas por entregas: 0%</h6>
                   {% endif %}
-
+       {% if b > 0 %}
+       <h6>Média de entregas por dia: {{ "%.0f" % (total_de_entregas / b) }}</h6>
+       <h6>Média de reentregas por dia: {{ "%.0f" % (total_de_reentregas / b) }}</h6>
+        {% endif %}
 </div>
 </div>
 

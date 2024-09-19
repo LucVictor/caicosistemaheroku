@@ -1,4 +1,6 @@
 from ..main import *
+
+
 @app.route('/entregas/', methods=['GET'])
 @login_required
 @access_level_required(1)
@@ -56,9 +58,22 @@ def entregas_index():
     for i in resultados_entregas:
         total_de_reentregas += i.total_reentregas
 
+    total_dias = db.session.query(Entrega).filter(
+        Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
+    ).order_by(
+        Entrega.data_da_entrega.desc()
+    ).all()
+    a = 0
+    b = 0
+    for i in total_dias:
+        if i.data_da_entrega != a:
+            a = i.data_da_entrega
+            b = b + 1
+
+
     return render_template('entregas/index.html', total_de_reentregas=total_de_reentregas,
                            total_de_entregas=total_de_entregas, mes=mes, rotas=rotas, entregas=entregas,
-                           data_agora=data_agora(),
+                           data_agora=data_agora(), b=b,
                            resultados=resultados
                            , resultados_entregas=resultados_entregas, calcular_porcentagem=calcular_porcentagem)
 
@@ -127,14 +142,27 @@ def entregas_emitir_relatorio():
     for i in resultados_entregas:
         total_de_reentregas += i.total_reentregas
     mes = mes_atual()
+
+    total_dias = db.session.query(Entrega).filter(
+        Entrega.data_da_entrega.between(data_inicial, data_final)
+    ).order_by(
+        Entrega.data_da_entrega.desc()
+    ).all()
+    a = 0
+    b = 0
+    for i in total_dias:
+        if i.data_da_entrega != a:
+            a = i.data_da_entrega
+            b = b + 1
+
     return render_template('entregas/emitir_relatorio.html', total_de_reentregas=total_de_reentregas,
                            total_de_entregas=total_de_entregas, mes=mes,
-                           entregas=entregas, data_agora=data_agora(), resultados=resultados,
+                           entregas=entregas, data_agora=data_agora(), b=b, resultados=resultados,
                            resultados_entregas=resultados_entregas, data_inicial=formatar_data(data_inicial),
                            data_final=formatar_data(data_final))
 
 
-@app.route('/entregas/comparar_entregas', methods=['GET','POST'])
+@app.route('/entregas/comparar_entregas', methods=['GET', 'POST'])
 @login_required
 @access_level_required(1)
 def entregar_comparar_entregas():
@@ -175,7 +203,8 @@ def entregar_comparar_entregas():
             total_entregas_periodo_1 += total_entregas_1
             total_reentregas_periodo_1 += total_reentregas_1
             if rota not in entregas_por_rota:
-                entregas_por_rota[rota] = {'total_entregas_1': total_entregas_1, 'total_reentregas_1': total_reentregas_1,
+                entregas_por_rota[rota] = {'total_entregas_1': total_entregas_1,
+                                           'total_reentregas_1': total_reentregas_1,
                                            'total_entregas_2': 0, 'total_reentregas_2': 0}
             else:
                 entregas_por_rota[rota]['total_entregas_1'] = total_entregas_1
@@ -189,12 +218,13 @@ def entregar_comparar_entregas():
             total_reentregas_periodo_2 += total_reentregas_2
             if rota not in entregas_por_rota:
                 entregas_por_rota[rota] = {'total_entregas_1': 0, 'total_reentregas_1': 0,
-                                           'total_entregas_2': total_entregas_2, 'total_reentregas_2': total_reentregas_2}
+                                           'total_entregas_2': total_entregas_2,
+                                           'total_reentregas_2': total_reentregas_2}
             else:
                 entregas_por_rota[rota]['total_entregas_2'] = total_entregas_2
                 entregas_por_rota[rota]['total_reentregas_2'] = total_reentregas_2
-        arry_entregas=[]
-        arry_reentregas=[]
+        arry_entregas = []
+        arry_reentregas = []
         arry_reentregas.append(total_reentregas_periodo_1)
         arry_reentregas.append(total_reentregas_periodo_2)
         arry_entregas.append(total_entregas_periodo_1)
@@ -208,7 +238,8 @@ def entregar_comparar_entregas():
                                total_entregas_periodo_2=total_entregas_periodo_2,
                                total_reentregas_periodo_2=total_reentregas_periodo_2,
                                data_inicial1=formatar_data(data_inicial_1), data_inicial2=formatar_data(data_inicial_2),
-                               data_final1=formatar_data(data_final_1), data_final2=formatar_data(data_final_2), calcular_porcentagem=calcular_porcentagem)
+                               data_final1=formatar_data(data_final_1), data_final2=formatar_data(data_final_2),
+                               calcular_porcentagem=calcular_porcentagem)
 
     return render_template('entregas/comparar_entregas.html')
 
@@ -262,8 +293,9 @@ def entrega_cadastrar():
     rotas_lista = Rotas.query.all()
     funcionarios = Funcionarios.query.all()
     return render_template("/entregas/cadastrar_entrega.html", rotas_lista=rotas_lista, funcionarios=funcionarios)
-total_reentregas_periodo_2 = 0
 
+
+total_reentregas_periodo_2 = 0
 
 
 @app.route('/entregas/deletar_entrega/<int:entrega_id>', methods=["post"])
@@ -319,7 +351,7 @@ def rotas_cadastrar():
             tempo_medio = request.form['tempo_medio']
             atualizar = Rotas.query.filter_by(rota=rota).first()
             if atualizar:
-                atualizar.tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M:%S').time()
+                atualizar.tempo_medio_rota = datetime.strptime(tempo_medio, '%H:%M:%S').time()
                 db.session.commit()
                 return render_template("/entregas/rotas_cadastrar.html", erro='Rota atualizada')
             nova_rota = Rotas(rota=rota, tempo_medio_rota=datetime.strptime(tempo_medio, '%H:%M:%S').time())
@@ -341,7 +373,7 @@ def entregas_erros():
         Erros_Logistica.data_do_erro >= primeiro_dia_mes(),
         Erros_Logistica.data_do_erro <= ultimo_dia_mes()
     ).order_by(
-            Erros_Logistica.data_do_erro.desc()).all()
+        Erros_Logistica.data_do_erro.desc()).all()
     erros_por_funcionario = db.session.query(
         Erros_Logistica.erro_funcionario,
         func.sum(Erros_Logistica.quantidade_de_erros).label('total_erros'),
@@ -375,18 +407,19 @@ def entregas_erros():
         subquery.c.conferente.asc()
     ).all()
 
-
     total_de_entregas = 0
     for i in resultados_entregas:
         total_de_entregas += i.total_entregas
-
 
     total_erros = 0
     for i in erros_por_funcionario:
         total_erros += i.total_erros
     total_array_resultados_entregas = len(resultados_entregas)
-    return render_template("/entregas/erros.html", mes=mes_atual(), total_array_resultados_entregas =total_array_resultados_entregas , erros=erros, resultados_entregas=resultados_entregas,
-                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas, calcular_porcentagem=calcular_porcentagem)
+    return render_template("/entregas/erros.html", mes=mes_atual(),
+                           total_array_resultados_entregas=total_array_resultados_entregas, erros=erros,
+                           resultados_entregas=resultados_entregas,
+                           erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
+                           total_de_entregas=total_de_entregas, calcular_porcentagem=calcular_porcentagem)
 
 
 @app.route('/entregas/erros_relatorio', methods=["GET", "POST"])
@@ -445,12 +478,16 @@ def entregas_erros_relatorio():
         for i in erros_por_funcionario:
             total_erros += i.total_erros
         total_array_resultados_entregas = len(resultados_entregas)
-        return render_template("/entregas/emitir_erro_relatorio.html", total_array_resultados_entregas=total_array_resultados_entregas, mes=mes_atual(), erros=erros,resultados_entregas=resultados_entregas,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final), total_de_entregas=total_de_entregas)
+        return render_template("/entregas/emitir_erro_relatorio.html",
+                               total_array_resultados_entregas=total_array_resultados_entregas, mes=mes_atual(),
+                               erros=erros, resultados_entregas=resultados_entregas,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros,
+                               data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final),
+                               total_de_entregas=total_de_entregas)
     return render_template('entregas/relatorio_erro.html')
 
 
-@app.route('/entregas/comparar_erros', methods=['GET','POST'])
+@app.route('/entregas/comparar_erros', methods=['GET', 'POST'])
 def entregas_erros_comparar():
     if request.method == "POST":
         data_inicial_1 = request.form["data_inicial1"]
@@ -510,7 +547,6 @@ def entregas_erros_comparar():
         for i in resultados_entregas:
             total_de_entregas += i.total_entregas
 
-
         subquery2 = db.session.query(
             Entrega.quantidade_de_entregas
         ).filter(
@@ -527,16 +563,17 @@ def entregas_erros_comparar():
         for i in resultados_entregas2:
             if i.total_entregas:
                 total_de_entregas2 += i.total_entregas
-        array_erros =[]
+        array_erros = []
         array_erros.append(total_erros_periodo_1)
         array_erros.append(total_erros_periodo_2)
-        return render_template('entregas/comparar_erros.html', array_erros=array_erros, erros_por_funcionario=erros_por_funcionario,
+        return render_template('entregas/comparar_erros.html', array_erros=array_erros,
+                               erros_por_funcionario=erros_por_funcionario,
                                data_inicial1=formatar_data(data_inicial_1),
                                data_final1=formatar_data(data_final_1), data_inicial2=formatar_data(data_inicial_2),
                                data_final2=formatar_data(data_final_2), total_erros_periodo_1=total_erros_periodo_1,
-                           total_erros_periodo_2=total_erros_periodo_2, calcular_porcentagem=calcular_porcentagem, total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2)
+                               total_erros_periodo_2=total_erros_periodo_2, calcular_porcentagem=calcular_porcentagem,
+                               total_de_entregas=total_de_entregas, total_de_entregas2=total_de_entregas2)
     return render_template('entregas/comparar_erros.html')
-
 
 
 @app.route('/entregas/cadastrar_erro', methods=["GET", "POST"])
@@ -565,6 +602,7 @@ def cadastrar_entregas_erro():
         return redirect(url_for("cadastrar_entregas_erro"))
     return render_template("/entregas/cadastrar_erro.html", funcionarios=funcionarios, rotas=rotas)
 
+
 @app.route('/entregas/deletar_erro/<int:erro_id>', methods=["post", 'get'])
 @login_required
 def deletar_erro_entrega(erro_id):
@@ -572,6 +610,7 @@ def deletar_erro_entrega(erro_id):
     db.session.delete(erro)
     db.session.commit()
     return redirect(url_for('entregas_erros'))
+
 
 @app.route('/entregas/editar_erro/<int:erro_id>', methods=["GET", "POST"])
 @login_required
