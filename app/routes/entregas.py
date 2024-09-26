@@ -669,3 +669,21 @@ def entrega_editar(erro_id):
         db.session.commit()
         return redirect(url_for("entregas_erros"))
     return render_template('/entregas/editar_erro.html', erros=erros, funcionarios=funcionarios, rotas=rotas)
+
+@app.route('/entregas/projetar_entregas', methods=["GET", "POST"])
+def projetar_entregas():
+    total_dias = db.session.query(Entrega).filter(
+        Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
+    ).order_by(
+        Entrega.data_da_entrega.desc()
+    ).all()
+
+    total_de_entregas = 0
+
+    for i in total_dias:
+        total_de_entregas += i.quantidade_de_entregas
+
+    dias_no_mes = int(ultimo_dia_mes().strftime('%d'))
+    dias_ate_data_atual = int(datetime.now().strftime('%d')) - 1
+
+    return render_template('/entregas/projetar_entregas.html', mes_atual=mes_atual(), dias_ate_data_atual=dias_ate_data_atual, dias_no_mes=dias_no_mes, total_de_entregas=total_de_entregas)

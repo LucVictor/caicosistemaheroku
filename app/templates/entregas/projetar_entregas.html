@@ -1,0 +1,16 @@
+{% extends "./template.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-center m-1 p-1 text-center">
+
+              <div class="shadow d-flex-inline border-orange m-3 p-2 h-50">
+                <h3>Projeção de entregas para o mês de {{ mes_atual }}</h3>
+                    <h4>{{ ((total_de_entregas / dias_ate_data_atual) * dias_no_mes)|int }}</h4>
+                    <h3>Média de entregas por dia</h3>
+                    <h4>{{ (total_de_entregas / dias_ate_data_atual)|int }}</h4>
+
+</div>
+
+    </div>
+
+{% endblock %}

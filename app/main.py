@@ -11,13 +11,13 @@ from babel.dates import format_datetime
 from datetime import datetime, timedelta, time
 from functools import wraps
 
-
 UPLOAD_FOLDER = "app/static/uploads"
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URL', 'mysql+pymysql://usuario:password@endereco/banco')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('SQLALCHEMY_DATABASE_URL',
+                                                  'mysql+pymysql://usuario:password@endereco/banco')
 app.config["SECRET_KEY"] = "secretkey"
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 28000,
@@ -35,3 +35,5 @@ from app.routes.entregas import *
 from app.routes.vencimentos import *
 from app.routes.vendas import *
 from app.routes.adm import *
+
+
