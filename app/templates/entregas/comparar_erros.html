@@ -33,16 +33,17 @@
 <div class="d-flex justify-content-center m-1 p-1 text-center">
        <div class="shadow border-orange m-3 p-2 h-50">
        <h3>Relatórios</h3>
-       <h4>Erro por conferente</h4>
+       <h4>Erro por funcionário</h4>
    <table class="table-bordered table table-sm text-center align-middle border-black">
     <tr>
-        <th>Conferente</th>
+        <th>Funcionário</th>
         <th>Relatório 1</th>
         <th>Relatório 2</th>
         <th>%</th>
     </tr>
          {% for funcionario, erros in erros_por_funcionario.items()  %}
     <tr>
+
         <td>{{ funcionario  }}</td>
         <td>{{ erros.total1 }}</td>
     <td>{{ erros.total2 }}</td>
