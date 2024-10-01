@@ -70,7 +70,11 @@
         <div class="shadow border-orange m-3 p-2 h-50 fs-12">
               <h4>Comparação</h4>
                 <h5>Totais de erros: {{ calcular_porcentagem(total_erros_periodo_1, total_erros_periodo_2) }}</h5>
-                <h5>Erros por entrega: {{ "%.2f" % ((total_erros_periodo_1 / total_de_entregas) / (total_erros_periodo_2 / total_de_entregas2) *100) }}</h5>
+            {% if (total_erros_periodo_1 / total_de_entregas) > (total_erros_periodo_2 / total_de_entregas2) %}
+                <h5>Erros por entrega: -{{ "%.2f" % ((total_erros_periodo_1 / total_de_entregas) / (total_erros_periodo_2 / total_de_entregas2)) }}%</h5>
+            {% else %}
+                <h5>Erros por entrega: +{{ "%.2f" % ((total_erros_periodo_1 / total_de_entregas) / (total_erros_periodo_2 / total_de_entregas2)) }}%</h5>
+            {% endif %}
                 <canvas id="myChart1"></canvas>
 </div>
     </div>
