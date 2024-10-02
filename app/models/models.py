@@ -17,6 +17,7 @@ class Produto_Vencimento(db.Model):
     quantidade = db.Column(db.DECIMAL(10, 2), nullable=False)
     data_de_vencimento = db.Column(db.Date)
     data_de_insercao = db.Column(db.Date)
+    atualizacao = db.Column(db.Date)
     criador = db.Column(db.String(300), nullable=True)
 
 

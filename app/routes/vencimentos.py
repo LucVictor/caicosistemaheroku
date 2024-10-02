@@ -40,7 +40,7 @@ def vencimentos_cadastro():
         nome_do_produto=produto.nome_do_produto,
         quantidade=quantidade,
         data_de_vencimento=formatar_data(data_de_vencimento),
-        data_de_insercao=data_agora(),
+        data_de_insercao=data_agora(), atualizacao=data_agora(),
         criador=current_user.username)
     db.session.add(cadastrar_vencimentos)
     db.session.commit()
@@ -56,6 +56,7 @@ def produto_vencimento_editar(vencimento_id):
     if request.method == 'POST':
         quantidade = request.form['quantidade']
         vencimento.quantidade = quantidade
+        vencimento.atualizacao = data_agora()
         db.session.add(vencimento)
         db.session.commit()
         return redirect(url_for('index_vencimentos'))
