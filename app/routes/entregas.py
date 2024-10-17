@@ -11,7 +11,8 @@ def entregas_index():
         Entrega.resultado_tempo,
         Entrega.quantidade_de_entregas,
         Entrega.data_da_entrega,
-        Entrega.reentregas
+        Entrega.reentregas,
+        Entrega.entreganrealizadas
     ).filter(
         Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
     ).subquery()
@@ -21,12 +22,14 @@ def entregas_index():
     total_sum = total_positivo - total_negativo
     total_entregas = func.sum(subquery.c.quantidade_de_entregas)
     total_reentregas = func.sum(subquery.c.reentregas)
+    total_nentregas = func.sum(subquery.c.entreganrealizadas)
 
     resultados = db.session.query(
         subquery.c.motorista,
         total_positivo.label('total_positivo'),
         total_negativo.label('total_negativo'),
-        total_sum.label('total_sum')
+        total_sum.label('total_sum'),
+        total_nentregas.label('total_nentregas')
     ).group_by(
         subquery.c.motorista
     ).order_by(
@@ -57,6 +60,9 @@ def entregas_index():
     total_de_reentregas = 0
     for i in resultados_entregas:
         total_de_reentregas += i.total_reentregas
+    tota_nao_entregas = 0
+    for i in resultados:
+        tota_nao_entregas = +i.total_nentregas
 
     total_dias = db.session.query(Entrega).filter(
         Entrega.data_da_entrega.between(primeiro_dia_mes(), ultimo_dia_mes())
@@ -74,7 +80,7 @@ def entregas_index():
     return render_template('entregas/index.html', total_de_reentregas=total_de_reentregas,
                            total_de_entregas=total_de_entregas, mes=mes, rotas=rotas, entregas=entregas,
                            data_agora=data_agora(), b=b,
-                           resultados=resultados
+                           resultados=resultados,tota_nao_entregas=tota_nao_entregas
                            , resultados_entregas=resultados_entregas, calcular_porcentagem=calcular_porcentagem)
 
 

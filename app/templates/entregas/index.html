@@ -65,13 +65,16 @@
 </div>
               <div class="shadow border-orange m-3 p-2 h-50">
        <h5>Total de Entregas: {{ total_de_entregas }}</h5>
+       <h5>Total de Entregas Real: {{ total_de_entregas - total_de_reentregas }}</h5>
        <h5>Total de Reentregas: {{ total_de_reentregas }}</h5>
+       <h6>Total de Entregas não realizadas: {{ tota_nao_entregas }}</h6>
        {% if total_de_entregas > 0 %}
        <h6>Reentregas por entregas: {{ "%.2f" % ((total_de_reentregas / total_de_entregas)*100) }}%</h6>
        {% else %}
                   <h6>Reentregas por entregas: 0%</h6>
                   {% endif %}
        {% if b > 0 %}
+
        <h6>Média de entregas por dia: {{ "%.0f" % (total_de_entregas / b) }}</h6>
        <h6>Média de reentregas por dia: {{ "%.0f" % (total_de_reentregas / b) }}</h6>
         {% endif %}
