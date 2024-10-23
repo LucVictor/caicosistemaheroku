@@ -7,13 +7,13 @@
     <form action="/vendas/editar_erro/{{ erros.id }}" method="POST">
 
   <div class="mb-3 m-auto"><label for="data_do_erro">Data do erro:</label>
-            <input class="form-control text-center w-50 m-auto" type="date" id="data_do_erro" name="data_do_erro" required></div>
+            <input class="form-control text-center w-50 m-auto" type="date" value="{{ erros.data_do_erro }}" id="data_do_erro" name="data_do_erro" required></div>
 
         <div class="mb-3 m-auto"><label for="erro_funcionario">Funcionário:</label>
                 <select class="form-select text-center w-50 m-auto" name="erro_funcionario" id="erro_funcionario" value="{{ erros.erro_funcionario }}">
                     <option class="lista">{{ erros.erro_funcionario }}</option>
                     {% for i in funcionarios %}
-                    {% if i.funcao != 'Vendedor' and i.nome != erros.erro_funcionario %}
+                    {% if i.funcao == 'Vendedor' and i.nome != erros.erro_funcionario %}
                     <option class="lista">{{ i.nome }}</option>
                     {% endif %}
                     {% endfor %}
