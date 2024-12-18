@@ -40,10 +40,10 @@
         <form action="/vencimentos/deletar/{{ vencimento.id }}" method="post">
         <input class="btn btn-sm btn-warning" type="submit" value="Apagar">
         </form></td>
-    {% endif %}
 
 
-    <td class="">{{ vencimento.criador }}</td>
+
+    <td class="">{{ vencimento.criador }}</td>{% endif %}
   </tr>
         {% endfor %}</tbody>
 </table>
