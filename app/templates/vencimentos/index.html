@@ -13,11 +13,11 @@
       <th>Quantidade</th>
       <th>Vencimento</th>
       <th>Dias</th>
-      {% if current_user.is_authenticated %}
       <th>Última At.</th>
-      {% endif %}
+          {% if current_user.is_authenticated %}
+
       <th class="botoesacao">Ação</th>
-      <th >Usuário</th>
+      <th >Usuário</th> {% endif %}
 
   </tr></thead>
    {% for vencimento in vencimentos %}
