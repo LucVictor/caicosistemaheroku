@@ -69,6 +69,8 @@ class Rotas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rota = db.Column(db.String(250), unique=True, nullable=False)
     tempo_medio_rota = db.Column(db.Time, nullable=False)
+    total_de_entregas = db.Column(db.Integer,  nullable=True)
+    
 
 
 class Funcionarios(db.Model):

@@ -116,3 +116,12 @@ def recalcular_rotas(rotax):
             seconds = total_seconds % 60
             rota.tempo_medio_rota = time(hours, minutes, seconds)
             db.session.commit()
+
+def recalcularMediaRota(tempo):
+    int(horas = tempo // 3600)
+    int(minutos = (tempo % 3600) // 60)
+    int(segundos = tempo % 60)
+    print(horas, minutos, segundos)
+    tempoString = time(int(horas), int(minutos), int(segundos))
+    
+    return tempoString

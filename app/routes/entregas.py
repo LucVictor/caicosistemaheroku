@@ -318,9 +318,14 @@ def entrega_cadastrar():
             reentregas=reentregas,
             entreganrealizadas=entreganrealizadas
         )
+
+
+        nova_media = ((hora_para_segundo(rota_media.tempo_medio_rota) * rota_media.total_de_entregas) + (hora_para_segundo(tempo_medio_entrega) * quantidade_de_entregas)) / (rota_media.total_de_entregas + quantidade_de_entregas)
+        rota_media.tempo_medio_rota = recalcularMediaRota(nova_media)
         db.session.add(entrega)
         db.session.commit()
-        recalcular_rotas(rota)
+        db.session.add(rota_media)
+        db.session.commit()
         return redirect("/entregas/")
     rotas_lista = Rotas.query.all()
     funcionarios = Funcionarios.query.all()
@@ -334,7 +339,13 @@ total_reentregas_periodo_2 = 0
 @login_required
 def deletar_entrega(entrega_id):
     entrega = Entrega.query.get_or_404(entrega_id)
+    rota = entrega.rota
+    rota_media = Rotas.query.filter_by(rota=rota).first()
+    nova_media = ((hora_para_segundo(rota_media.tempo_medio_rota) * rota_media.total_de_entregas) - (hora_para_segundo(entrega.tempo_total_entrega))) / (rota_media.total_de_entregas - entrega.quantidade_de_entregas)
+    rota_media.tempo_medio_rota = recalcularMediaRota(nova_media)
     db.session.delete(entrega)
+    db.session.commit()
+    db.session.add(rota_media)
     db.session.commit()
     return redirect(url_for('entregas_index'))
 
