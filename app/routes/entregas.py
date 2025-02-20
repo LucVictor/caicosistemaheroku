@@ -344,7 +344,7 @@ def deletar_entrega(entrega_id):
     rota_media = Rotas.query.filter_by(rota=rota).first()
     nova_media = ((hora_para_segundo(rota_media.tempo_medio_rota) * rota_media.total_de_entregas) - (hora_para_segundo(entrega.tempo_total_entrega))) / (rota_media.total_de_entregas - entrega.quantidade_de_entregas)
     rota_media.tempo_medio_rota = recalcularMediaRota(nova_media)
-    rota_media.total_de_entregas = entrega.quantidade_de_entregas - rota_media.total_de_entrega
+    rota_media.total_de_entregas = rota_media.total_de_entregas - entrega.quantidade_de_entregas
     db.session.delete(entrega)
     db.session.commit()
     db.session.add(rota_media)
