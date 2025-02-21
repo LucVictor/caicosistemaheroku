@@ -1,4 +1,4 @@
-FROM alpine:3.
+FROM alpine:3.20
 ENV SQLALCHEMY_DATABASE_URI="mysql+pymysql://usuario:password@endereco/banco"
 COPY ./ /app
 WORKDIR /app
