@@ -14,4 +14,3 @@ gunicorn
 python-dotenv
 Babel==2.12.1
 pymysql
-os
