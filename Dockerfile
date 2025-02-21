@@ -1,5 +1,5 @@
-FROM python3.9
-ENV SQLALCHEMY_DATABASE_URI="mysql+pymysql://usuario:password@endereco/banco"
+FROM python:3.9
+ENV SQLALCHEMY_DATABASE_URL="mysql+pymysql://usuario:senha@endereco/banco"
 COPY ./ /app
 WORKDIR /app
 RUN ls -a
