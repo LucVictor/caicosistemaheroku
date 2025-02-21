@@ -4,4 +4,4 @@ WORKDIR /app
 ENV SQLALCHEMY_DATABASE_URI=""
 RUN ls -a
 RUN pip3 install -r requirements.txt
-CMD [ "gunicorn", "wsgi:app"]
+CMD [ "gunicorn", "wsgi:app", "--bind", "0.0.0.0:8000" ]
