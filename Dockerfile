@@ -1,4 +1,5 @@
 FROM python:3.9
+ENV SQLALCHEMY_DATABASE_URI="BANCO"
 COPY ./ /app
 WORKDIR /app
 RUN ls -a
