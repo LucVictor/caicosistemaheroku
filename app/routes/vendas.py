@@ -92,11 +92,11 @@ def relatorio_vendas_erros():
             Entrega.data_da_entrega.between(data_inicial, data_final)
         ).subquery()
 
-        total_entregas = func.sum(subquery.c.quantidade_de_entregas)
-        resultados_entregas = db.session.query(
-            subquery.c.quantidade_de_entregas,
-            total_entregas.label('total_entregas')
-        ).all()
+        total_entregas = db.session.query(
+        func.sum(Entrega.quantidade_de_entregas).label('total_entregas')
+        ).filter(
+        Entrega.data_da_entrega.between(data_inicial, data_final)
+        ).scalar()
 
         total_de_entregas = 0
         for i in resultados_entregas:
