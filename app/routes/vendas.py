@@ -92,18 +92,11 @@ def relatorio_vendas_erros():
             Entrega.data_da_entrega.between(data_inicial, data_final)
         ).subquery()
 
-        total_entregas = db.session.query(
-        func.sum(Entrega.quantidade_de_entregas).label('total_entregas')
-        ).filter(
-        Entrega.data_da_entrega.between(data_inicial, data_final)
-        ).scalar()
+        total_entregas = db.session.query(func.sum(Entrega.quantidade_de_entregas).label('total_entregas')).filter(Entrega.data_da_entrega.between(data_inicial, data_final)).scalar()
 
-        total_de_entregas = 0
-        for i in resultados_entregas:
-            total_de_entregas += i.total_entregas
 
         return render_template("/vendas/relatorio.html", mes=mes_atual(), erros=erros,
-                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_de_entregas=total_de_entregas,
+                               erros_por_funcionario=erros_por_funcionario, total_erros=total_erros, total_entregas=total_entregas,
                                data_inicial=formatar_data(data_inicial), data_final=formatar_data(data_final))
     return render_template('/vendas/relatorio.html')
 
