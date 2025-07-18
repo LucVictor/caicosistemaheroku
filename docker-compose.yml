@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
-    ports:
-      - "8000:8000"
     volumes:
       - .:/app
     command: gunicorn wsgi:app --bind 0.0.0.0:8000
+    expose:
+      - "8000"
